@@ -3,6 +3,68 @@
 let eventsData = [];
 let scheduleDataAll = null;
 
+// ===== THEME SYSTEM =====
+const THEMES = [
+  { key: 'padrao', label: 'Padrão' },
+  { key: 'super',  label: 'Super' },
+  { key: 'hypado', label: 'Hypado' },
+  { key: 'omni',   label: 'Omni' },
+];
+
+let currentThemeIndex = 0;
+let themeFullRotations = 0;
+
+function cycleTheme() {
+  const prevIndex = currentThemeIndex;
+  currentThemeIndex = (currentThemeIndex + 1) % THEMES.length;
+
+  // Track full rotations (returning to theme 0)
+  if (currentThemeIndex === 0) {
+    themeFullRotations++;
+    if (themeFullRotations >= 2) {
+      triggerMoonEasterEgg();
+      themeFullRotations = 0;
+    }
+  }
+
+  applyTheme(THEMES[currentThemeIndex]);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme.key);
+  const dot = document.getElementById('theme-dot');
+  const label = document.getElementById('theme-label');
+  if (dot) dot.style.animation = 'none';
+  if (label) label.textContent = theme.label;
+  // Re-trigger dot animation
+  setTimeout(() => {
+    if (dot) dot.style.animation = '';
+  }, 10);
+  localStorage.setItem('dasitheme', theme.key);
+}
+
+function triggerMoonEasterEgg() {
+  const moon = document.getElementById('moon-egg');
+  if (!moon) return;
+  moon.classList.remove('flying');
+  void moon.offsetWidth; // reflow to restart anim
+  moon.classList.add('flying');
+  setTimeout(() => moon.classList.remove('flying'), 1500);
+}
+
+function loadSavedTheme() {
+  const saved = localStorage.getItem('dasitheme');
+  if (saved) {
+    const idx = THEMES.findIndex(t => t.key === saved);
+    if (idx >= 0) {
+      currentThemeIndex = idx;
+      applyTheme(THEMES[idx]);
+      return;
+    }
+  }
+  applyTheme(THEMES[0]);
+}
+
 // ===== ROUTING =====
 function navigateTo(page) {
   // Deactivate all
@@ -265,6 +327,9 @@ function updateTime() {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
+  // Load saved theme
+  loadSavedTheme();
+
   // Check URL hash for initial page
   const hash = window.location.hash.replace('#', '') || 'home';
   navigateTo(hash);

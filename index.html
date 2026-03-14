@@ -17,6 +17,11 @@
   <link rel="icon" type="image/png" href="./assets/logo-dasi.jpg">
 </head>
 <body>
+  <!-- Background orbs (theme-reactive) -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
 
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
@@ -59,9 +64,20 @@
 
       <div style="width: 1px; height: 20px; background: var(--border); margin: 0 8px;"></div>
 
+      <!-- Theme Switcher -->
+      <button class="theme-switcher" id="theme-switcher" onclick="cycleTheme()" title="Trocar tema">
+        <span class="theme-dot" id="theme-dot"></span>
+        <span class="theme-label" id="theme-label">Padrão</span>
+      </button>
+
+      <div style="width: 1px; height: 20px; background: var(--border); margin: 0 8px;"></div>
+
       <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); padding: 7px 10px;" id="current-time"></div>
     </div>
   </nav>
+
+  <!-- Easter egg: moon -->
+  <div id="moon-egg" class="moon-egg">🌕</div>
 
   <!-- ===== MAIN CONTENT ===== -->
   <main class="main-content">
@@ -74,26 +90,6 @@
         <div class="home-hero-greeting">DaSIboard — SI-USP / EACH</div>
         <h2>Seu espaço acadêmico <span>personalizado</span></h2>
         <p>Calendário, horários, newsletters, docentes e materiais de estudo em um só lugar.</p>
-      </div>
-
-      <!-- Stats -->
-      <div class="stat-grid stagger-fade" style="margin-bottom: 28px;">
-        <div class="stat-card card-shine anim-fade-up stagger-1">
-          <div class="stat-value" id="stat-semesters">8</div>
-          <div class="stat-label">Semestres</div>
-        </div>
-        <div class="stat-card card-shine anim-fade-up stagger-2">
-          <div class="stat-value" id="stat-courses">—</div>
-          <div class="stat-label">Disciplinas</div>
-        </div>
-        <div class="stat-card card-shine anim-fade-up stagger-3">
-          <div class="stat-value" id="stat-events">—</div>
-          <div class="stat-label">Próximos eventos</div>
-        </div>
-        <div class="stat-card card-shine anim-fade-up stagger-4">
-          <div class="stat-value" style="font-size: 20px;">EACH</div>
-          <div class="stat-label">Escola de Artes, Ciências e Humanidades</div>
-        </div>
       </div>
 
       <!-- Quick nav buttons (mobile friendly) -->
