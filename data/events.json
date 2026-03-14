@@ -4,20 +4,6 @@
     "title": "Pesquisa 'A Terceira Onda'",
     "description": "Fazer um resumo de no mínimo 3 páginas sobre a obra A terceira Onda de Alvin Toffler.",
     "type": "entrega",
-    "turmas": ["2026102", "2026104"]
-  },
-  {
-    "date": "2026-03-28",
-    "title": "Prazo: Inscrição no Simpósio de SI",
-    "description": "Último dia para realizar inscrições no Simpósio de Sistemas de Informação.",
-    "type": "deadline",
-    "turmas": ["2026102", "2026104", "2026194"]
-  },
-  {
-    "date": "2026-04-30",
-    "title": "Deadline: Projeto Final ACH2014",
-    "description": "Entrega final do projeto integrador da disciplina ACH2014.",
-    "type": "deadline",
     "turmas": ["2026102"]
   },
   {
