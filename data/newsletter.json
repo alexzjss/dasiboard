@@ -1,23 +1,9 @@
 [
   {
-    "id": 3,
-    "date": "2026-04-08",
-    "title": "Semana da Computação 2026 — Programação Completa",
-    "summary": "A Semana da Computação da EACH está chegando! Confira a programação completa com palestras, workshops e hackathon.",
-    "content": "A Semana da Computação 2026 promete ser o maior evento da EACH até hoje. Com mais de 30 atividades programadas, incluindo palestras com profissionais de grandes empresas de tecnologia, workshops práticos de desenvolvimento web, inteligência artificial e segurança, além de um hackathon de 24 horas com premiações.\n\nA abertura oficial acontecerá no dia 18 de abril às 09:00 no Auditório Principal. As inscrições para workshops já estão abertas no portal da USP.\n\nDestaques da programação:\n- Palestra: O futuro da IA generativa nas empresas\n- Workshop: Desenvolvimento com LLMs\n- Workshop: Kubernetes para iniciantes\n- Hackathon: Soluções para cidades inteligentes\n- Mesa redonda: Carreira em tecnologia\n\nParticipação gratuita para alunos da EACH. Certificados serão emitidos para atividades com frequência mínima de 75%."
-  },
-  {
-    "id": 2,
-    "date": "2026-03-20",
-    "title": "Início do Semestre 2026 — Informações Importantes",
-    "summary": "Calendário acadêmico, novos professores e mudanças na grade curricular para o primeiro semestre de 2026.",
-    "content": "O primeiro semestre letivo de 2026 teve início no dia 10 de março. Confira as principais novidades e mudanças para este semestre.\n\nO calendário acadêmico prevê o término das aulas regulares para 4 de julho, com provas finais entre 6 e 17 de julho.\n\nNovos professores ingressaram no departamento, reforçando as áreas de Inteligência Artificial e Sistemas Distribuídos. As disciplinas optativas tiveram sua oferta ampliada, com novos cursos em Cloud Computing e Ciência de Dados.\n\nA Biblioteca da EACH ampliou seu acervo digital com acesso a IEEE Xplore e ACM Digital Library para todos os alunos matriculados."
-  },
-  {
     "id": 1,
-    "date": "2026-02-15",
-    "title": "Processo Seletivo para Iniciação Científica 2026",
-    "summary": "Abertas as inscrições para bolsas de Iniciação Científica com projetos nas áreas de IA, sistemas distribuídos e banco de dados.",
-    "content": "O Departamento de Sistemas de Informação da EACH abre inscrições para o Programa de Iniciação Científica 2026. São oferecidas bolsas FAPESP e CNPq com duração de 12 meses.\n\nÁreas disponíveis este ano:\n- Inteligência Artificial e Machine Learning\n- Sistemas de Informação Distribuídos\n- Bancos de Dados e Big Data\n- Segurança da Informação\n- Interação Humano-Computador\n\nRequisitos: estar cursando a partir do 3º semestre, ter coeficiente de rendimento mínimo de 6,0 e disponibilidade de 20 horas semanais.\n\nInscrições pelo portal SIICUSP até 28 de fevereiro."
+    "date": "2026-03-14",
+    "title": "Jarvis, ativar o DaSIboard",
+    "summary": "O projeto foi criado.",
+    "content": "Desenvolvido no Github para alunos de SI na EACH-USP."
   }
 ]
