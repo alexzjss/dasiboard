@@ -7,6 +7,13 @@
     "turmas": ["2026102"]
   },
   {
+    "date": "2026-03-16",
+    "title": "Exclusivo noturno",
+    "description": "teste",
+    "type": "deadline",
+    "turmas": ["2026104"]
+  },
+  {
     "date": "2026-04-10",
     "title": "Fim das inscrições Síntese Jr.",
     "description": "NA",
