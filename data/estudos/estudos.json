@@ -300,7 +300,7 @@
         "titulo": "Dia 3",
         "descricao": "",
         "ordem": 3,
-        "concluido": false,
+        "concluido": true,
         "links": [
           { "titulo": "YouTube", "url": "https://www.youtube.com/live/nrBJ6GQfZ-s?si=e9kN7LIxzO-v0EPp" }
         ],
