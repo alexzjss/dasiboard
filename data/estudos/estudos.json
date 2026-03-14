@@ -311,7 +311,7 @@
 
   
   {
-    "id": 9,
+    "id": 11,
     "tipo": "link",
     "titulo": "Aula de Redes Neurais",
     "descricao": "Construindo Redes Neurais com TensorFlow e Keras.",
