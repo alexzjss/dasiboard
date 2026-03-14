@@ -1,0 +1,219 @@
+[
+  {
+    "id": 1,
+    "tipo": "documento",
+    "titulo": "Resumo de Estruturas de Dados",
+    "descricao": "Resumo completo sobre árvores, grafos, filas e pilhas com exemplos em Python.",
+    "area": "Computação",
+    "disciplina": "Algoritmos e Estruturas de Dados",
+    "semestre": 3,
+    "criadoPor": "Alex J.S.",
+    "enviadoPor": "Alex J.S.",
+    "dataCriacao": "2026-03-10",
+    "dataEnvio": "2026-03-12",
+    "tags": ["algoritmos", "python", "estruturas-de-dados"],
+    "anexos": [
+      { "nome": "resumo-estruturas.pdf", "tipo": "pdf", "tamanho": "512KB", "caminho": "data/estudos/anexos/resumo-estruturas.pdf" }
+    ],
+    "links": [],
+    "destaque": true
+  },
+  {
+    "id": 2,
+    "tipo": "link",
+    "titulo": "Visualizador de Algoritmos de Ordenação",
+    "descricao": "Site interativo que anima visualmente bubble sort, merge sort, quick sort e mais.",
+    "area": "Computação",
+    "disciplina": "Algoritmos e Estruturas de Dados",
+    "semestre": 3,
+    "criadoPor": "Externo",
+    "enviadoPor": "Maria S.",
+    "dataCriacao": "2026-02-20",
+    "dataEnvio": "2026-03-01",
+    "tags": ["algoritmos", "visualização", "ordenação"],
+    "anexos": [],
+    "links": [
+      { "titulo": "VisuAlgo", "url": "https://visualgo.net/pt" }
+    ],
+    "destaque": false
+  },
+  {
+    "id": 3,
+    "tipo": "curso",
+    "titulo": "Introdução ao Banco de Dados Relacionais",
+    "descricao": "Curso completo cobrindo modelagem ER, SQL, normalização e transações.",
+    "area": "Banco de Dados",
+    "disciplina": "Banco de Dados",
+    "semestre": 4,
+    "criadoPor": "Prof. Silva",
+    "enviadoPor": "João P.",
+    "dataCriacao": "2026-01-15",
+    "dataEnvio": "2026-02-05",
+    "tags": ["sql", "modelagem", "banco-de-dados"],
+    "anexos": [],
+    "links": [],
+    "destaque": true,
+    "modulos": [
+      {
+        "id": "m1",
+        "titulo": "Módulo 1 — Modelagem Entidade-Relacionamento",
+        "descricao": "Conceitos fundamentais de MER, entidades, atributos e relacionamentos.",
+        "ordem": 1,
+        "concluido": true,
+        "links": [{ "titulo": "Slides MER", "url": "https://example.com/slides-mer" }],
+        "anexos": [{ "nome": "aula-01-mer.pdf", "tipo": "pdf", "tamanho": "1.2MB", "caminho": "data/estudos/anexos/aula-01-mer.pdf" }]
+      },
+      {
+        "id": "m2",
+        "titulo": "Módulo 2 — SQL Básico",
+        "descricao": "SELECT, INSERT, UPDATE, DELETE e JOINs.",
+        "ordem": 2,
+        "concluido": true,
+        "links": [],
+        "anexos": [{ "nome": "exercicios-sql.pdf", "tipo": "pdf", "tamanho": "800KB", "caminho": "data/estudos/anexos/exercicios-sql.pdf" }]
+      },
+      {
+        "id": "m3",
+        "titulo": "Módulo 3 — Normalização",
+        "descricao": "Formas normais 1FN, 2FN, 3FN e BCNF com exemplos práticos.",
+        "ordem": 3,
+        "concluido": false,
+        "links": [{ "titulo": "Tutorial Normalização", "url": "https://example.com/normalizacao" }],
+        "anexos": []
+      },
+      {
+        "id": "m4",
+        "titulo": "Módulo 4 — Transações e Controle de Concorrência",
+        "descricao": "ACID, locks, deadlocks e recuperação de falhas.",
+        "ordem": 4,
+        "concluido": false,
+        "links": [],
+        "anexos": []
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "tipo": "documento",
+    "titulo": "Cheat Sheet — Git e GitHub",
+    "descricao": "Referência rápida com os principais comandos Git para uso no dia a dia.",
+    "area": "Ferramentas",
+    "disciplina": "Laboratório de Programação",
+    "semestre": 1,
+    "criadoPor": "Alex J.S.",
+    "enviadoPor": "Alex J.S.",
+    "dataCriacao": "2026-03-01",
+    "dataEnvio": "2026-03-01",
+    "tags": ["git", "github", "versionamento", "cheat-sheet"],
+    "anexos": [
+      { "nome": "git-cheatsheet.pdf", "tipo": "pdf", "tamanho": "256KB", "caminho": "data/estudos/anexos/git-cheatsheet.pdf" }
+    ],
+    "links": [
+      { "titulo": "Documentação Git", "url": "https://git-scm.com/doc" }
+    ],
+    "destaque": false
+  },
+  {
+    "id": 5,
+    "tipo": "link",
+    "titulo": "CS50x — Introdução à Ciência da Computação",
+    "descricao": "Curso gratuito de Harvard disponível no edX. Recomendado para reforço dos fundamentos.",
+    "area": "Computação",
+    "disciplina": "Introdução à Computação",
+    "semestre": 1,
+    "criadoPor": "Harvard / edX",
+    "enviadoPor": "Prof. Tavares",
+    "dataCriacao": "2025-06-01",
+    "dataEnvio": "2026-02-10",
+    "tags": ["fundamentos", "programação", "c", "python", "harvard"],
+    "anexos": [],
+    "links": [
+      { "titulo": "Acessar CS50x", "url": "https://cs50.harvard.edu/x/" }
+    ],
+    "destaque": true
+  },
+  {
+    "id": 6,
+    "tipo": "documento",
+    "titulo": "Anotações — Redes de Computadores",
+    "descricao": "Notas de aula cobrindo modelo OSI, TCP/IP, protocolos HTTP, DNS e segurança básica.",
+    "area": "Redes",
+    "disciplina": "Redes de Computadores",
+    "semestre": 5,
+    "criadoPor": "Camila R.",
+    "enviadoPor": "Camila R.",
+    "dataCriacao": "2026-03-05",
+    "dataEnvio": "2026-03-08",
+    "tags": ["redes", "tcp-ip", "protocolos", "segurança"],
+    "anexos": [
+      { "nome": "notas-redes.pdf", "tipo": "pdf", "tamanho": "2.1MB", "caminho": "data/estudos/anexos/notas-redes.pdf" },
+      { "nome": "topologias.png", "tipo": "imagem", "tamanho": "340KB", "caminho": "data/estudos/anexos/topologias.png" }
+    ],
+    "links": [],
+    "destaque": false
+  },
+  {
+    "id": 7,
+    "tipo": "curso",
+    "titulo": "Desenvolvimento Web Full Stack",
+    "descricao": "Do HTML/CSS básico ao React e Node.js, passando por APIs REST e deploy.",
+    "area": "Desenvolvimento Web",
+    "disciplina": "Desenvolvimento de Software",
+    "semestre": 4,
+    "criadoPor": "Alex J.S.",
+    "enviadoPor": "Alex J.S.",
+    "dataCriacao": "2026-02-01",
+    "dataEnvio": "2026-02-15",
+    "tags": ["html", "css", "javascript", "react", "nodejs", "api"],
+    "anexos": [],
+    "links": [],
+    "destaque": false,
+    "modulos": [
+      {
+        "id": "m1",
+        "titulo": "Módulo 1 — HTML e CSS Fundamentais",
+        "descricao": "Estrutura de páginas, box model, flexbox e grid.",
+        "ordem": 1,
+        "concluido": true,
+        "links": [],
+        "anexos": []
+      },
+      {
+        "id": "m2",
+        "titulo": "Módulo 2 — JavaScript Moderno (ES6+)",
+        "descricao": "Funções, closures, promises, async/await e manipulação do DOM.",
+        "ordem": 2,
+        "concluido": true,
+        "links": [],
+        "anexos": []
+      },
+      {
+        "id": "m3",
+        "titulo": "Módulo 3 — React",
+        "descricao": "Components, hooks, estado global com Context e roteamento com React Router.",
+        "ordem": 3,
+        "concluido": false,
+        "links": [],
+        "anexos": []
+      },
+      {
+        "id": "m4",
+        "titulo": "Módulo 4 — Node.js e APIs REST",
+        "descricao": "Express, autenticação JWT, CRUD completo e integração com banco de dados.",
+        "ordem": 4,
+        "concluido": false,
+        "links": [],
+        "anexos": []
+      },
+      {
+        "id": "m5",
+        "titulo": "Módulo 5 — Deploy e DevOps Básico",
+        "descricao": "Heroku, Vercel, Docker básico e CI/CD com GitHub Actions.",
+        "ordem": 5,
+        "concluido": false,
+        "links": [],
+        "anexos": []
+      }
+    ]
+  }
+]

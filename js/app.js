@@ -28,6 +28,7 @@ function navigateTo(page) {
   if (page === 'schedule') initSchedule();
   if (page === 'newsletter') initNewsletter();
   if (page === 'docentes') initDocentes();
+  if (page === 'estudos') initEstudos();
 
   // Update URL hash
   history.pushState(null, '', `#${page}`);
@@ -246,7 +247,10 @@ function initModal() {
 
   // ESC key
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeNewsletterModal();
+    if (e.key === 'Escape') {
+      closeNewsletterModal();
+      fecharEstudosModal();
+    }
   });
 }
 
@@ -270,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Modal setup
   initModal();
+  initEstudosModal();
 
   // Clock
   updateTime();

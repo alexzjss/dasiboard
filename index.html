@@ -52,6 +52,10 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Docentes
       </button>
+      <button class="nav-link" data-page="estudos" onclick="navigateTo('estudos')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        Estudos
+      </button>
 
       <div style="width: 1px; height: 20px; background: var(--border); margin: 0 8px;"></div>
 
@@ -65,8 +69,15 @@
     <!-- ===== HOME PAGE ===== -->
     <div id="home-page" class="page active">
 
+      <!-- Hero -->
+      <div class="home-hero anim-fade-up stagger-1" style="margin-bottom: 28px;">
+        <div class="home-hero-greeting">DaSIboard — SI-USP / EACH</div>
+        <h2>Seu espaço acadêmico <span>personalizado</span></h2>
+        <p>Calendário, horários, newsletters, docentes e materiais de estudo em um só lugar.</p>
+      </div>
+
       <!-- Stats -->
-      <div class="stat-grid stagger-fade" style="margin-bottom: 32px;">
+      <div class="stat-grid stagger-fade" style="margin-bottom: 28px;">
         <div class="stat-card card-shine anim-fade-up stagger-1">
           <div class="stat-value" id="stat-semesters">8</div>
           <div class="stat-label">Semestres</div>
@@ -85,8 +96,32 @@
         </div>
       </div>
 
+      <!-- Quick nav buttons (mobile friendly) -->
+      <div class="home-quick-nav anim-fade-up stagger-2">
+        <button class="home-quick-btn" onclick="navigateTo('calendar')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Calendário
+        </button>
+        <button class="home-quick-btn" onclick="navigateTo('schedule')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Horários
+        </button>
+        <button class="home-quick-btn" onclick="navigateTo('estudos')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Estudos
+        </button>
+        <button class="home-quick-btn" onclick="navigateTo('docentes')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Docentes
+        </button>
+        <button class="home-quick-btn" onclick="navigateTo('newsletter')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Newsletter
+        </button>
+      </div>
+
       <!-- Two-column layout -->
-      <div class="grid-2" style="margin-bottom: 24px; align-items: start;">
+      <div class="grid-2" style="margin-top: 28px; align-items: start;">
 
         <!-- Upcoming events -->
         <div class="anim-fade-up stagger-2">
@@ -286,6 +321,45 @@
 
     </div>
 
+    <!-- ===== ESTUDOS PAGE ===== -->
+    <div id="estudos-page" class="page">
+
+      <div class="page-header">
+        <div class="page-header-label">Materiais & Recursos</div>
+        <h1>Estudos</h1>
+        <p>Documentos, links e cursos organizados por área e disciplina</p>
+      </div>
+
+      <!-- Search bar -->
+      <div class="estudos-search-wrap">
+        <div class="estudos-search-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <input type="text" id="estudos-search" class="estudos-search" placeholder="Buscar por título, área, disciplina, autor ou tag..." oninput="buscarEstudos(this.value)" />
+      </div>
+
+      <!-- Filters row -->
+      <div class="estudos-filters-wrap">
+        <div class="estudos-filter-group">
+          <div class="estudos-filter-label">Tipo</div>
+          <div id="estudos-filter-tipo" class="estudos-filter-pills"></div>
+        </div>
+        <div class="estudos-filter-group">
+          <div class="estudos-filter-label">Área</div>
+          <div id="estudos-filter-area" class="estudos-filter-pills"></div>
+        </div>
+      </div>
+
+      <!-- Count -->
+      <div id="estudos-count" class="estudos-count"></div>
+
+      <!-- Grid -->
+      <div class="estudos-grid" id="estudos-grid">
+        <div class="loading-spinner"><div class="spinner"></div>Carregando estudos...</div>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- ===== NEWSLETTER MODAL ===== -->
@@ -295,6 +369,14 @@
       <div class="modal-date" id="modal-date"></div>
       <h2 class="modal-title" id="modal-title"></h2>
       <div class="modal-content" id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== ESTUDOS MODAL ===== -->
+  <div id="estudos-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-box-lg">
+      <button class="modal-close" onclick="fecharEstudosModal()">×</button>
+      <div id="estudos-modal-content"></div>
     </div>
   </div>
 
@@ -320,6 +402,7 @@
   <script src="js/schedule.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/docentes.js"></script>
+  <script src="js/estudos.js"></script>
   <script src="js/app.js"></script>
 
 
