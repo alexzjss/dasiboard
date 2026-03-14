@@ -7,35 +7,35 @@
       "dia": "Segunda",
       "inicio": "08:00",
       "fim": "12:00",
-      "codigo": "ACH2014",
+      "codigo": "ACH0041",
       "turma": "2026104"
     },
     {
       "dia": "Terça",
       "inicio": "08:00",
       "fim": "09:45",
-      "codigo": "ACH0021",
+      "codigo": "ACH0161",
       "turma": "2026104"
     },
     {
       "dia": "Terça",
       "inicio": "10:15",
       "fim": "12:00",
-      "codigo": "ACH0161",
+      "codigo": "ACH0021",
       "turma": "2026104"
     },
     {
       "dia": "Quarta",
       "inicio": "08:00",
       "fim": "12:00",
-      "codigo": "ACH0041",
+      "codigo": "ACH2001",
       "turma": "2026104"
     },
     {
       "dia": "Quinta",
       "inicio": "08:00",
       "fim": "09:45",
-      "codigo": "ACH2001",
+      "codigo": "ACH2014",
       "turma": "2026104"
     },
     {
@@ -56,7 +56,7 @@
       "dia": "Sexta",
       "inicio": "10:15",
       "fim": "12:00",
-      "codigo": "ACH2001",
+      "codigo": "ACH2014",
       "turma": "2026104"
     }
   ]
