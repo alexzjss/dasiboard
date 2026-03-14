@@ -213,7 +213,26 @@
         "concluido": false,
         "links": [],
         "anexos": []
-      }
+      },
+  {
+    "id": 8,
+    "tipo": "link",
+    "titulo": "Introdução ao Cálculo Diferencial e Integral ",
+    "descricao": "Curso gratuito de Cálculo no YouTube.",
+    "area": "Matemática",
+    "disciplina": "Cálculo I",
+    "semestre": 1,
+    "criadoPor": "Cláudio Possani",
+    "enviadoPor": "Alex J.S.",
+    "dataCriacao": "2016-04-02",
+    "dataEnvio": "2026-03-14",
+    "tags": ["fundamentos", "calculo", "matematica"],
+    "anexos": [],
+    "links": [
+      { "titulo": "YouTube", "url": "https://youtube.com/playlist?list=PL23TBfsYj5mcyy8ZciFXidHpFh8HgNvel&si=u_Whtoks7R38WjeM" }
+    ],
+    "destaque": true
+    }
     ]
   }
 ]
