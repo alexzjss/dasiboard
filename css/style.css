@@ -305,7 +305,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .kanban-input:focus{border-color:var(--border-hover);box-shadow:0 0 0 3px var(--glass-tint)}
 .kanban-input::placeholder{color:var(--text-dim)}
 .kanban-input[type="date"]{color-scheme:dark}
-[data-theme="grifinho"] .kanban-input[type="date"],[data-theme="bidu"] .kanban-input[type="date"],[data-theme="laboratorio"] .kanban-input[type="date"],[data-theme="sintetizado"] .kanban-input[type="date"],[data-theme="masacote"] .kanban-input[type="date"],[data-theme="grace"] .kanban-input[type="date"]{color-scheme:light}
+[data-theme="grifinho"] .kanban-input[type="date"],[data-theme="bidu"] .kanban-input[type="date"],[data-theme="laboratorio"] .kanban-input[type="date"],[data-theme="sintetizado"] .kanban-input[type="date"],[data-theme="masacote"] .kanban-input[type="date"],[data-theme="grace"] .kanban-input[type="date"],[data-theme="mamaco"] .kanban-input[type="date"]{color-scheme:light}
 .kanban-select{background:var(--bg-card);backdrop-filter:blur(14px);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:var(--font-body);color:var(--text);transition:all var(--transition);outline:none;cursor:pointer;flex-shrink:0}
 .kanban-select:focus{border-color:var(--border-hover)}
 .kanban-board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
@@ -637,7 +637,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @keyframes rainbowShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
 
 /* LIGHT THEME CARDS */
-[data-theme="grifinho"] .card,[data-theme="bidu"] .card,[data-theme="laboratorio"] .card,[data-theme="sintetizado"] .card,[data-theme="masacote"] .card,[data-theme="grace"] .card{background:rgba(255,255,255,.8);box-shadow:0 2px 14px rgba(0,0,0,.06)}
+[data-theme="grifinho"] .card,[data-theme="bidu"] .card,[data-theme="laboratorio"] .card,[data-theme="sintetizado"] .card,[data-theme="masacote"] .card,[data-theme="grace"] .card,[data-theme="mamaco"] .card{background:rgba(255,255,255,.8);box-shadow:0 2px 14px rgba(0,0,0,.06)}
 [data-theme="grifinho"] .card:hover,[data-theme="bidu"] .card:hover,[data-theme="laboratorio"] .card:hover,[data-theme="sintetizado"] .card:hover,[data-theme="masacote"] .card:hover,[data-theme="grace"] .card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1)}
 [data-theme="grifinho"] input,[data-theme="grifinho"] textarea,[data-theme="bidu"] input,[data-theme="bidu"] textarea,[data-theme="laboratorio"] input,[data-theme="laboratorio"] textarea,[data-theme="sintetizado"] input,[data-theme="sintetizado"] textarea,[data-theme="masacote"] input,[data-theme="masacote"] textarea,[data-theme="grace"] input,[data-theme="grace"] textarea{color:var(--text);background:rgba(255,255,255,.7)}
 
@@ -1215,4 +1215,297 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @media (max-width: 380px) {
   .entidades-grid { grid-template-columns: 1fr; }
   .entidade-destaques { grid-template-columns: 1fr 1fr; }
+}
+
+/* =====================================================
+   TEMA: SUPERMAN — Azul Celeste + Vermelho + Amarelo
+   ===================================================== */
+[data-theme="super"] {
+  --bg:#04080f;--bg-2:#060c18;--bg-3:#091220;
+  --bg-card:rgba(5,10,25,.75);--bg-card-hover:rgba(8,16,36,.88);
+  --border:rgba(30,144,255,.22);--border-hover:rgba(220,50,50,.7);
+  --primary:#1e90ff;--primary-2:#0066cc;
+  --secondary:#e8f4ff;--highlight:#ffd700;--accent:#cc2200;
+  --text:#e8f4ff;--text-muted:#7ab0d8;--text-dim:#2a4a6e;
+  --success:#34d399;--warning:#ffd700;--danger:#cc2200;--info:#60a5fa;
+  --glow:rgba(30,144,255,.45);--glow-strong:rgba(30,144,255,.75);
+  --orb-1:rgba(30,144,255,.2);--orb-2:rgba(204,34,0,.12);--orb-3:rgba(255,215,0,.06);
+  --sidebar-bg:rgba(4,8,15,.92);
+  --theme-dot-color:#1e90ff;--gradient-a:#1e90ff;--gradient-b:#ffd700;
+  --glass-tint:rgba(30,144,255,.07);--glass-border:rgba(100,180,255,.22);--glass-shine:rgba(255,255,255,.1);
+  --font-display:'Fraunces',Georgia,serif;
+}
+/* Superman: S-shield glow on active elements */
+[data-theme="super"] .sidebar-link.active {
+  background:rgba(30,144,255,.12);
+  border-color:rgba(204,34,0,.5);
+  box-shadow:inset 0 0 12px rgba(30,144,255,.15), 0 0 8px rgba(204,34,0,.3);
+}
+[data-theme="super"] .navbar-logo-img,
+[data-theme="super"] .sidebar-logo-img { border-color:rgba(204,34,0,.6); box-shadow:0 0 14px rgba(30,144,255,.5); }
+[data-theme="super"] .stat-value { background:linear-gradient(135deg,#1e90ff,#ffd700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="super"] .card:hover { border-color:rgba(204,34,0,.6); box-shadow:var(--glass-inner-shadow),0 0 28px rgba(30,144,255,.25); }
+[data-theme="super"] .page-header h1 { background:linear-gradient(135deg,#e8f4ff,#ffd700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+/* Superman red cape stripe on active page header label */
+[data-theme="super"] .page-header-label::before { background:linear-gradient(90deg,#cc2200,#ffd700); }
+[data-theme="super"] .btn-primary { background:linear-gradient(135deg,#1e90ff,#0066cc); border:1px solid rgba(255,215,0,.3); }
+[data-theme="super"] .section-title::after { background:linear-gradient(90deg,rgba(204,34,0,.5),transparent); }
+[data-theme="super"] .footer::before { background:linear-gradient(90deg,transparent,#1e90ff,#ffd700,#cc2200,transparent); opacity:.7; }
+
+/* =====================================================
+   TEMA: MAMACO — DK Country (Selva / Banana / Caverna)
+   ===================================================== */
+[data-theme="mamaco"] {
+  color-scheme:light;
+  --bg:#f5f0e0;--bg-2:#ede5cc;--bg-3:#ddd4b0;
+  --bg-card:rgba(255,248,220,.82);--bg-card-hover:rgba(255,252,230,.93);
+  --border:rgba(101,67,33,.2);--border-hover:rgba(101,67,33,.55);
+  --primary:#5a3200;--primary-2:#3d2000;
+  --secondary:#8b5e00;--highlight:#c8860a;--accent:#f5c800;
+  --text:#2c1800;--text-muted:#6b4200;--text-dim:#b8996a;
+  --success:#2e7d32;--warning:#e65100;--danger:#b71c1c;--info:#1565c0;
+  --glow:rgba(90,50,0,.25);--glow-strong:rgba(90,50,0,.45);
+  --orb-1:rgba(90,50,0,.1);--orb-2:rgba(245,200,0,.12);--orb-3:rgba(46,125,50,.08);
+  --sidebar-bg:rgba(44,24,0,.9);
+  --theme-dot-color:#f5c800;--gradient-a:#5a3200;--gradient-b:#f5c800;
+  --glass-tint:rgba(90,50,0,.06);--glass-border:rgba(101,67,33,.22);--glass-shine:rgba(255,248,200,.7);
+  --font-display:'Fraunces',Georgia,serif;
+}
+/* Banana yellow accents */
+[data-theme="mamaco"] .page-header h1 { color:var(--primary); }
+[data-theme="mamaco"] .stat-value { background:linear-gradient(135deg,#5a3200,#f5c800); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="mamaco"] .sidebar { background:rgba(28,14,0,.95); border-right-color:rgba(90,50,0,.5); }
+[data-theme="mamaco"] .sidebar-title { background:linear-gradient(135deg,#f5c800,#e8a800); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="mamaco"] .sidebar-link { color:rgba(245,200,0,.75); }
+[data-theme="mamaco"] .sidebar-link:hover { color:#f5c800; background:rgba(245,200,0,.1); }
+[data-theme="mamaco"] .sidebar-link.active { color:#f5c800; background:rgba(245,200,0,.12); border-color:rgba(245,200,0,.35); }
+[data-theme="mamaco"] .sidebar-section-label { color:rgba(245,200,0,.4); }
+[data-theme="mamaco"] .sidebar-time { color:rgba(245,200,0,.5); }
+[data-theme="mamaco"] .topbar { background:rgba(28,14,0,.95); }
+[data-theme="mamaco"] .card { background:rgba(255,248,220,.82); box-shadow:0 2px 16px rgba(90,50,0,.08),inset 0 1px 0 rgba(255,252,200,.9); border-color:rgba(101,67,33,.2); }
+[data-theme="mamaco"] .card:hover { box-shadow:0 8px 28px rgba(90,50,0,.15); }
+[data-theme="mamaco"] .home-quick-btn { background:rgba(255,248,210,.85); }
+[data-theme="mamaco"] .btn-primary { background:linear-gradient(135deg,#5a3200,#3d2000); color:#f5c800; }
+[data-theme="mamaco"] .navbar-logo-img, [data-theme="mamaco"] .sidebar-logo-img { border-color:rgba(245,200,0,.5); box-shadow:0 0 10px rgba(90,50,0,.25); }
+/* Banana icons on orbs */
+[data-theme="mamaco"] .orb-1 { background:radial-gradient(circle,rgba(245,200,0,.2) 0%,transparent 70%); }
+[data-theme="mamaco"] .orb-2 { background:radial-gradient(circle,rgba(46,125,50,.15) 0%,transparent 70%); }
+[data-theme="mamaco"] .orb-3 { background:radial-gradient(circle,rgba(90,50,0,.12) 0%,transparent 70%); }
+/* Caverna texture header */
+[data-theme="mamaco"] .page-header-label { color:#8b5e00; }
+[data-theme="mamaco"] .page-header-label::before { background:linear-gradient(90deg,#8b5e00,transparent); }
+[data-theme="mamaco"] .section-title { color:#6b4200; }
+[data-theme="mamaco"] .section-title::after { background:linear-gradient(90deg,rgba(101,67,33,.3),transparent); }
+[data-theme="mamaco"] .footer { background:rgba(28,14,0,.95); border-top-color:rgba(90,50,0,.4); }
+[data-theme="mamaco"] .footer-text, [data-theme="mamaco"] .footer-badge { color:rgba(245,200,0,.5); }
+[data-theme="mamaco"] input, [data-theme="mamaco"] textarea { color:var(--text); background:rgba(255,248,210,.8); }
+/* Mamaco badge - banana themed */
+[data-theme="mamaco"] .badge-yellow { background:rgba(245,200,0,.25); color:#7a5000; border-color:rgba(245,200,0,.5); }
+[data-theme="mamaco"] .badge-green { background:rgba(46,125,50,.2); color:#1a5c1a; border-color:rgba(46,125,50,.4); }
+/* Banana trail on scroll */
+[data-theme="mamaco"] ::-webkit-scrollbar-thumb { background:#8b5e00; }
+[data-theme="mamaco"] .kanban-col { background:rgba(255,248,210,.78); }
+[data-theme="mamaco"] .entidade-card { background:rgba(255,248,210,.82); }
+
+/* Mamaco: Banana decorations via pseudo-elements */
+[data-theme="mamaco"] body::after {
+  content: '🍌';
+  position: fixed; bottom: 80px; right: 18px;
+  font-size: 28px; opacity: .35; pointer-events: none;
+  animation: bananaBounce 3s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes bananaBounce { 0%,100%{transform:translateY(0) rotate(-10deg)} 50%{transform:translateY(-8px) rotate(10deg)} }
+
+/* =====================================================
+   TEMA: HACKERMAN — Terminal verde / Matrix
+   ===================================================== */
+[data-theme="hackerman"] {
+  --bg:#010a01;--bg-2:#020f02;--bg-3:#031503;
+  --bg-card:rgba(0,20,0,.8);--bg-card-hover:rgba(0,28,0,.92);
+  --border:rgba(0,255,65,.15);--border-hover:rgba(0,255,65,.5);
+  --primary:#00ff41;--primary-2:#00cc33;
+  --secondary:#00e035;--highlight:#80ff99;--accent:#00ffcc;
+  --text:#00ff41;--text-muted:#00aa2b;--text-dim:#005515;
+  --success:#00ff41;--warning:#ffff00;--danger:#ff0040;--info:#00e5ff;
+  --glow:rgba(0,255,65,.35);--glow-strong:rgba(0,255,65,.65);
+  --orb-1:rgba(0,255,65,.12);--orb-2:rgba(0,204,51,.07);--orb-3:rgba(0,255,204,.04);
+  --sidebar-bg:rgba(0,8,0,.96);
+  --theme-dot-color:#00ff41;--gradient-a:#00ff41;--gradient-b:#00e5ff;
+  --glass-tint:rgba(0,255,65,.05);--glass-border:rgba(0,255,65,.18);--glass-shine:rgba(0,255,65,.08);
+  --font-display:'JetBrains Mono',monospace;
+  --font-body:'JetBrains Mono',monospace;
+}
+/* Hackerman: override font to mono everywhere */
+[data-theme="hackerman"] * { font-family: 'JetBrains Mono', monospace !important; }
+[data-theme="hackerman"] h1,[data-theme="hackerman"] h2,[data-theme="hackerman"] h3 { font-style:normal !important; letter-spacing:.05em !important; font-weight:600 !important; }
+[data-theme="hackerman"] .navbar-title,[data-theme="hackerman"] .sidebar-title { font-style:normal !important; letter-spacing:.1em; text-transform:uppercase; }
+/* Scanlines effect */
+[data-theme="hackerman"] body::after {
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);
+  pointer-events:none;z-index:9998;
+}
+/* Phosphor glow on text */
+[data-theme="hackerman"] .page-header h1 { color:#00ff41; text-shadow:0 0 10px rgba(0,255,65,.6); }
+[data-theme="hackerman"] .sidebar-title { color:#00ff41 !important; text-shadow:0 0 8px rgba(0,255,65,.5); -webkit-text-fill-color:#00ff41 !important; }
+[data-theme="hackerman"] .stat-value { background:none; -webkit-text-fill-color:#00ff41; color:#00ff41; text-shadow:0 0 12px rgba(0,255,65,.7); }
+[data-theme="hackerman"] .card { background:rgba(0,18,0,.8); border-color:rgba(0,255,65,.18); box-shadow:0 0 16px rgba(0,255,65,.08),inset 0 1px 0 rgba(0,255,65,.08); }
+[data-theme="hackerman"] .card:hover { border-color:rgba(0,255,65,.5); box-shadow:0 0 28px rgba(0,255,65,.2),inset 0 1px 0 rgba(0,255,65,.1); }
+[data-theme="hackerman"] .btn-primary { background:rgba(0,255,65,.1); color:#00ff41; border:1px solid rgba(0,255,65,.4); box-shadow:0 0 12px rgba(0,255,65,.2); }
+[data-theme="hackerman"] .btn-primary:hover { background:rgba(0,255,65,.2); box-shadow:0 0 24px rgba(0,255,65,.35); }
+[data-theme="hackerman"] .sidebar { background:rgba(0,6,0,.98); border-right-color:rgba(0,255,65,.2); box-shadow:2px 0 24px rgba(0,255,65,.08); }
+[data-theme="hackerman"] .sidebar-link { color:rgba(0,255,65,.6); }
+[data-theme="hackerman"] .sidebar-link:hover { color:#00ff41; background:rgba(0,255,65,.08); }
+[data-theme="hackerman"] .sidebar-link.active { color:#00ff41; background:rgba(0,255,65,.1); border-color:rgba(0,255,65,.35); box-shadow:0 0 10px rgba(0,255,65,.15); }
+[data-theme="hackerman"] .sidebar-section-label { color:rgba(0,255,65,.3); letter-spacing:.15em; }
+[data-theme="hackerman"] .topbar { background:rgba(0,6,0,.98); }
+[data-theme="hackerman"] .home-quick-btn { border-color:rgba(0,255,65,.2); color:rgba(0,255,65,.7); }
+[data-theme="hackerman"] .home-quick-btn:hover { border-color:rgba(0,255,65,.5); color:#00ff41; box-shadow:0 0 16px rgba(0,255,65,.15); }
+[data-theme="hackerman"] .navbar::after { background:linear-gradient(90deg,transparent,#00ff41,transparent); }
+[data-theme="hackerman"] .footer::before { background:linear-gradient(90deg,transparent,#00ff41,transparent); opacity:.4; }
+[data-theme="hackerman"] .kanban-card,.hackerman .event-item { border-color:rgba(0,255,65,.15); }
+[data-theme="hackerman"] .badge-green { background:rgba(0,255,65,.12); color:#00ff41; border-color:rgba(0,255,65,.3); }
+[data-theme="hackerman"] input,[data-theme="hackerman"] textarea,[data-theme="hackerman"] select { background:rgba(0,18,0,.9); color:#00ff41; border-color:rgba(0,255,65,.25); caret-color:#00ff41; }
+[data-theme="hackerman"] ::-webkit-scrollbar-thumb { background:#00aa2b; }
+/* Blinking cursor effect on page headers */
+[data-theme="hackerman"] .page-header h1::after { content:'_'; animation:hackBlink .8s step-end infinite; opacity:.8; }
+@keyframes hackBlink { 0%,100%{opacity:.8} 50%{opacity:0} }
+/* Matrix rain orbs */
+[data-theme="hackerman"] .orb-1 { background:radial-gradient(circle,rgba(0,255,65,.15) 0%,transparent 70%); filter:blur(60px); }
+[data-theme="hackerman"] .orb-2 { background:radial-gradient(circle,rgba(0,204,51,.1) 0%,transparent 70%); filter:blur(80px); }
+[data-theme="hackerman"] .footer { background:rgba(0,6,0,.98); }
+[data-theme="hackerman"] .section-title { color:rgba(0,255,65,.6); }
+[data-theme="hackerman"] .section-title::after { background:linear-gradient(90deg,rgba(0,255,65,.3),transparent); }
+[data-theme="hackerman"] .entidade-card { background:rgba(0,18,0,.8); }
+[data-theme="hackerman"] .entidade-hero { border-color:rgba(0,255,65,.3) !important; }
+[data-theme="hackerman"] .cal-day.today .cal-day-num { background:rgba(0,255,65,.2); color:#00ff41; box-shadow:0 0 12px rgba(0,255,65,.4); }
+[data-theme="hackerman"] .newsletter-title,[data-theme="hackerman"] .countdown-num { color:#00ff41; text-shadow:0 0 8px rgba(0,255,65,.5); }
+
+/* =====================================================
+   TEMA: BIDU — Easter Eggs de Cachorro 🐾
+   ===================================================== */
+/* Patas nos backgrounds */
+[data-theme="bidu"] body::after {
+  content:'🐾';
+  position:fixed;bottom:72px;right:16px;
+  font-size:32px;opacity:.18;pointer-events:none;z-index:0;
+  animation:pawFloat 4s ease-in-out infinite;
+}
+@keyframes pawFloat { 0%,100%{transform:rotate(-15deg) scale(1)} 50%{transform:rotate(15deg) scale(1.1)} }
+
+/* Biscoito no footer badge */
+[data-theme="bidu"] .footer-badge::before { content:'🦴 '; }
+[data-theme="bidu"] .footer-badge-dot { background:#ea580c; }
+
+/* Pata no page-header label */
+[data-theme="bidu"] .page-header-label::after { content:' 🐾'; font-size:10px; }
+
+/* Orelha de cachorro nos cards ao hover */
+[data-theme="bidu"] .card:hover::before { content:'🐕'; position:absolute; top:-12px; right:12px; font-size:20px; opacity:.6; z-index:10; background:none; width:auto; height:auto; pointer-events:none; }
+
+/* Biscoito na sidebar footer */
+[data-theme="bidu"] .sidebar-time::before { content:'🍪 '; }
+
+/* Latido secreto no título da sidebar */
+[data-theme="bidu"] .sidebar-title::after { content:' 🐶'; font-size:12px; }
+
+/* Pata nas section titles */
+[data-theme="bidu"] .section-title::before { content:'🐾 '; font-size:11px; opacity:.5; }
+
+/* Woof no breadcrumb label */
+[data-theme="bidu"] .page-header-label::before { content:'🦴'; display:inline-block; width:14px; height:auto; background:none; font-size:10px; opacity:.7; }
+
+/* Placa de cachorrinho no stat card hover */
+[data-theme="bidu"] .stat-card:hover::after { content:'Au au! 🐕'; position:absolute; bottom:8px; right:10px; font-size:9px; font-family:var(--font-mono); color:var(--text-dim); opacity:.6; z-index:10; background:none; }
+
+/* Patas de cachorro na scrollbar */
+[data-theme="bidu"] ::-webkit-scrollbar-thumb { background:repeating-linear-gradient(45deg,#ea580c,#ea580c 4px,#c2410c 4px,#c2410c 8px); }
+
+/* Biscoito no kanban col header ao hover */
+[data-theme="bidu"] .kanban-col-header::after { content:'🦴'; opacity:0; transition:opacity .3s; margin-left:auto; font-size:14px; }
+[data-theme="bidu"] .kanban-col:hover .kanban-col-header::after { opacity:.4; }
+
+/* Cachorro correndo no navbar bottom line */
+[data-theme="bidu"] .navbar::after { animation:dogRun 6s linear infinite; background-size:30px 1px; background-image:repeating-linear-gradient(90deg,#ea580c 0px,#ea580c 20px,transparent 20px,transparent 30px); }
+
+/* Bolinha no hero */
+[data-theme="bidu"] .home-hero p::after { content:' 🎾'; opacity:.6; }
+
+/* ==================================================
+   CALENDAR: entidade badge style
+   ================================================== */
+.cal-entidade-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--font-mono); font-size:10px; font-weight:600;
+  padding:3px 9px; border-radius:100px; border:1px solid;
+  margin-top:6px; cursor:pointer; transition:all .2s;
+  backdrop-filter:blur(6px);
+}
+.cal-entidade-badge:hover { opacity:.8; transform:translateX(2px); }
+
+/* ===================================================
+   ESTUDOS EASTER EGG — Aula de Caligrafia
+   =================================================== */
+.caligrafia-overlay {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(18px);
+  z-index:5000;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  animation:fadeIn .3s ease;
+}
+.caligrafia-box {
+  background:var(--bg-card);
+  backdrop-filter:blur(32px) saturate(220%);
+  -webkit-backdrop-filter:blur(32px) saturate(220%);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-xl);
+  padding:40px 36px;
+  max-width:480px;
+  width:100%;
+  text-align:center;
+  position:relative;
+  box-shadow:var(--glass-inner-shadow),0 32px 80px rgba(0,0,0,.45);
+  animation:slideUp .32s cubic-bezier(.34,1.56,.64,1);
+}
+.caligrafia-box::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:40%;
+  background:linear-gradient(180deg,var(--glass-specular-strong) 0%,transparent 100%);
+  pointer-events:none;border-radius:inherit;
+}
+.caligrafia-close {
+  position:absolute;top:14px;right:14px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--glass-tint);backdrop-filter:blur(8px);
+  border:1px solid var(--glass-border);border-radius:var(--radius-sm);
+  color:var(--text-muted);cursor:pointer;font-size:16px;
+  transition:all .2s;z-index:1;
+}
+.caligrafia-close:hover { background:rgba(248,113,113,.12);border-color:var(--danger);color:var(--danger); }
+.caligrafia-emoji { font-size:52px;margin-bottom:12px;position:relative;z-index:1; }
+.caligrafia-title {
+  font-family:var(--font-display);font-size:26px;font-weight:800;font-style:italic;
+  letter-spacing:-.5px;color:var(--text);margin-bottom:8px;position:relative;z-index:1;
+}
+.caligrafia-secret {
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--primary);margin-bottom:16px;position:relative;z-index:1;
+}
+.caligrafia-desc {
+  font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:24px;position:relative;z-index:1;
+}
+.caligrafia-btn {
+  display:inline-flex;align-items:center;gap:10px;padding:12px 28px;
+  border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:var(--font-body);
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:#fff;text-decoration:none;cursor:pointer;border:none;
+  box-shadow:0 4px 20px var(--glow);transition:all .2s;position:relative;z-index:1;
+}
+.caligrafia-btn:hover { box-shadow:0 8px 32px var(--glow-strong);transform:translateY(-2px); }
+.caligrafia-fine-print {
+  font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:14px;
+  position:relative;z-index:1;letter-spacing:.3px;
 }

@@ -16,121 +16,183 @@
   {
     "date": "2026-04-10",
     "title": "Fim das inscrições Síntese Jr.",
-    "description": "NA",
-    "type": "evento"
+    "description": "Encerramento das inscrições do processo seletivo.",
+    "type": "deadline",
+    "entidade": "sintese-jr"
   },
   {
     "date": "2026-03-22",
     "title": "Fim das inscrições Conway",
-    "description": "NA",
-    "type": "evento"
+    "description": "Encerramento das inscrições 2026.1.",
+    "type": "deadline",
+    "entidade": "conway"
   },
   {
     "date": "2026-03-22",
     "title": "Fim das inscrições Hype",
-    "description": "NA",
-    "type": "evento"
+    "description": "Inscrições gerais encerram.",
+    "type": "deadline",
+    "entidade": "hype"
   },
   {
     "date": "2026-03-14",
     "title": "Fim das inscrições Each in the Shell",
-    "description": "NA",
-    "type": "evento"
+    "description": "Prazo de inscrição encerra.",
+    "type": "deadline",
+    "entidade": "each-in-the-shell"
   },
   {
     "date": "2026-03-16",
     "title": "Liberação dos Cases Each in the Shell",
-    "description": "NA",
-    "type": "evento"
+    "description": "Cases da competição disponibilizados.",
+    "type": "evento",
+    "entidade": "each-in-the-shell"
   },
   {
     "date": "2026-04-06",
     "title": "Entrevistas Each in the Shell",
-    "description": "NA",
-    "type": "evento"
+    "description": "Fase de entrevistas dos participantes.",
+    "type": "evento",
+    "entidade": "each-in-the-shell"
   },
   {
     "date": "2026-04-15",
     "title": "Aprovados Each in the Shell",
-    "description": "NA",
-    "type": "evento"
+    "description": "Divulgação dos resultados finais.",
+    "type": "evento",
+    "entidade": "each-in-the-shell"
   },
   {
     "date": "2026-03-30",
     "title": "PS Hype Iniciante",
-    "description": "NA",
-    "type": "evento"
+    "description": "Seletivo para trilha iniciante.",
+    "type": "evento",
+    "entidade": "hype"
   },
   {
     "date": "2026-03-23",
     "title": "PS Hype Avançado",
-    "description": "NA",
-    "type": "evento"
+    "description": "Seletivo para trilha avançada.",
+    "type": "evento",
+    "entidade": "hype"
   },
   {
     "date": "2026-05-01",
     "title": "Entrevistas Hype",
-    "description": "NA",
-    "type": "evento"
+    "description": "Etapa final do processo seletivo.",
+    "type": "evento",
+    "entidade": "hype"
   },
   {
     "date": "2026-03-20",
     "title": "Fim das Inscrições Monitoria AcaDASI",
-    "description": "NA",
-    "type": "evento"
+    "description": "Última chance para se inscrever.",
+    "type": "deadline",
+    "entidade": "dasi"
   },
   {
     "date": "2026-03-20",
     "title": "Reunião Geral DASI USP",
-    "description": "NA",
-    "type": "evento"
+    "description": "Reunião aberta a todos os alunos de SI.",
+    "type": "evento",
+    "entidade": "dasi"
   },
   {
     "date": "2026-03-18",
     "title": "Reunião DASI Esportivo",
-    "description": "NA",
-    "type": "evento"
+    "description": "Reunião do departamento esportivo.",
+    "type": "evento",
+    "entidade": "dasi"
   },
   {
     "date": "2026-03-19",
     "title": "Reunião DASI TI",
-    "description": "NA",
-    "type": "evento"
+    "description": "Reunião do departamento de TI.",
+    "type": "evento",
+    "entidade": "dasi"
   },
   {
     "date": "2026-04-05",
     "title": "Fim das Inscrições Grace USP",
-    "description": "NA",
-    "type": "evento"
+    "description": "Encerramento das inscrições 2026.1.",
+    "type": "deadline",
+    "entidade": "grace"
   },
   {
     "date": "2026-03-17",
-    "title": "Dojo Grace USP",
+    "title": "Dojo GRACE: GitHub",
     "description": "Curso de Github exclusivo para mulheres, ministrado por mulheres.",
-    "type": "evento"
+    "type": "evento",
+    "entidade": "grace"
   },
   {
     "date": "2026-03-19",
-    "title": "Dojo Grace USP",
-    "description": "Curso de Jargões, Debugging e Boas Práticas exclusivo para mulheres, ministrado por mulheres.",
-    "type": "evento"
+    "title": "Dojo GRACE: Debugging",
+    "description": "Curso de Jargões, Debugging e Boas Práticas exclusivo para mulheres.",
+    "type": "evento",
+    "entidade": "grace"
   },
   {
     "date": "2026-03-20",
-    "title": "Dojo Grace USP",
-    "description": "Curso de Leetcode e Roda de Conversa exclusivo para mulheres, ministrado por mulheres.",
-    "type": "evento"
+    "title": "Dojo GRACE: LeetCode",
+    "description": "Curso de Leetcode e Roda de Conversa exclusivo para mulheres.",
+    "type": "evento",
+    "entidade": "grace"
   },
   {
     "date": "2026-03-14",
     "title": "Inscrições Semana de SI",
-    "description": "",
-    "type": "evento"
+    "description": "Abertura das inscrições para o evento.",
+    "type": "evento",
+    "entidade": "semana-si"
   },
   {
     "date": "2026-03-27",
     "title": "Fim das Inscrições Semana de SI",
-    "description": "",
-    "type": "deadline"
+    "description": "Prazo final para inscrições.",
+    "type": "deadline",
+    "entidade": "semana-si"
+  },
+  {
+    "date": "2026-03-28",
+    "title": "Primeira Reunião Conway",
+    "description": "Kickoff do semestre da liga.",
+    "type": "evento",
+    "entidade": "conway"
+  },
+  {
+    "date": "2026-03-31",
+    "title": "Fim das Inscrições CodeLab",
+    "description": "Encerramento do PS 2026.1.",
+    "type": "deadline",
+    "entidade": "codelab"
+  },
+  {
+    "date": "2026-04-10",
+    "title": "Demo Day CodeLab",
+    "description": "Apresentação dos projetos do semestre.",
+    "type": "apresentacao",
+    "entidade": "codelab"
+  },
+  {
+    "date": "2026-03-30",
+    "title": "Processo Seletivo PET-SI",
+    "description": "Inscrições para bolsistas do PET.",
+    "type": "evento",
+    "entidade": "pet-si"
+  },
+  {
+    "date": "2026-04-12",
+    "title": "Entrevistas Síntese Jr.",
+    "description": "Entrevistas para novos membros.",
+    "type": "evento",
+    "entidade": "sintese-jr"
+  },
+  {
+    "date": "2026-04-18",
+    "title": "Hackathon Lab das Minas",
+    "description": "Hackathon exclusivo para mulheres e NB.",
+    "type": "evento",
+    "entidade": "lab-das-minas"
   }
 ]

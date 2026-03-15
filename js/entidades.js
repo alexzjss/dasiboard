@@ -9,6 +9,7 @@ async function initEntidades() {
     entidadesData = data ? (data.entidades || []) : [];
     window._entidadesData = entidadesData;
   }
+  await mergeCalendarEventsIntoEntidades();
   renderEntidadesHub();
 }
 
@@ -314,4 +315,21 @@ function linkIcon(tipo) {
     mail:      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
   };
   return icons[tipo] || icons.globe;
+}
+
+// ===== MERGE CALENDAR EVENTS INTO ENTIDADE =====
+// Called after both data sources load to inject calendar events into entity data
+async function mergeCalendarEventsIntoEntidades() {
+  const evData = await fetchJSON('./data/events.json');
+  if (!evData || !entidadesData.length) return;
+  evData.forEach(ev => {
+    if (!ev.entidade) return;
+    const ent = entidadesData.find(e => e.id === ev.entidade);
+    if (!ent) return;
+    // Avoid duplicates (events already defined in entidades.json)
+    const exists = ent.eventos.some(e => e.titulo === ev.title && e.data === ev.date);
+    if (!exists) {
+      ent.eventos.push({ data: ev.date, titulo: ev.title, descricao: ev.description || '', tipo: ev.type });
+    }
+  });
 }

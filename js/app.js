@@ -7,12 +7,14 @@ let scheduleDataAll = null;
 const THEMES = [
   { key: 'padrao',      label: 'Padrão' },
   { key: 'super',       label: 'Super' },
+  { key: 'hackerman',   label: 'Hackerman' },
   { key: 'hypado',      label: 'Hypado' },
   { key: 'omni',        label: 'Omni' },
   { key: 'minas',       label: 'Minas' },
   { key: 'd20',         label: 'D20' },
   { key: 'grifinho',    label: 'Grifinho' },
   { key: 'bidu',        label: 'Bidu' },
+  { key: 'mamaco',      label: 'Mamaco' },
   { key: 'laboratorio', label: 'Laboratório' },
   { key: 'sintetizado', label: 'Sintetizado' },
   { key: 'masacote',    label: 'Masacote' },
@@ -38,7 +40,7 @@ function applyTheme(theme) {
   if (dot) { dot.style.animation = 'none'; void dot.offsetWidth; dot.style.animation = ''; }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    const bgMap = { padrao:'#07070c',super:'#050a14',hypado:'#080600',omni:'#060606',minas:'#060908',d20:'#020614',grifinho:'#f4f0ff',bidu:'#fff8f0',laboratorio:'#fff0f7',sintetizado:'#f0f6ff',masacote:'#fffce8',grace:'#fff4eb' };
+    const bgMap = { padrao:'#07070c',super:'#04080f',hackerman:'#010a01',hypado:'#080600',omni:'#060606',minas:'#060908',d20:'#020614',grifinho:'#f4f0ff',bidu:'#fff8f0',mamaco:'#f5f0e0',laboratorio:'#fff0f7',sintetizado:'#f0f6ff',masacote:'#fffce8',grace:'#fff4eb' };
     meta.setAttribute('content', bgMap[theme.key] || '#07070c');
   }
   localStorage.setItem('dasitheme', theme.key);
@@ -76,7 +78,7 @@ function navigateTo(page) {
   if (page === 'schedule') initSchedule();
   if (page === 'newsletter') initNewsletter();
   if (page === 'docentes') initDocentes();
-  if (page === 'estudos') initEstudos();
+  if (page === 'estudos') { initEstudos(); estudosClickCount++; clearTimeout(estudosClickTimer); estudosClickTimer = setTimeout(()=>{ estudosClickCount=0; },2000); if (estudosClickCount >= 6) { estudosClickCount=0; triggerCaligrafiaEasterEgg(); } }
   if (page === 'ferramentas') closeTool?.();
   if (page === 'notas-gpa') initGPA?.();
   if (page === 'kanban') { initKanban?.(); }
@@ -282,6 +284,37 @@ function showToast(msg, duration = 2500) {
   toast.classList.add('show');
   clearTimeout(toast._timeout);
   toast._timeout = setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+// ===== ESTUDOS EASTER EGG =====
+let estudosClickCount = 0;
+let estudosClickTimer = null;
+
+function triggerCaligrafiaEasterEgg() {
+  if (document.getElementById('caligrafia-overlay')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'caligrafia-overlay';
+  overlay.className = 'caligrafia-overlay';
+  overlay.innerHTML = `
+    <div class="caligrafia-box">
+      <button class="caligrafia-close" onclick="document.getElementById('caligrafia-overlay').remove()">×</button>
+      <div class="caligrafia-emoji">✍️</div>
+      <div class="caligrafia-secret">— Aula Secreta Desbloqueada —</div>
+      <div class="caligrafia-title">Aula de Caligrafia</div>
+      <div class="caligrafia-desc">
+        Parabéns! Você encontrou uma aula especial.<br>
+        A arte da caligrafia é fundamental para qualquer estudante de SI — afinal, comunicação é tudo.
+      </div>
+      <a href="https://youtu.be/dQw4w9WgXcQ?si=b7kZlAuE7yX-D9lP" target="_blank" rel="noopener" class="caligrafia-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Assistir aula
+      </a>
+      <div class="caligrafia-fine-print">Clique 6x em Estudos para rever esta aula</div>
+    </div>
+  `;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); } });
+  document.body.appendChild(overlay);
 }
 
 // ===== INIT =====

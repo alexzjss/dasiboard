@@ -5,40 +5,35 @@ let calYear = new Date().getFullYear();
 let calMonth = new Date().getMonth();
 let calSelectedDate = null;
 
-// Active filters
-let calActiveTypes = new Set(['prova', 'entrega', 'evento', 'apresentacao', 'deadline']);
-let calActiveTurmas = new Set(); // empty = show all
+let calActiveTypes = new Set(['prova','entrega','evento','apresentacao','deadline']);
+let calActiveTurmas = new Set();
 let calAvailableTurmas = [];
 
-const TYPE_LABELS = {
-  prova:        'Prova',
-  entrega:      'Entrega',
-  evento:       'Evento',
-  apresentacao: 'Apresentação',
-  deadline:     'Deadline',
-};
+const TYPE_LABELS = { prova:'Prova', entrega:'Entrega', evento:'Evento', apresentacao:'Apresentação', deadline:'Deadline' };
+const TYPE_DOT_COLORS = { prova:'var(--danger)', entrega:'var(--warning)', evento:'var(--success)', apresentacao:'var(--info)', deadline:'#fb923c' };
 
-const TYPE_DOT_COLORS = {
-  prova:        'var(--danger)',
-  entrega:      'var(--warning)',
-  evento:       'var(--success)',
-  apresentacao: 'var(--info)',
-  deadline:     '#fb923c',
+// Entidade name/color map (populated after entidades load)
+const ENTIDADE_META = {
+  'dasi':             { nome:'DASI',            cor:'#7c3aed', emoji:'🎓' },
+  'semana-si':        { nome:'Semana de SI',    cor:'#0ea5e9', emoji:'🚀' },
+  'grace':            { nome:'GRACE',           cor:'#ec4899', emoji:'💜' },
+  'each-in-the-shell':{ nome:'Each in the Shell',cor:'#10b981',emoji:'🐚' },
+  'hype':             { nome:'Hype',            cor:'#f97316', emoji:'⚡' },
+  'codelab':          { nome:'CodeLab',         cor:'#6366f1', emoji:'💻' },
+  'lab-das-minas':    { nome:'Lab das Minas',   cor:'#d946ef', emoji:'🔬' },
+  'conway':           { nome:'Conway',          cor:'#14b8a6', emoji:'🧮' },
+  'pet-si':           { nome:'PET-SI',          cor:'#f59e0b', emoji:'🏅' },
+  'sintese-jr':       { nome:'Síntese Jr.',     cor:'#ef4444', emoji:'💼' },
 };
 
 async function initCalendar() {
   if (calEvents.length === 0) {
     const data = await fetchJSON('./data/events.json');
     calEvents = data || [];
-
-    // Collect unique turmas referenced in events
     const turmaSet = new Set();
-    calEvents.forEach(ev => {
-      if (Array.isArray(ev.turmas)) ev.turmas.forEach(t => turmaSet.add(t));
-    });
+    calEvents.forEach(ev => { if (Array.isArray(ev.turmas)) ev.turmas.forEach(t => turmaSet.add(t)); });
     calAvailableTurmas = [...turmaSet].sort();
   }
-
   renderCalendarFilters();
   renderCalendar();
   renderCalendarSidebar(null);
@@ -74,14 +69,11 @@ function renderCalendar() {
   if (!grid || !monthLabel) return;
 
   monthLabel.textContent = `${MONTH_NAMES_PT[calMonth]} ${calYear}`;
-
   const firstDay = new Date(calYear, calMonth, 1).getDay();
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
   const today = new Date();
   const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
   const eventMap = buildFilteredEventMap();
-
   grid.innerHTML = '';
 
   for (let i = 0; i < firstDay; i++) {
@@ -94,10 +86,8 @@ function renderCalendar() {
     const dateKey = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const dayEl = document.createElement('div');
     dayEl.className = 'cal-day';
-
     const isToday = dateKey === todayKey;
     const events = eventMap[dateKey] || [];
-
     if (isToday) dayEl.classList.add('today');
     if (events.length) dayEl.classList.add('has-events');
     if (dateKey === calSelectedDate) dayEl.classList.add('selected-day');
@@ -113,6 +103,10 @@ function renderCalendar() {
       events.slice(0, 3).forEach(ev => {
         const dot = document.createElement('div');
         dot.className = `cal-event-dot tipo-${ev.type || 'default'}`;
+        // Color dot by entidade if available
+        if (ev.entidade && ENTIDADE_META[ev.entidade]) {
+          dot.style.background = ENTIDADE_META[ev.entidade].cor;
+        }
         dotsEl.appendChild(dot);
       });
       dayEl.appendChild(dotsEl);
@@ -124,7 +118,6 @@ function renderCalendar() {
       dayEl.classList.add('selected-day');
       renderCalendarSidebar(dateKey, getFilteredEvents(dateKey));
     });
-
     grid.appendChild(dayEl);
   }
 
@@ -138,21 +131,13 @@ function renderCalendarSidebar(dateKey, events = []) {
   if (!panel) return;
 
   if (!dateKey) {
-    panel.innerHTML = `
-      <div class="cal-selected-date">Selecione um dia</div>
-      <div class="no-events-msg">Clique em um dia para ver eventos</div>
-    `;
+    panel.innerHTML = `<div class="cal-selected-date">Selecione um dia</div><div class="no-events-msg">Clique em um dia para ver eventos</div>`;
     return;
   }
 
   const [y, m, d] = dateKey.split('-').map(Number);
   const dateLabel = `${String(d).padStart(2,'0')} de ${MONTH_NAMES_PT[m-1]}`;
-
-  panel.innerHTML = `
-    <div class="cal-selected-date">${dateLabel}</div>
-    <div class="cal-day-events" id="cal-day-events-list"></div>
-  `;
-
+  panel.innerHTML = `<div class="cal-selected-date">${dateLabel}</div><div class="cal-day-events" id="cal-day-events-list"></div>`;
   const list = el('#cal-day-events-list');
 
   if (!events.length) {
@@ -164,16 +149,24 @@ function renderCalendarSidebar(dateKey, events = []) {
     const item = document.createElement('div');
     item.className = `cal-day-event-item tipo-${ev.type || 'default'} anim-fade-up`;
 
-    let turmasBadgesHtml = '';
+    // Entidade badge
+    let entidadeBadge = '';
+    if (ev.entidade && ENTIDADE_META[ev.entidade]) {
+      const meta = ENTIDADE_META[ev.entidade];
+      const r = parseInt(meta.cor.slice(1,3),16), g = parseInt(meta.cor.slice(3,5),16), b = parseInt(meta.cor.slice(5,7),16);
+      entidadeBadge = `<div class="cal-entidade-badge" style="background:rgba(${r},${g},${b},.15);color:${meta.cor};border-color:rgba(${r},${g},${b},.3)" onclick="event.stopPropagation();navigateTo('entidades');setTimeout(()=>openEntidade('${ev.entidade}'),120)">${meta.emoji} ${meta.nome}</div>`;
+    }
+
+    let turmasBadges = '';
     if (Array.isArray(ev.turmas) && ev.turmas.length > 0) {
-      const badges = ev.turmas.map(t => `<span class="cal-turma-badge">${t}</span>`).join('');
-      turmasBadgesHtml = `<div class="cal-day-event-turmas">${badges}</div>`;
+      turmasBadges = `<div class="cal-day-event-turmas">${ev.turmas.map(t=>`<span class="cal-turma-badge">${t}</span>`).join('')}</div>`;
     }
 
     item.innerHTML = `
       <div class="cal-day-event-title">${ev.title}</div>
       ${ev.description && ev.description !== 'NA' ? `<div class="cal-day-event-desc">${ev.description}</div>` : ''}
-      ${turmasBadgesHtml}
+      ${entidadeBadge}
+      ${turmasBadges}
     `;
     list.appendChild(item);
   });
@@ -182,61 +175,30 @@ function renderCalendarSidebar(dateKey, events = []) {
 function renderCalendarFilters() {
   const panel = el('#cal-filters-panel');
   if (!panel) return;
-
   const typeButtons = Object.entries(TYPE_LABELS).map(([type, label]) => {
     const isActive = calActiveTypes.has(type);
     const color = TYPE_DOT_COLORS[type] || 'var(--text-muted)';
-    return `<button class="cal-filter-btn ${isActive ? 'active' : ''}" data-type="${type}" onclick="calToggleTypeFilter('${type}')"><span class="filter-dot" style="background:${color}"></span>${label}</button>`;
+    return `<button class="cal-filter-btn ${isActive?'active':''}" data-type="${type}" onclick="calToggleTypeFilter('${type}')"><span class="filter-dot" style="background:${color}"></span>${label}</button>`;
   }).join('');
-
   let turmaSection = '';
   if (calAvailableTurmas.length > 0) {
     const turmaButtons = calAvailableTurmas.map(t => {
-      const isActive = calActiveTurmas.has(t);
-      return `<button class="cal-filter-btn ${isActive ? 'active' : ''}" data-turma="${t}" onclick="calToggleTurmaFilter('${t}')">${t}</button>`;
+      return `<button class="cal-filter-btn ${calActiveTurmas.has(t)?'active':''}" data-turma="${t}" onclick="calToggleTurmaFilter('${t}')">${t}</button>`;
     }).join('');
-    turmaSection = `
-      <div class="cal-filters-title" style="margin-top:8px;">Turmas</div>
-      <div class="cal-filter-group">${turmaButtons}</div>
-    `;
+    turmaSection = `<div class="cal-filters-title" style="margin-top:8px">Turmas</div><div class="cal-filter-group">${turmaButtons}</div>`;
   }
-
-  panel.innerHTML = `
-    <div class="cal-legend-title">Filtros</div>
-    <div class="cal-filters-title">Tipo</div>
-    <div class="cal-filter-group">${typeButtons}</div>
-    ${turmaSection}
-  `;
+  panel.innerHTML = `<div class="cal-legend-title">Filtros</div><div class="cal-filters-title">Tipo</div><div class="cal-filter-group">${typeButtons}</div>${turmaSection}`;
 }
 
 function calToggleTypeFilter(type) {
-  if (calActiveTypes.has(type)) {
-    if (calActiveTypes.size > 1) calActiveTypes.delete(type);
-  } else {
-    calActiveTypes.add(type);
-  }
-  renderCalendarFilters();
-  renderCalendar();
+  if (calActiveTypes.has(type)) { if (calActiveTypes.size > 1) calActiveTypes.delete(type); }
+  else calActiveTypes.add(type);
+  renderCalendarFilters(); renderCalendar();
 }
-
 function calToggleTurmaFilter(turma) {
-  if (calActiveTurmas.has(turma)) {
-    calActiveTurmas.delete(turma);
-  } else {
-    calActiveTurmas.add(turma);
-  }
-  renderCalendarFilters();
-  renderCalendar();
+  if (calActiveTurmas.has(turma)) calActiveTurmas.delete(turma); else calActiveTurmas.add(turma);
+  renderCalendarFilters(); renderCalendar();
 }
-
-function calPrevMonth() {
-  calMonth--;
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-}
-
-function calNextMonth() {
-  calMonth++;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  renderCalendar();
-}
+function calPrevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function calNextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+function calGoToday() { calYear = new Date().getFullYear(); calMonth = new Date().getMonth(); renderCalendar(); }
