@@ -1,4 +1,4 @@
-/* ===== ANIMATIONS ===== */
+/* ===== ANIMATIONS — Liquid Glass / Frutiger Aero ===== */
 
 /* Entry animations with stagger */
 .stagger-1 { animation-delay: 0.05s; }
@@ -25,14 +25,9 @@
   to   { opacity: 1; }
 }
 
-/* Glow pulse for highlights */
+/* Glow pulse */
 .glow-pulse {
   animation: glowPulse 3s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 16px rgba(124,58,237,0.3); }
-  50%       { box-shadow: 0 0 32px rgba(124,58,237,0.6); }
 }
 
 /* Number count up */
@@ -40,109 +35,79 @@
   from { opacity: 0; transform: scale(0.8); }
   to   { opacity: 1; transform: scale(1); }
 }
-
 .count-up {
   animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Shine sweep on hover */
+/* Liquid glass shine sweep on hover */
 .card-shine {
   position: relative;
   overflow: hidden;
 }
-
 .card-shine::after {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -75%;
-  width: 50%;
-  height: 200%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,0.04),
-    transparent
-  );
+  top: -50%; left: -75%;
+  width: 50%; height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
   transform: skewX(-20deg);
-  transition: left 0.6s ease;
+  transition: left 0.7s ease;
 }
-
-.card-shine:hover::after {
-  left: 125%;
-}
+.card-shine:hover::after { left: 125%; }
 
 /* Progress bar animation */
-@keyframes progressFill {
-  from { width: 0%; }
-}
+@keyframes progressFill { from { width: 0%; } }
+.progress-bar { animation: progressFill 1s cubic-bezier(0.4, 0, 0.2, 1) both; }
 
-.progress-bar {
-  animation: progressFill 1s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* Float animation for decorative elements */
+/* Float animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
 }
 
-/* Skeleton loading */
+/* Skeleton shimmer */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-3) 25%,
-    rgba(124,58,237,0.08) 50%,
-    var(--bg-3) 75%
-  );
+  background: linear-gradient(90deg, var(--bg-3) 25%, rgba(124,58,237,0.08) 50%, var(--bg-3) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
 }
 
 /* Typed cursor */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-.cursor-blink {
-  animation: blink 1s step-end infinite;
-}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.cursor-blink { animation: blink 1s step-end infinite; }
 
 /* Scale in */
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.9); }
   to   { opacity: 1; transform: scale(1); }
 }
-
-.scale-in {
-  animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
+.scale-in { animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 
 /* Slide from right */
 @keyframes slideFromRight {
   from { opacity: 0; transform: translateX(24px); }
   to   { opacity: 1; transform: translateX(0); }
 }
+.slide-right { animation: slideFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both; }
 
-.slide-right {
-  animation: slideFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* Bg gradient animation */
+/* Gradient shift */
 @keyframes gradientShift {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-
 .gradient-animate {
   background-size: 200% 200%;
   animation: gradientShift 6s ease infinite;
+}
+
+/* Liquid ripple on click */
+@keyframes liquidRipple {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
 }

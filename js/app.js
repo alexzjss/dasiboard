@@ -73,11 +73,25 @@ function applyTheme(theme) {
 
 function triggerMoonEasterEgg() {
   const moon = document.getElementById('moon-egg');
+  const text = document.getElementById('moon-to-the-moon-text');
   if (!moon) return;
+
+  // Reset moon
   moon.classList.remove('flying');
-  void moon.offsetWidth; // reflow to restart anim
+  void moon.offsetWidth;
   moon.classList.add('flying');
-  setTimeout(() => moon.classList.remove('flying'), 1500);
+
+  // Show "To the moon" text shortly after launch
+  if (text) {
+    text.classList.remove('show');
+    void text.offsetWidth;
+    setTimeout(() => {
+      text.classList.add('show');
+      setTimeout(() => text.classList.remove('show'), 2700);
+    }, 200);
+  }
+
+  setTimeout(() => moon.classList.remove('flying'), 2600);
 }
 
 function loadSavedTheme() {
