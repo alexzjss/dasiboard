@@ -691,3 +691,528 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   .newsletter-featured{padding:18px}
   .newsletter-title{font-size:17px}
 }
+
+/* ========================================================
+   LIQUID GLASS UPGRADE — Camadas adicionais de brilho
+   ======================================================== */
+
+/* Nova variável de saturação para vidro mais intenso */
+:root {
+  --glass-blur-soft: blur(16px) saturate(160%);
+  --glass-blur-mid: blur(24px) saturate(190%);
+  --glass-blur-hard: blur(36px) saturate(220%);
+  --glass-blur-ultra: blur(48px) saturate(240%);
+  --glass-specular: rgba(255,255,255,0.12);
+  --glass-specular-strong: rgba(255,255,255,0.22);
+  --glass-inner-shadow: inset 0 1px 0 var(--glass-specular), inset 0 -1px 0 rgba(0,0,0,0.08);
+  --glass-drop-shadow: 0 8px 32px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.16);
+  --glass-drop-shadow-hover: 0 16px 48px rgba(0,0,0,0.38), 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* Versões light com shininess diferente */
+[data-theme="grifinho"],[data-theme="bidu"],[data-theme="laboratorio"],
+[data-theme="sintetizado"],[data-theme="masacote"],[data-theme="grace"] {
+  --glass-specular: rgba(255,255,255,0.7);
+  --glass-specular-strong: rgba(255,255,255,0.85);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(0,0,0,0.04);
+}
+
+/* ---- Upgrade dos cards existentes ---- */
+.card {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow);
+  background: var(--bg-card);
+}
+.card:hover {
+  backdrop-filter: var(--glass-blur-hard);
+  -webkit-backdrop-filter: var(--glass-blur-hard);
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow-hover);
+}
+
+/* Specular highlight top-left — efeito de luz incidindo no vidro */
+.card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(
+    160deg,
+    var(--glass-specular-strong) 0%,
+    var(--glass-specular) 20%,
+    transparent 60%
+  );
+  pointer-events: none; z-index: 1; border-radius: inherit;
+}
+
+/* Borda luminosa na parte superior */
+.card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(135deg, var(--glass-tint) 0%, transparent 50%),
+    linear-gradient(to bottom, var(--glass-border) 0%, transparent 1px);
+  pointer-events: none; z-index: 0; border-radius: inherit;
+}
+
+/* ---- Sidebar liquid glass upgrade ---- */
+.sidebar {
+  background: var(--sidebar-bg);
+  backdrop-filter: var(--glass-blur-ultra);
+  -webkit-backdrop-filter: var(--glass-blur-ultra);
+  box-shadow: 2px 0 32px rgba(0,0,0,0.22), inset -1px 0 0 var(--glass-border);
+}
+/* Shine strip on sidebar right edge */
+.sidebar::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0; width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--glass-specular) 30%,
+    var(--glass-specular) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ---- Topbar liquid glass upgrade ---- */
+.topbar {
+  backdrop-filter: var(--glass-blur-ultra);
+  -webkit-backdrop-filter: var(--glass-blur-ultra);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.18), inset 0 -1px 0 var(--glass-border);
+}
+/* Topbar top specular */
+.topbar::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--glass-specular-strong) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ---- Modal liquid glass upgrade ---- */
+.modal-box {
+  backdrop-filter: var(--glass-blur-ultra);
+  -webkit-backdrop-filter: var(--glass-blur-ultra);
+  box-shadow:
+    var(--glass-inner-shadow),
+    0 32px 80px rgba(0,0,0,0.45),
+    0 0 0 1px var(--glass-border);
+}
+
+/* ---- Search overlay upgrade ---- */
+.search-box {
+  backdrop-filter: var(--glass-blur-ultra);
+  -webkit-backdrop-filter: var(--glass-blur-ultra);
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular),
+    0 24px 64px rgba(0,0,0,0.42),
+    0 0 0 1px var(--glass-border);
+}
+
+/* ---- Home quick buttons upgrade ---- */
+.home-quick-btn {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow);
+}
+.home-quick-btn:hover {
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow-hover);
+  backdrop-filter: var(--glass-blur-hard);
+  -webkit-backdrop-filter: var(--glass-blur-hard);
+}
+
+/* ---- Stat cards upgrade ---- */
+.stat-card {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow);
+}
+.stat-card::before {
+  background: linear-gradient(
+    160deg,
+    var(--glass-specular-strong) 0%,
+    var(--glass-specular) 15%,
+    transparent 55%
+  );
+}
+.stat-card:hover {
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow-hover);
+}
+
+/* ---- Event items upgrade ---- */
+.event-item {
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  box-shadow: var(--glass-inner-shadow);
+}
+.event-item:hover {
+  box-shadow: var(--glass-inner-shadow), 4px 0 20px rgba(0,0,0,0.15);
+}
+
+/* ---- Kanban cards upgrade ---- */
+.kanban-card {
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  box-shadow: var(--glass-inner-shadow);
+}
+.kanban-card:hover {
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow);
+}
+.kanban-col {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow);
+}
+
+/* ---- Badges with glass ---- */
+.badge {
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* ---- Calendar main upgrade ---- */
+.calendar-main {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow);
+}
+
+/* ---- GPA cards upgrade ---- */
+.gpa-big-card {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow);
+}
+
+/* ---- Docente/estudo cards upgrade ---- */
+.docente-card, .estudo-card {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow);
+}
+.docente-card:hover, .estudo-card:hover {
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow-hover);
+}
+
+/* ---- Newsletter featured upgrade ---- */
+.newsletter-featured {
+  backdrop-filter: var(--glass-blur-hard);
+  -webkit-backdrop-filter: var(--glass-blur-hard);
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow);
+}
+
+/* ---- Sidebar links glass active ---- */
+.sidebar-link.active {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 12px var(--glow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Tool cards upgrade ---- */
+.tool-card {
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  box-shadow: var(--glass-inner-shadow);
+}
+.tool-card:hover {
+  box-shadow: var(--glass-inner-shadow), var(--glass-drop-shadow-hover);
+}
+
+/* ---- GPA semester blocks ---- */
+.gpa-semester-block {
+  backdrop-filter: var(--glass-blur-soft);
+  -webkit-backdrop-filter: var(--glass-blur-soft);
+  box-shadow: var(--glass-inner-shadow);
+}
+
+/* ---- Floating glass orb on active sidebar item ---- */
+.sidebar-link.active::after {
+  content: '';
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--glow), 0 0 16px var(--glow);
+}
+
+/* ===================================================
+   ENTIDADES — Styles
+   =================================================== */
+
+/* Hub grid */
+.entidades-intro { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px; max-width: 600px; }
+
+.entidades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* Entidade card (hub) */
+.entidade-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(.34,1.56,.64,1);
+  text-align: left;
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glass-inner-shadow);
+}
+
+/* Specular + color glow on hover */
+.entidade-card-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 55%;
+  background: linear-gradient(160deg, var(--glass-specular-strong) 0%, var(--glass-specular) 20%, transparent 65%);
+  pointer-events: none; border-radius: inherit; z-index: 1; transition: opacity 0.3s;
+}
+.entidade-card-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% -20%, color-mix(in srgb, var(--e-cor,#7c3aed) 14%, transparent) 0%, transparent 70%);
+  pointer-events: none; z-index: 0; transition: opacity 0.3s;
+}
+
+.entidade-card:hover {
+  border-color: var(--e-cor, var(--border-hover));
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:
+    var(--glass-inner-shadow),
+    0 16px 48px rgba(0,0,0,0.3),
+    0 0 0 1px color-mix(in srgb, var(--e-cor,#7c3aed) 35%, transparent);
+  background: var(--bg-card-hover);
+}
+
+.entidade-card > * { position: relative; z-index: 2; }
+
+.entidade-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.entidade-emoji { font-size: 28px; line-height: 1; }
+.entidade-tipo-badge {
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 3px 8px; border-radius: 100px; border: 1px solid;
+  backdrop-filter: blur(8px); white-space: nowrap;
+}
+.entidade-tipo-badge-lg {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 4px 12px; border-radius: 100px; border: 1px solid;
+  backdrop-filter: blur(8px);
+}
+.entidade-card-nome {
+  font-family: var(--font-display); font-size: 18px; font-weight: 800;
+  font-style: italic; color: var(--text); letter-spacing: -0.3px; line-height: 1.2;
+}
+.entidade-card-desc {
+  font-size: 12.5px; color: var(--text-muted); line-height: 1.6; flex: 1;
+}
+.entidade-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; border-top: 1px solid var(--glass-border);
+  margin-top: auto;
+}
+.entidade-eventos-count {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--text-dim);
+}
+.entidade-card-arrow {
+  font-size: 14px; color: var(--e-cor, var(--primary));
+  transition: transform 0.2s; font-weight: 700;
+}
+.entidade-card:hover .entidade-card-arrow { transform: translateX(4px); }
+
+/* ---- Entidade hero (detalhe) ---- */
+#entidade-detalhe { display: none; }
+
+.entidade-hero {
+  position: relative; overflow: hidden;
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur-hard);
+  -webkit-backdrop-filter: var(--glass-blur-hard);
+  border: 1px solid color-mix(in srgb, var(--e-cor,#7c3aed) 35%, transparent);
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  margin-bottom: 24px;
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular),
+    0 0 0 1px color-mix(in srgb, var(--e-cor,#7c3aed) 18%, transparent),
+    0 16px 48px rgba(0,0,0,0.25);
+}
+.entidade-hero-glow {
+  position: absolute; top: -40%; right: -15%; width: 60%; height: 120%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--e-cor,#7c3aed) 22%, transparent) 0%, transparent 70%);
+  pointer-events: none; filter: blur(4px);
+}
+.entidade-hero-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 55%;
+  background: linear-gradient(160deg, var(--glass-specular-strong) 0%, var(--glass-specular) 18%, transparent 60%);
+  pointer-events: none; border-radius: inherit;
+}
+.entidade-hero-content { position: relative; z-index: 1; }
+.entidade-hero-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.entidade-hero-emoji { font-size: 40px; line-height: 1; filter: drop-shadow(0 0 12px color-mix(in srgb, var(--e-cor,#7c3aed) 50%, transparent)); }
+.entidade-hero-nome {
+  font-family: var(--font-display); font-size: 34px; font-weight: 800;
+  font-style: italic; letter-spacing: -0.8px; line-height: 1.1; color: var(--text);
+  margin-bottom: 4px;
+}
+.entidade-hero-nomeCompleto {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+  letter-spacing: 0.5px; margin-bottom: 14px;
+}
+.entidade-hero-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; max-width: 680px; }
+.entidade-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.entidade-link-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 14px; border-radius: var(--radius-sm);
+  font-size: 12.5px; font-weight: 600; font-family: var(--font-body);
+  text-decoration: none; cursor: pointer;
+  background: color-mix(in srgb, var(--e-cor,#7c3aed) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--e-cor,#7c3aed) 35%, transparent);
+  color: var(--e-cor, var(--primary));
+  backdrop-filter: blur(8px);
+  transition: all 0.22s ease;
+}
+.entidade-link-btn:hover {
+  background: color-mix(in srgb, var(--e-cor,#7c3aed) 22%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--e-cor,#7c3aed) 30%, transparent);
+}
+
+/* ---- Destaques (stats row) ---- */
+.entidade-destaques {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.entidade-destaque-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur-mid);
+  -webkit-backdrop-filter: var(--glass-blur-mid);
+  border: 1px solid color-mix(in srgb, var(--e-cor,#7c3aed) 22%, transparent);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  box-shadow: var(--glass-inner-shadow);
+}
+.entidade-destaque-card-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(160deg, var(--glass-specular-strong) 0%, transparent 65%);
+  pointer-events: none; border-radius: inherit;
+}
+.entidade-destaque-icon { font-size: 22px; line-height: 1; margin-bottom: 8px; position: relative; z-index: 1; }
+.entidade-destaque-val {
+  font-family: var(--font-display); font-size: 28px; font-weight: 800;
+  font-style: italic; letter-spacing: -1px; line-height: 1;
+  margin-bottom: 4px; position: relative; z-index: 1;
+}
+.entidade-destaque-lbl {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted);
+  position: relative; z-index: 1;
+}
+
+/* ---- Body grid (eventos + newsletter) ---- */
+.entidade-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.entidade-col { display: flex; flex-direction: column; gap: 0; }
+
+/* Entidade event item (colored) */
+.entidade-event-item::before { opacity: 0.6; }
+.entidade-urgencia {
+  display: inline-flex; margin-left: 8px; align-items: center;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 700;
+  padding: 2px 7px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+.entidade-passados summary::-webkit-details-marker { display: none; }
+.entidade-passados summary { list-style: none; display: flex; align-items: center; gap: 6px; }
+.entidade-passados summary::before { content: '▸'; transition: transform 0.2s; }
+.entidade-passados[open] summary::before { transform: rotate(90deg); }
+
+/* ---- Newsletter featured (entidade) ---- */
+.entidade-nl-featured {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur-hard);
+  -webkit-backdrop-filter: var(--glass-blur-hard);
+  border: 1px solid color-mix(in srgb, var(--e-cor,#7c3aed) 30%, transparent);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular),
+    0 8px 28px rgba(0,0,0,0.2);
+}
+.entidade-nl-featured:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 var(--glass-specular),
+    0 16px 44px rgba(0,0,0,0.3),
+    0 0 0 1px color-mix(in srgb, var(--e-cor,#7c3aed) 40%, transparent);
+}
+.entidade-nl-featured-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(160deg, var(--glass-specular-strong) 0%, var(--glass-specular) 18%, transparent 60%);
+  pointer-events: none; border-radius: inherit; z-index: 1;
+}
+.entidade-nl-featured-glow {
+  position: absolute; top: -30%; right: -10%; width: 50%; height: 100%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--e-cor,#7c3aed) 15%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+}
+.entidade-nl-read-btn {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* ---- Back button & page header ---- */
+.entidades-page-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 32px;
+}
+#entidades-back-btn {
+  display: none; align-items: center; gap: 7px;
+  padding: 8px 14px; border-radius: var(--radius-sm);
+  background: var(--glass-tint); backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border); color: var(--text-muted);
+  font-size: 13px; font-weight: 600; font-family: var(--font-body);
+  cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+}
+#entidades-back-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* ---- Responsive entidades ---- */
+@media (max-width: 900px) {
+  .entidade-body-grid { grid-template-columns: 1fr; }
+  .entidade-destaques { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .entidades-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .entidade-card { padding: 16px; border-radius: var(--radius-lg); }
+  .entidade-card-nome { font-size: 15px; }
+  .entidade-emoji { font-size: 22px; }
+  .entidade-hero { padding: 22px; }
+  .entidade-hero-nome { font-size: 26px; }
+  .entidade-destaques { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .entidade-destaque-card { padding: 14px; }
+  .entidade-destaque-val { font-size: 22px; }
+  .entidade-body-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 380px) {
+  .entidades-grid { grid-template-columns: 1fr; }
+  .entidade-destaques { grid-template-columns: 1fr 1fr; }
+}

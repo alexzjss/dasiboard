@@ -80,6 +80,7 @@ function navigateTo(page) {
   if (page === 'ferramentas') closeTool?.();
   if (page === 'notas-gpa') initGPA?.();
   if (page === 'kanban') { initKanban?.(); }
+  if (page === 'entidades') initEntidades?.();
   history.pushState(null, '', `#${page}`);
 }
 

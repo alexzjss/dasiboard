@@ -108,6 +108,28 @@ async function runGlobalSearch(query) {
     }
   });
 
+  // Search entidades
+  if (window._entidadesData) {
+    window._entidadesData.forEach(e => {
+      if (
+        (e.nome || '').toLowerCase().includes(q) ||
+        (e.nomeCompleto || '').toLowerCase().includes(q) ||
+        (e.tipo || '').toLowerCase().includes(q) ||
+        (e.descricao || '').toLowerCase().includes(q)
+      ) {
+        results.push({
+          type: 'entidade',
+          icon: e.emoji || '🏛️',
+          title: e.nome,
+          sub: e.tipo + ' · ' + e.nomeCompleto.slice(0, 50),
+          action: () => { navigateTo('entidades'); setTimeout(() => openEntidade(e.id), 100); closeSearch(); },
+          badge: e.tipo,
+          badgeColor: e.cor,
+        });
+      }
+    });
+  }
+
   // Search pages
   const pages = [
     { name: 'Home', page: 'home', icon: '🏠', sub: 'Página principal' },
@@ -118,6 +140,7 @@ async function runGlobalSearch(query) {
     { name: 'Newsletter', page: 'newsletter', icon: '✉️', sub: 'Notícias do curso' },
     { name: 'Docentes', page: 'docentes', icon: '👥', sub: 'Professores' },
     { name: 'Estudos', page: 'estudos', icon: '📖', sub: 'Materiais' },
+    { name: 'Entidades', page: 'entidades', icon: '🏛️', sub: 'DASI, Síntese Jr., GRACE...' },
     { name: 'Ferramentas', page: 'ferramentas', icon: '🔧', sub: 'Pomodoro, notas, etc.' },
   ];
   pages.forEach(p => {
@@ -141,8 +164,8 @@ async function runGlobalSearch(query) {
 
   // Group by type
   const grouped = {};
-  const typeOrder = ['page', 'event', 'estudo', 'docente'];
-  const typeLabels = { page: 'Páginas', event: 'Eventos', estudo: 'Materiais de estudo', docente: 'Docentes' };
+  const typeOrder = ['page', 'event', 'estudo', 'docente', 'entidade'];
+  const typeLabels = { page: 'Páginas', event: 'Eventos', estudo: 'Materiais de estudo', docente: 'Docentes', entidade: 'Entidades' };
   results.forEach(r => {
     if (!grouped[r.type]) grouped[r.type] = [];
     grouped[r.type].push(r);

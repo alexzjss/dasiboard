@@ -1,0 +1,358 @@
+{
+  "entidades": [
+    {
+      "id": "dasi",
+      "nome": "DASI",
+      "nomeCompleto": "Diretório Acadêmico de Sistemas de Informação",
+      "tipo": "Diretório Acadêmico",
+      "descricao": "Órgão representativo máximo dos estudantes de Sistemas de Informação da USP/EACH. O DASI organiza eventos, promove a integração da turma, representa os alunos junto à administração e apoia iniciativas acadêmicas e culturais do curso.",
+      "cor": "#7c3aed",
+      "corSecundaria": "#c084fc",
+      "emoji": "🎓",
+      "links": [
+        { "label": "Instagram", "url": "https://instagram.com/dasi.usp", "icone": "instagram" },
+        { "label": "Site oficial", "url": "#", "icone": "globe" }
+      ],
+      "contato": "dasi.usp@gmail.com",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-14",
+          "titulo": "Bem-vindos ao 1º Semestre de 2026!",
+          "resumo": "Calouros e veteranos, o DASI inicia o semestre com novidades: novos projetos, eventos culturais e oportunidades de monitoria estão chegando.",
+          "conteudo": "O DASI dá as boas-vindas a todos os alunos de SI para o semestre 2026.1! Este semestre promete ser cheio de atividades. Fiquem atentos ao nosso calendário de eventos e não percam a Reunião Geral do dia 20 de março.\n\nDestaques do semestre:\n- Abertura do processo seletivo de monitoria AcaDASI\n- Parceria com entidades para semana de workshops\n- Processo eleitoral da nova gestão em outubro\n\nQualquer dúvida, entre em contato pelo Instagram @dasi.usp."
+        },
+        {
+          "id": 2,
+          "data": "2026-03-20",
+          "titulo": "Reunião Geral DASI — Resumo e próximos passos",
+          "resumo": "A Reunião Geral de 20/03 reuniu mais de 60 alunos. Confira as decisões tomadas e os projetos aprovados para o semestre.",
+          "conteudo": "A Reunião Geral realizada na última quinta-feira contou com a presença de representantes de todas as turmas ativas do curso.\n\nPrincipais deliberações:\n- Aprovação do orçamento semestral do DASI\n- Abertura de vagas nos departamentos de Comunicação, Eventos e TI\n- Confirmação da parceria com a Semana de SI para organização conjunta\n\nPróxima reunião: 24 de abril, às 19h, no bloco acadêmico."
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-20", "titulo": "Reunião Geral DASI USP", "descricao": "Reunião aberta a todos os alunos de SI", "tipo": "evento" },
+        { "data": "2026-03-20", "titulo": "Fim das Inscrições Monitoria AcaDASI", "descricao": "Última chance para se inscrever", "tipo": "deadline" },
+        { "data": "2026-04-24", "titulo": "Reunião Geral DASI — Abril", "descricao": "Segunda reunião do semestre", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "👥", "label": "Membros ativos", "valor": "30+" },
+        { "icone": "📅", "label": "Eventos por semestre", "valor": "8+" },
+        { "icone": "🏛️", "label": "Fundado em", "valor": "2009" }
+      ]
+    },
+    {
+      "id": "semana-si",
+      "nome": "Semana de SI",
+      "nomeCompleto": "Semana Acadêmica de Sistemas de Informação",
+      "tipo": "Evento Acadêmico",
+      "descricao": "O maior evento acadêmico do curso de SI da USP. A Semana de SI reúne palestras de profissionais, workshops práticos, hackathons, mesas redondas e oportunidades de networking com empresas parceiras.",
+      "cor": "#0ea5e9",
+      "corSecundaria": "#7dd3fc",
+      "emoji": "🚀",
+      "links": [
+        { "label": "Instagram", "url": "https://instagram.com/semana.si", "icone": "instagram" }
+      ],
+      "contato": "semana.si@usp.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-14",
+          "titulo": "Inscrições abertas para a Semana de SI 2026",
+          "resumo": "O evento mais esperado do ano está chegando. Palestras, workshops e muito networking te esperam.",
+          "conteudo": "A Semana Acadêmica de SI 2026 está com inscrições abertas! Este ano o evento promete ser maior do que nunca, com palestrantes de empresas como Google, Nubank, iFood e startups do ecossistema paulistano.\n\nProgramação prevista:\n- Palestras técnicas e de carreira\n- Workshops hands-on de tecnologia\n- Mesa redonda com egressos\n- Hackathon de 24h\n- Feira de estágios\n\nAs inscrições vão até 27 de março. Não perca!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-14", "titulo": "Abertura das Inscrições", "descricao": "Inscrições para a Semana de SI", "tipo": "evento" },
+        { "data": "2026-03-27", "titulo": "Fim das Inscrições Semana de SI", "descricao": "Prazo final para inscrições", "tipo": "deadline" },
+        { "data": "2026-05-12", "titulo": "Semana de SI 2026 — Abertura", "descricao": "Primeiro dia do evento", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "🎤", "label": "Palestrantes", "valor": "20+" },
+        { "icone": "👤", "label": "Participantes", "valor": "500+" },
+        { "icone": "📅", "label": "Edições realizadas", "valor": "12+" }
+      ]
+    },
+    {
+      "id": "grace",
+      "nome": "GRACE USP",
+      "nomeCompleto": "Girls Researchers and Coders in Engineering",
+      "tipo": "Grupo de Afinidade",
+      "descricao": "O GRACE é um grupo dedicado ao empoderamento de mulheres e pessoas de identidade feminina na tecnologia. Promove dojos de programação, mentorias, rodas de conversa e conecta alunas a oportunidades no mercado de TI.",
+      "cor": "#ec4899",
+      "corSecundaria": "#f9a8d4",
+      "emoji": "💜",
+      "links": [
+        { "label": "Instagram", "url": "https://instagram.com/grace.usp", "icone": "instagram" },
+        { "label": "LinkedIn", "url": "#", "icone": "linkedin" }
+      ],
+      "contato": "grace.usp@gmail.com",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-17",
+          "titulo": "Dojos GRACE — Programação de março",
+          "resumo": "Três dojos exclusivos para mulheres em uma semana: GitHub, Debugging e LeetCode. Vagas limitadas!",
+          "conteudo": "O GRACE está com uma semana cheia em março! Três dojos especialmente desenvolvidos para mulheres que querem se aprofundar em habilidades técnicas fundamentais para o mercado.\n\nProgramação:\n- 17/03 (Seg): Dojo de GitHub — controle de versão na prática\n- 19/03 (Qua): Dojo de Debugging & Boas Práticas\n- 20/03 (Qui): LeetCode + Roda de Conversa sobre carreira em tech\n\nTodos os encontros são exclusivos para mulheres e ministrados por mulheres. Inscreva-se pelo Instagram!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-17", "titulo": "Dojo GRACE: GitHub", "descricao": "Curso de Github exclusivo para mulheres", "tipo": "evento" },
+        { "data": "2026-03-19", "titulo": "Dojo GRACE: Debugging", "descricao": "Jargões, Debugging e Boas Práticas", "tipo": "evento" },
+        { "data": "2026-03-20", "titulo": "Dojo GRACE: LeetCode", "descricao": "Leetcode e Roda de Conversa", "tipo": "evento" },
+        { "data": "2026-04-05", "titulo": "Fim das Inscrições GRACE USP", "descricao": "Encerramento das inscrições 2026.1", "tipo": "deadline" }
+      ],
+      "destaques": [
+        { "icone": "💻", "label": "Dojos realizados", "valor": "40+" },
+        { "icone": "👩", "label": "Membros", "valor": "80+" },
+        { "icone": "🤝", "label": "Empresas parceiras", "valor": "15+" }
+      ]
+    },
+    {
+      "id": "each-in-the-shell",
+      "nome": "Each in the Shell",
+      "nomeCompleto": "Each in the Shell — Competição de Programação",
+      "tipo": "Competição",
+      "descricao": "Competição de programação competitiva da EACH! Inspirado no CTF (Capture the Flag) e nas Olimpíadas de Programação, o Each in the Shell desafia alunos a resolverem problemas algorítmicos em tempo limitado.",
+      "cor": "#10b981",
+      "corSecundaria": "#6ee7b7",
+      "emoji": "🐚",
+      "links": [
+        { "label": "Instagram", "url": "#", "icone": "instagram" }
+      ],
+      "contato": "eachintheshell@usp.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-10",
+          "titulo": "Each in the Shell 2026 — Inscrições abertas!",
+          "resumo": "A competição de programação da EACH está de volta. Inscreva-se até 14 de março e receba os cases no dia 16.",
+          "conteudo": "O Each in the Shell chega em sua nova edição! Este ano teremos categorias iniciante e avançado, com problemas que envolvem algoritmos, estruturas de dados e raciocínio lógico.\n\nCalendário:\n- Até 14/03: Inscrições\n- 16/03: Liberação dos cases\n- 06/04: Entrevistas\n- 15/04: Divulgação dos aprovados\n\nNão importa se você é calouro ou veterano — venha testar seus limites!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-14", "titulo": "Fim das Inscrições Each in the Shell", "descricao": "Prazo de inscrição encerra", "tipo": "deadline" },
+        { "data": "2026-03-16", "titulo": "Liberação dos Cases", "descricao": "Cases da competição disponibilizados", "tipo": "evento" },
+        { "data": "2026-04-06", "titulo": "Entrevistas Each in the Shell", "descricao": "Fase de entrevistas dos participantes", "tipo": "evento" },
+        { "data": "2026-04-15", "titulo": "Aprovados Each in the Shell", "descricao": "Divulgação dos resultados", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "🏆", "label": "Edições", "valor": "5+" },
+        { "icone": "👨‍💻", "label": "Participantes", "valor": "200+" },
+        { "icone": "🎯", "label": "Categorias", "valor": "2" }
+      ]
+    },
+    {
+      "id": "hype",
+      "nome": "Hype",
+      "nomeCompleto": "Hype — Grupo de Empreendedorismo e Inovação",
+      "tipo": "Grupo de Empreendedorismo",
+      "descricao": "O Hype conecta estudantes apaixonados por inovação, startups e empreendedorismo. Organiza talks com fundadores, bootcamps, design sprints e apoia projetos de alunos que querem transformar ideias em negócios reais.",
+      "cor": "#f97316",
+      "corSecundaria": "#fdba74",
+      "emoji": "⚡",
+      "links": [
+        { "label": "Instagram", "url": "#", "icone": "instagram" },
+        { "label": "LinkedIn", "url": "#", "icone": "linkedin" }
+      ],
+      "contato": "hype.each@gmail.com",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-18",
+          "titulo": "PS Hype 2026 — Venha fazer parte!",
+          "resumo": "O processo seletivo do Hype para 2026 está com inscrições abertas em duas trilhas: Iniciante e Avançado.",
+          "conteudo": "O Hype está selecionando novos membros para 2026! Temos duas trilhas para acolher alunos em diferentes níveis de experiência com empreendedorismo.\n\nTrilha Iniciante:\n- Inscrições até 30/03\n- Voltado para quem quer aprender sobre startups do zero\n\nTrilha Avançado:\n- Inscrições até 23/03\n- Para quem já tem experiência ou projetos em andamento\n- Entrevistas em maio\n\nVenha transformar suas ideias em realidade com a gente!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-22", "titulo": "Fim das Inscrições Hype", "descricao": "Inscrições gerais encerram", "tipo": "deadline" },
+        { "data": "2026-03-23", "titulo": "PS Hype Avançado", "descricao": "Seletivo para trilha avançada", "tipo": "evento" },
+        { "data": "2026-03-30", "titulo": "PS Hype Iniciante", "descricao": "Seletivo para trilha iniciante", "tipo": "evento" },
+        { "data": "2026-05-01", "titulo": "Entrevistas Hype", "descricao": "Etapa final do processo seletivo", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "💡", "label": "Projetos apoiados", "valor": "30+" },
+        { "icone": "🎯", "label": "Membros ativos", "valor": "40+" },
+        { "icone": "🤝", "label": "Mentores parceiros", "valor": "20+" }
+      ]
+    },
+    {
+      "id": "codelab",
+      "nome": "CodeLab",
+      "nomeCompleto": "CodeLab — Laboratório de Desenvolvimento",
+      "tipo": "Liga de Desenvolvimento",
+      "descricao": "O CodeLab é a liga de desenvolvimento de software da EACH. Reúne estudantes para criar projetos reais open source, contribuir com a comunidade e aprender desenvolvimento full-stack, mobile e DevOps em equipe.",
+      "cor": "#6366f1",
+      "corSecundaria": "#a5b4fc",
+      "emoji": "💻",
+      "links": [
+        { "label": "GitHub", "url": "#", "icone": "github" },
+        { "label": "Instagram", "url": "#", "icone": "instagram" }
+      ],
+      "contato": "codelab.each@gmail.com",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-05",
+          "titulo": "CodeLab v2026 — Novos projetos, novas vagas",
+          "resumo": "O CodeLab abre seleção para novos membros e apresenta os projetos do semestre: plataforma de estudos, app móvel e ferramentas para o curso.",
+          "conteudo": "O CodeLab começa 2026 com tudo! Este semestre trabalharemos em três frentes principais:\n\n1. Plataforma de estudos colaborativa para alunos de SI\n2. App mobile de acompanhamento de horários\n3. Bot de Telegram para notificações acadêmicas\n\nEstamos buscando devs frontend, backend, mobile e também pessoas de UX/Design. Se você quer colocar a mão na massa e sair com projetos reais no portfólio, venha para o CodeLab!\n\nInscrições abertas durante todo o mês de março."
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-15", "titulo": "Hackathon Interno CodeLab", "descricao": "Sprint de 2 dias para novos projetos", "tipo": "evento" },
+        { "data": "2026-03-31", "titulo": "Fim das Inscrições CodeLab", "descricao": "Encerramento do PS 2026.1", "tipo": "deadline" },
+        { "data": "2026-04-10", "titulo": "Demo Day CodeLab", "descricao": "Apresentação dos projetos do semestre", "tipo": "apresentacao" }
+      ],
+      "destaques": [
+        { "icone": "🛠️", "label": "Projetos ativos", "valor": "6" },
+        { "icone": "⭐", "label": "Repositórios GitHub", "valor": "20+" },
+        { "icone": "👥", "label": "Devs no time", "valor": "35+" }
+      ]
+    },
+    {
+      "id": "lab-das-minas",
+      "nome": "Lab das Minas",
+      "nomeCompleto": "Lab das Minas — Coletivo Feminino de TI",
+      "tipo": "Coletivo",
+      "descricao": "O Lab das Minas é um coletivo que cria espaços seguros e de aprendizado para mulheres e pessoas não-binárias na computação. Promove hackathons exclusivos, mentorias entre pares e ações de visibilidade feminina na tech.",
+      "cor": "#d946ef",
+      "corSecundaria": "#f0abfc",
+      "emoji": "🔬",
+      "links": [
+        { "label": "Instagram", "url": "#", "icone": "instagram" }
+      ],
+      "contato": "labdasminas@usp.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-08",
+          "titulo": "8 de Março — Um dia, um manifesto",
+          "resumo": "No Dia Internacional da Mulher, o Lab das Minas anuncia a programação do semestre e reafirma seu compromisso com a diversidade na computação.",
+          "conteudo": "No dia 8 de março reafirmamos nosso propósito: criar mais espaço para mulheres e pessoas não-binárias na tecnologia.\n\nProgramação do semestre:\n- Hackathon Lab das Minas (abril)\n- Série de mentorias com profissionais de TI\n- Painel sobre diversidade e inclusão na tech\n- Workshops de carreira e negociação salarial\n\nEstamos abertas a parcerias com empresas que acreditam na diversidade. Entre em contato pelo Instagram!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-04-18", "titulo": "Hackathon Lab das Minas", "descricao": "Hackathon exclusivo para mulheres e NB", "tipo": "evento" },
+        { "data": "2026-03-25", "titulo": "Mentoria Lab das Minas", "descricao": "Sessão de mentoria coletiva", "tipo": "evento" },
+        { "data": "2026-05-10", "titulo": "Painel: Mulheres na Tech", "descricao": "Mesa redonda com profissionais", "tipo": "apresentacao" }
+      ],
+      "destaques": [
+        { "icone": "🔬", "label": "Hackathons realizados", "valor": "4+" },
+        { "icone": "💬", "label": "Mentorias", "valor": "60+" },
+        { "icone": "🌐", "label": "Parcerias", "valor": "10+" }
+      ]
+    },
+    {
+      "id": "conway",
+      "nome": "Conway",
+      "nomeCompleto": "Conway — Liga de Computação Teórica",
+      "tipo": "Liga Acadêmica",
+      "descricao": "Inspirado no matemático John Horton Conway, a liga Conway explora os fundamentos teóricos da computação: teoria dos grafos, complexidade computacional, matemática discreta e algoritmos avançados. Para quem ama a ciência por trás do código.",
+      "cor": "#14b8a6",
+      "corSecundaria": "#99f6e4",
+      "emoji": "🧮",
+      "links": [
+        { "label": "Instagram", "url": "#", "icone": "instagram" }
+      ],
+      "contato": "conway.each@usp.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-12",
+          "titulo": "Conway 2026 — Inscrições e primeira reunião",
+          "resumo": "A liga de computação teórica abre suas portas para o semestre. Confira o plano de estudos e venha explorar a teoria com a gente.",
+          "conteudo": "A Conway inicia 2026 com um plano de estudos ambicioso! Este semestre vamos explorar:\n\n- Teoria dos Grafos aplicada\n- Algoritmos de aproximação\n- Criptografia moderna\n- Preparação para a Maratona de Programação\n\nA primeira reunião acontece na última semana de março. Inscrições abertas até 22 de março. Não é necessário ser veterano — apenas curiosidade e vontade de aprender teoria!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-22", "titulo": "Fim das Inscrições Conway", "descricao": "Encerramento das inscrições 2026.1", "tipo": "deadline" },
+        { "data": "2026-03-28", "titulo": "Primeira Reunião Conway", "descricao": "Kickoff do semestre", "tipo": "evento" },
+        { "data": "2026-05-20", "titulo": "Maratona Conway", "descricao": "Competição interna de algoritmos", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "📐", "label": "Membros estudantes", "valor": "25+" },
+        { "icone": "🏆", "label": "Classificados na Maratona", "valor": "8+" },
+        { "icone": "📚", "label": "Tópicos por semestre", "valor": "4+" }
+      ]
+    },
+    {
+      "id": "pet-si",
+      "nome": "PET-SI",
+      "nomeCompleto": "Programa de Educação Tutorial em Sistemas de Informação",
+      "tipo": "Programa Federal",
+      "descricao": "O PET-SI é um grupo de excelência acadêmica financiado pelo MEC. Desenvolve projetos de ensino, pesquisa e extensão de alto impacto, e forma líderes acadêmicos que contribuem com a comunidade interna e externa da USP.",
+      "cor": "#f59e0b",
+      "corSecundaria": "#fde68a",
+      "emoji": "🏅",
+      "links": [
+        { "label": "Site PET-SI", "url": "#", "icone": "globe" },
+        { "label": "Instagram", "url": "#", "icone": "instagram" }
+      ],
+      "contato": "pet.si@usp.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-02-20",
+          "titulo": "PET-SI — Publicações e projetos em 2026",
+          "resumo": "O PET-SI apresenta seus projetos de pesquisa para o primeiro semestre e abre inscrições para o processo seletivo anual.",
+          "conteudo": "O PET-SI inicia 2026 com projetos consolidados em três grandes eixos:\n\nEnsino: Projeto Nivelamento — apoio a calouros nas disciplinas de exatas.\n\nPesquisa: Levantamento sobre evasão universitária em cursos de TI no Brasil.\n\nExtensão: Oficinas de computação para escolas públicas de São Paulo.\n\nO processo seletivo anual do PET-SI está com inscrições abertas. São bolsas remuneradas do MEC. Acesse o site para mais informações."
+        }
+      ],
+      "eventos": [
+        { "data": "2026-03-30", "titulo": "Processo Seletivo PET-SI", "descricao": "Inscrições para bolsistas do PET", "tipo": "evento" },
+        { "data": "2026-04-20", "titulo": "Nivelamento PET-SI — Cálculo", "descricao": "Oficina de apoio acadêmico", "tipo": "evento" },
+        { "data": "2026-05-15", "titulo": "Seminário PET-SI", "descricao": "Apresentação de pesquisas do grupo", "tipo": "apresentacao" }
+      ],
+      "destaques": [
+        { "icone": "🎓", "label": "Bolsistas", "valor": "12" },
+        { "icone": "📄", "label": "Publicações", "valor": "30+" },
+        { "icone": "🏫", "label": "Escolas atendidas", "valor": "5+" }
+      ]
+    },
+    {
+      "id": "sintese-jr",
+      "nome": "Síntese Jr.",
+      "nomeCompleto": "Síntese Jr. — Empresa Júnior de SI",
+      "tipo": "Empresa Júnior",
+      "descricao": "A Síntese Jr. é a empresa júnior do curso de Sistemas de Informação da USP/EACH. Desenvolve projetos reais de software, consultoria em TI e transformação digital para clientes externos, formando profissionais completos e prontos para o mercado.",
+      "cor": "#ef4444",
+      "corSecundaria": "#fca5a5",
+      "emoji": "💼",
+      "links": [
+        { "label": "Site", "url": "#", "icone": "globe" },
+        { "label": "Instagram", "url": "#", "icone": "instagram" },
+        { "label": "LinkedIn", "url": "#", "icone": "linkedin" }
+      ],
+      "contato": "contato@sintesejr.com.br",
+      "newsletter": [
+        {
+          "id": 1,
+          "data": "2026-03-01",
+          "titulo": "Síntese Jr. abre PS 2026 — Faça parte do time",
+          "resumo": "A empresa júnior de SI está selecionando novos membros para as áreas de Desenvolvimento, Projetos, Marketing e Vendas.",
+          "conteudo": "A Síntese Jr. está crescendo e abrindo vagas para novos membros! Este semestre buscamos pessoas para as seguintes áreas:\n\n- Desenvolvimento: Frontend, Backend, Mobile\n- Gestão de Projetos: Scrum, acompanhamento de clientes\n- Marketing: Redes sociais, branding, captação\n- Vendas: Prospecção e CRM\n\nNão é necessária experiência prévia — apenas vontade de aprender e crescer!\n\nInscrições até 10 de abril. Entrevistas entre 12 e 16 de abril."
+        },
+        {
+          "id": 2,
+          "data": "2026-03-15",
+          "titulo": "Caso de sucesso: Portal de gestão para ONG",
+          "resumo": "A Síntese Jr. entregou com sucesso um portal de gestão completo para uma ONG parceira. Conheça o projeto.",
+          "conteudo": "Mais um projeto concluído com excelência! Desenvolvemos um portal web completo para gestão de voluntários, doações e campanhas para uma ONG da cidade de São Paulo.\n\nTecnologias utilizadas:\n- Frontend: React + TypeScript\n- Backend: Node.js + PostgreSQL\n- Deploy: AWS EC2 com CI/CD automatizado\n\nO cliente ficou muito satisfeito e já sinalizou interesse em uma segunda fase do projeto. Parabéns ao time de desenvolvimento!"
+        }
+      ],
+      "eventos": [
+        { "data": "2026-04-10", "titulo": "Fim das Inscrições Síntese Jr.", "descricao": "Encerramento das inscrições do PS", "tipo": "deadline" },
+        { "data": "2026-04-12", "titulo": "Entrevistas Síntese Jr.", "descricao": "Entrevistas para novos membros", "tipo": "evento" },
+        { "data": "2026-04-20", "titulo": "Resultados PS Síntese Jr.", "descricao": "Divulgação dos aprovados", "tipo": "evento" }
+      ],
+      "destaques": [
+        { "icone": "💼", "label": "Projetos entregues", "valor": "50+" },
+        { "icone": "👔", "label": "Membros ativos", "valor": "25+" },
+        { "icone": "🏆", "label": "Prêmios Brasil Júnior", "valor": "3+" }
+      ]
+    }
+  ]
+}
