@@ -59,7 +59,7 @@ function applyTheme(theme) {
   if (dot) { dot.style.animation = 'none'; void dot.offsetWidth; dot.style.animation = ''; }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    const bgMap = { padrao:'#07070c',super:'#04080f',hackerman:'#010a01',sith:'#0a0002',gatilho:'#050210',hypado:'#080600',omni:'#060606',minas:'#060908',d20:'#020614',grifinho:'#f4f0ff',bidu:'#fff8f0',mamaco:'#f5f0e0',jedi:'#f0f8f2',ocean:'#f0f8ff',laboratorio:'#fff0f7',sintetizado:'#f0f6ff',masacote:'#fffce8',grace:'#fff4eb' };
+    const bgMap = { padrao:'#07070c',super:'#020c1a',hackerman:'#010a01',sith:'#0a0002',gatilho:'#050210',hypado:'#080600',omni:'#060606',minas:'#060908',d20:'#020614',grifinho:'#f4f0ff',bidu:'#fff8f0',mamaco:'#f5f0e0',jedi:'#f0f8f2',ocean:'#f0f8ff',laboratorio:'#fff0f7',sintetizado:'#f0f6ff',masacote:'#fffce8',grace:'#fff4eb' };
     meta.setAttribute('content', bgMap[theme.key] || '#07070c');
   }
   localStorage.setItem('dasitheme', theme.key);
@@ -468,10 +468,21 @@ function triggerCaligrafiaEasterEgg() {
   document.body.appendChild(overlay);
 }
 
+// ===== GITHUB TOKEN STATUS =====
+function renderGhTokenStatus() {
+  const dot = document.getElementById('gh-token-dot');
+  const label = document.getElementById('gh-token-label');
+  if (!dot || !label) return;
+  const hasToken = typeof ghHasToken === 'function' && ghHasToken();
+  dot.className = 'gh-token-dot ' + (hasToken ? 'connected' : 'disconnected');
+  label.textContent = hasToken ? 'GitHub ✓' : 'GitHub';
+}
+
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   loadSavedTheme();
   renderThemeSwitch();
+  renderGhTokenStatus();
   createSidebarOverlay();
   const hash = window.location.hash.replace('#','') || 'home';
   navigateTo(hash);

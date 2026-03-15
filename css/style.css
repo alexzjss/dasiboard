@@ -2,7 +2,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,500&display=swap');
 
 :root,[data-theme="padrao"]{--bg:#07070c;--bg-2:#0c0c16;--bg-3:#11111d;--bg-card:rgba(13,13,26,.72);--bg-card-hover:rgba(19,19,38,.84);--border:rgba(124,58,237,.18);--border-hover:rgba(167,139,250,.52);--primary:#7c3aed;--primary-2:#6d28d9;--secondary:#a78bfa;--highlight:#c084fc;--accent:#e879f9;--text:#e8e4f4;--text-muted:#8b82b4;--text-dim:#4a4570;--success:#34d399;--warning:#fbbf24;--danger:#f87171;--info:#60a5fa;--glow:rgba(124,58,237,.32);--glow-strong:rgba(124,58,237,.62);--orb-1:rgba(124,58,237,.18);--orb-2:rgba(192,132,252,.1);--orb-3:rgba(232,121,249,.07);--sidebar-bg:rgba(7,7,12,.88);--theme-dot-color:#7c3aed;--gradient-a:#7c3aed;--gradient-b:#c084fc;--glass-tint:rgba(124,58,237,.06);--glass-border:rgba(167,139,250,.2);--glass-shine:rgba(255,255,255,.07)}
-[data-theme="super"]{--bg:#050a14;--bg-2:#080e1c;--bg-3:#0c1425;--bg-card:rgba(9,16,32,.72);--bg-card-hover:rgba(13,22,42,.84);--border:rgba(56,189,248,.18);--border-hover:rgba(125,211,252,.55);--primary:#38bdf8;--primary-2:#0ea5e9;--secondary:#7dd3fc;--highlight:#bae6fd;--accent:#ef4444;--text:#e0f0ff;--text-muted:#7eafd4;--text-dim:#3b6080;--success:#34d399;--warning:#fbbf24;--danger:#ef4444;--info:#60a5fa;--glow:rgba(56,189,248,.32);--glow-strong:rgba(56,189,248,.62);--orb-1:rgba(56,189,248,.15);--orb-2:rgba(239,68,68,.1);--orb-3:rgba(125,211,252,.07);--sidebar-bg:rgba(5,10,20,.9);--theme-dot-color:#38bdf8;--gradient-a:#38bdf8;--gradient-b:#ef4444;--glass-tint:rgba(56,189,248,.06);--glass-border:rgba(125,211,252,.22);--glass-shine:rgba(255,255,255,.07)}
+[data-theme="super"]{
+  /* Fortaleza da Solidão: gelo cristalino + Superman vermelho/amarelo */
+  --bg:#020c1a;--bg-2:#041020;--bg-3:#061628;
+  --bg-card:rgba(8,24,48,.68);--bg-card-hover:rgba(12,32,60,.82);
+  --border:rgba(160,220,255,.18);--border-hover:rgba(220,50,30,.65);
+  --primary:#dc1e00;--primary-2:#b81800;
+  --secondary:#ffd700;--highlight:#ffec4f;--accent:#a8e0ff;
+  --text:#eaf5ff;--text-muted:#8cb8d8;--text-dim:#2c5470;
+  --success:#34d399;--warning:#ffd700;--danger:#ff3a1a;--info:#60c8fa;
+  --glow:rgba(220,30,0,.4);--glow-strong:rgba(220,30,0,.7);
+  --orb-1:rgba(160,220,255,.18);--orb-2:rgba(220,30,0,.08);--orb-3:rgba(255,215,0,.05);
+  --sidebar-bg:rgba(2,8,18,.96);
+  --theme-dot-color:#dc1e00;--gradient-a:#dc1e00;--gradient-b:#ffd700;
+  --glass-tint:rgba(160,220,255,.05);--glass-border:rgba(160,220,255,.16);--glass-shine:rgba(200,240,255,.12);
+  --font-display:'Fraunces',Georgia,serif;
+}
 [data-theme="hypado"]{--bg:#080600;--bg-2:#110d00;--bg-3:#181200;--bg-card:rgba(18,14,0,.72);--bg-card-hover:rgba(28,22,0,.84);--border:rgba(251,146,60,.18);--border-hover:rgba(251,146,60,.52);--primary:#fb923c;--primary-2:#f97316;--secondary:#fdba74;--highlight:#a855f7;--accent:#c084fc;--text:#fdf0e0;--text-muted:#c4956a;--text-dim:#6b4f2a;--success:#34d399;--warning:#fbbf24;--danger:#f87171;--info:#60a5fa;--glow:rgba(251,146,60,.32);--glow-strong:rgba(251,146,60,.62);--orb-1:rgba(251,146,60,.14);--orb-2:rgba(168,85,247,.1);--orb-3:rgba(253,186,116,.07);--sidebar-bg:rgba(8,6,0,.9);--theme-dot-color:#fb923c;--gradient-a:#fb923c;--gradient-b:#a855f7;--glass-tint:rgba(251,146,60,.06);--glass-border:rgba(253,186,116,.22);--glass-shine:rgba(255,255,255,.07)}
 [data-theme="omni"]{--bg:#060606;--bg-2:#0d0d0d;--bg-3:#141414;--bg-card:rgba(16,16,16,.72);--bg-card-hover:rgba(26,26,26,.84);--border:rgba(74,222,128,.18);--border-hover:rgba(74,222,128,.52);--primary:#4ade80;--primary-2:#22c55e;--secondary:#86efac;--highlight:#d1fae5;--accent:#f0fdf4;--text:#f5f5f5;--text-muted:#a0a0a0;--text-dim:#505050;--success:#4ade80;--warning:#fbbf24;--danger:#f87171;--info:#60a5fa;--glow:rgba(74,222,128,.28);--glow-strong:rgba(74,222,128,.55);--orb-1:rgba(74,222,128,.1);--orb-2:rgba(255,255,255,.04);--orb-3:rgba(74,222,128,.05);--sidebar-bg:rgba(6,6,6,.92);--theme-dot-color:#4ade80;--gradient-a:#fff;--gradient-b:#4ade80;--glass-tint:rgba(74,222,128,.05);--glass-border:rgba(134,239,172,.2);--glass-shine:rgba(255,255,255,.06)}
 [data-theme="minas"]{--bg:#060908;--bg-2:#0a100c;--bg-3:#0e1710;--bg-card:rgba(11,18,16,.72);--bg-card-hover:rgba(18,29,21,.84);--border:rgba(236,72,153,.18);--border-hover:rgba(236,72,153,.55);--primary:#ec4899;--primary-2:#db2777;--secondary:#f9a8d4;--highlight:#6b8f5e;--accent:#4ade80;--text:#f0e8f0;--text-muted:#a88fa0;--text-dim:#4d6045;--success:#6b8f5e;--warning:#fbbf24;--danger:#f87171;--info:#60a5fa;--glow:rgba(236,72,153,.32);--glow-strong:rgba(236,72,153,.62);--orb-1:rgba(236,72,153,.14);--orb-2:rgba(107,143,94,.1);--orb-3:rgba(249,168,212,.07);--sidebar-bg:rgba(6,9,8,.9);--theme-dot-color:#ec4899;--gradient-a:#ec4899;--gradient-b:#6b8f5e;--glass-tint:rgba(236,72,153,.05);--glass-border:rgba(249,168,212,.2);--glass-shine:rgba(255,255,255,.06)}
@@ -1245,22 +1260,237 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   --glass-tint:rgba(30,144,255,.07);--glass-border:rgba(100,180,255,.22);--glass-shine:rgba(255,255,255,.1);
   --font-display:'Fraunces',Georgia,serif;
 }
-/* Superman: S-shield glow on active elements */
-[data-theme="super"] .sidebar-link.active {
-  background:rgba(30,144,255,.12);
-  border-color:rgba(204,34,0,.5);
-  box-shadow:inset 0 0 12px rgba(30,144,255,.15), 0 0 8px rgba(204,34,0,.3);
+/* ===================================================
+   SUPER — Fortaleza da Solidão (Fortress of Solitude)
+   Fundo de cristais de gelo; detalhes vermelho + amarelo
+   =================================================== */
+
+/* Ice crystal background */
+[data-theme="super"] body {
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(140,200,255,.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 75% 10%, rgba(180,235,255,.12) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 85%, rgba(80,160,220,.1) 0%, transparent 50%),
+    linear-gradient(180deg, #020c1a 0%, #041020 50%, #020c1a 100%);
 }
-[data-theme="super"] .navbar-logo-img,
-[data-theme="super"] .sidebar-logo-img { border-color:rgba(204,34,0,.6); box-shadow:0 0 14px rgba(30,144,255,.5); }
-[data-theme="super"] .stat-value { background:linear-gradient(135deg,#1e90ff,#ffd700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-[data-theme="super"] .card:hover { border-color:rgba(204,34,0,.6); box-shadow:var(--glass-inner-shadow),0 0 28px rgba(30,144,255,.25); }
-[data-theme="super"] .page-header h1 { background:linear-gradient(135deg,#e8f4ff,#ffd700); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-/* Superman red cape stripe on active page header label */
-[data-theme="super"] .page-header-label::before { background:linear-gradient(90deg,#cc2200,#ffd700); }
-[data-theme="super"] .btn-primary { background:linear-gradient(135deg,#1e90ff,#0066cc); border:1px solid rgba(255,215,0,.3); }
-[data-theme="super"] .section-title::after { background:linear-gradient(90deg,rgba(204,34,0,.5),transparent); }
-[data-theme="super"] .footer::before { background:linear-gradient(90deg,transparent,#1e90ff,#ffd700,#cc2200,transparent); opacity:.7; }
+
+/* Ice facets — repeating crystal pattern overlay */
+[data-theme="super"] body::before {
+  background-image:
+    repeating-linear-gradient(60deg, rgba(180,235,255,.025) 0px, transparent 1px, transparent 32px, rgba(180,235,255,.025) 33px),
+    repeating-linear-gradient(-60deg, rgba(180,235,255,.025) 0px, transparent 1px, transparent 32px, rgba(180,235,255,.025) 33px),
+    repeating-linear-gradient(0deg, rgba(180,235,255,.018) 0px, transparent 1px, transparent 48px, rgba(180,235,255,.018) 49px);
+  opacity: 1;
+}
+
+/* Orbs: ice blue light shafts */
+[data-theme="super"] .orb-1 {
+  background: radial-gradient(ellipse, rgba(160,220,255,.22) 0%, rgba(100,180,240,.08) 50%, transparent 70%);
+  filter: blur(70px);
+  width: 60vw; height: 50vh; top: -10vh; left: -5vw;
+}
+[data-theme="super"] .orb-2 {
+  background: radial-gradient(ellipse, rgba(220,30,0,.1) 0%, transparent 65%);
+  filter: blur(80px);
+}
+[data-theme="super"] .orb-3 {
+  background: radial-gradient(ellipse, rgba(255,215,0,.07) 0%, transparent 65%);
+  filter: blur(90px);
+}
+
+/* Sidebar: deep ice wall */
+[data-theme="super"] .sidebar {
+  background: rgba(2,6,16,.97);
+  border-right: 1px solid rgba(160,220,255,.15);
+  box-shadow: 2px 0 32px rgba(0,0,0,.4), inset -1px 0 0 rgba(160,220,255,.08);
+}
+/* Crystal line on sidebar right */
+[data-theme="super"] .sidebar::after {
+  content:'';
+  position:absolute; top:10%; right:0; bottom:10%; width:1px;
+  background: linear-gradient(180deg, transparent, rgba(180,235,255,.3) 30%, rgba(180,235,255,.3) 70%, transparent);
+  pointer-events:none;
+}
+
+/* Topbar: ice shelf */
+[data-theme="super"] .topbar {
+  background: rgba(2,6,16,.97);
+  border-bottom: 1px solid rgba(160,220,255,.15);
+  box-shadow: 0 2px 24px rgba(0,0,0,.3);
+}
+/* S-shield stripe: red + yellow on navbar/topbar bottom */
+[data-theme="super"] .navbar::after,
+[data-theme="super"] .topbar::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent 0%, #dc1e00 25%, #ffd700 50%, #dc1e00 75%, transparent 100%);
+  opacity: .75;
+}
+
+/* Sidebar links */
+[data-theme="super"] .sidebar-link { color: rgba(160,215,255,.65); }
+[data-theme="super"] .sidebar-link:hover { color:#a8e0ff; background:rgba(160,220,255,.07); }
+[data-theme="super"] .sidebar-link.active {
+  color: #ffd700;
+  background: rgba(220,30,0,.1);
+  border-color: rgba(220,30,0,.4);
+  box-shadow: inset 0 0 10px rgba(220,30,0,.08), 0 0 8px rgba(255,215,0,.15);
+}
+/* S-symbol indicator bar: red */
+[data-theme="super"] .sidebar-link.active::before {
+  background: linear-gradient(180deg, #ffd700, #dc1e00);
+  box-shadow: 0 0 8px rgba(220,30,0,.6);
+}
+[data-theme="super"] .sidebar-section-label { color: rgba(160,215,255,.3); }
+[data-theme="super"] .sidebar-time { color: rgba(160,215,255,.35); font-family:var(--font-mono); }
+[data-theme="super"] .sidebar-title {
+  background: linear-gradient(135deg, #eaf5ff, #ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+/* Cards: ice crystal panes */
+[data-theme="super"] .card {
+  background: rgba(8,24,48,.68);
+  border-color: rgba(160,220,255,.16);
+  box-shadow: var(--glass-inner-shadow), 0 4px 20px rgba(0,0,0,.3);
+}
+[data-theme="super"] .card::before {
+  background: linear-gradient(
+    155deg,
+    rgba(200,240,255,.1) 0%,
+    rgba(180,235,255,.05) 20%,
+    transparent 55%
+  );
+}
+[data-theme="super"] .card:hover {
+  border-color: rgba(220,30,0,.55);
+  box-shadow: var(--glass-inner-shadow), 0 8px 32px rgba(0,0,0,.35), 0 0 0 1px rgba(220,30,0,.2);
+}
+
+/* Typography */
+[data-theme="super"] .page-header h1 {
+  background: linear-gradient(135deg, #eaf5ff 0%, #ffd700 60%, #dc1e00 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+[data-theme="super"] .page-header-label { color:#dc1e00; letter-spacing:2.5px; }
+[data-theme="super"] .page-header-label::before { background:linear-gradient(90deg,#dc1e00,#ffd700,transparent); }
+
+/* Stat values */
+[data-theme="super"] .stat-value {
+  background: linear-gradient(135deg, #ffd700, #dc1e00);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter: drop-shadow(0 0 4px rgba(255,215,0,.3));
+}
+
+/* Section dividers: red-yellow stripe */
+[data-theme="super"] .section-title { color: rgba(168,224,255,.75); }
+[data-theme="super"] .section-title svg { color: #dc1e00; }
+[data-theme="super"] .section-title::after {
+  background: linear-gradient(90deg, rgba(220,30,0,.4), rgba(255,215,0,.2), transparent);
+}
+
+/* Buttons */
+[data-theme="super"] .btn-primary {
+  background: linear-gradient(135deg, #dc1e00, #b81800);
+  border: 1px solid rgba(255,215,0,.3);
+  box-shadow: 0 4px 18px rgba(220,30,0,.45);
+}
+[data-theme="super"] .btn-primary:hover { box-shadow: 0 8px 28px rgba(220,30,0,.65); }
+[data-theme="super"] .btn-ghost { border-color: rgba(160,220,255,.2); color: rgba(160,215,255,.7); }
+[data-theme="super"] .btn-ghost:hover { border-color:rgba(255,215,0,.4); color:#ffd700; }
+
+/* Calendar */
+[data-theme="super"] .calendar-main { border-color:rgba(160,220,255,.14); }
+[data-theme="super"] .calendar-month-year { color:#a8e0ff; }
+[data-theme="super"] .cal-weekday { color:rgba(160,215,255,.4); }
+[data-theme="super"] .cal-day.today .cal-day-num {
+  background: linear-gradient(135deg, #dc1e00, #b81800);
+  color:#fff; box-shadow:0 0 14px rgba(220,30,0,.6), 0 0 28px rgba(255,215,0,.15);
+}
+[data-theme="super"] .cal-nav-btn:hover { border-color:rgba(255,215,0,.4); color:#ffd700; }
+
+/* Kanban */
+[data-theme="super"] .kanban-col { border-color:rgba(160,220,255,.14); }
+[data-theme="super"] .kanban-card:hover { border-color:rgba(220,30,0,.45); }
+
+/* Quick nav */
+[data-theme="super"] .home-quick-btn:hover {
+  border-color:rgba(220,30,0,.4);
+  box-shadow:0 8px 24px rgba(0,0,0,.25), 0 0 0 1px rgba(220,30,0,.15);
+}
+[data-theme="super"] .home-quick-btn svg { color:#dc1e00; }
+
+/* Hero gradient */
+[data-theme="super"] .home-hero h2 span {
+  background:linear-gradient(135deg,#dc1e00,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Footer */
+[data-theme="super"] .footer { background:rgba(2,6,16,.97); border-top-color:rgba(160,220,255,.12); }
+[data-theme="super"] .footer::before {
+  background: linear-gradient(90deg, transparent, #dc1e00 25%, #ffd700 50%, #dc1e00 75%, transparent);
+  opacity: .65;
+}
+
+/* Scrollbar */
+[data-theme="super"] ::-webkit-scrollbar-thumb { background:#b81800; }
+[data-theme="super"] ::-webkit-scrollbar-thumb:hover { background:#dc1e00; }
+
+/* Badges */
+[data-theme="super"] .badge-red { background:rgba(220,30,0,.18); color:#ff6644; border-color:rgba(220,30,0,.35); }
+[data-theme="super"] .badge-yellow { background:rgba(255,215,0,.15); color:#ffd700; border-color:rgba(255,215,0,.3); }
+[data-theme="super"] .badge-blue { background:rgba(160,220,255,.12); color:#a8e0ff; border-color:rgba(160,220,255,.25); }
+
+/* Next class card */
+[data-theme="super"] .next-class-label { color:#dc1e00; }
+[data-theme="super"] .next-class-label::before { background:#dc1e00; box-shadow:0 0 8px rgba(220,30,0,.6); }
+
+/* Quote card */
+[data-theme="super"] .quote-mark { color:#dc1e00; }
+[data-theme="super"] .quote-author { color:#ffd700; }
+
+/* GPA chart */
+[data-theme="super"] .gpa-big-num {
+  background:linear-gradient(135deg,#ffd700,#dc1e00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* Sidebar logo crystal glow */
+[data-theme="super"] .sidebar-logo-img {
+  border-color:rgba(255,215,0,.4);
+  box-shadow:0 0 16px rgba(220,30,0,.4), 0 0 32px rgba(160,220,255,.1);
+}
+
+/* Dev avatar in super */
+[data-theme="super"] .dev-card-avatar { background:linear-gradient(135deg,#dc1e00,#ffd700); }
+
+/* Ice shimmer animation on cards */
+@keyframes iceShimmer {
+  0%,100% { opacity:.3; }
+  50%      { opacity:.7; }
+}
+[data-theme="super"] .card::after {
+  background: linear-gradient(135deg, rgba(180,235,255,.04) 0%, transparent 50%);
+  animation: iceShimmer 4s ease-in-out infinite;
+}
+/* Crystal points at top of stat cards */
+[data-theme="super"] .stat-card {
+  border-top: 2px solid rgba(160,220,255,.2);
+}
+[data-theme="super"] .stat-card:hover {
+  border-top-color: rgba(220,30,0,.5);
+  box-shadow:var(--glass-inner-shadow), 0 8px 24px rgba(0,0,0,.3), 0 -2px 8px rgba(160,220,255,.1);
+}
+
+/* Sidebar badge colors */
+[data-theme="super"] .sidebar-badge-new {
+  background: linear-gradient(135deg,#dc1e00,#ffd700);
+}
+
+/* Progress bars */
+[data-theme="super"] .gpa-bar-fill { background:linear-gradient(90deg,#dc1e00,#ffd700); }
+[data-theme="super"] .estudo-progresso-fill { background:linear-gradient(90deg,#dc1e00,#ffd700); }
 
 /* =====================================================
    TEMA: MAMACO — DK Country (Selva / Banana / Caverna)
@@ -2568,4 +2798,113 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @media(max-width:480px) {
   .pacman-box { padding:14px; }
   .pacman-title { font-size:15px; }
+}
+
+/* ============================================================
+   ADD EVENT MODAL — GitHub Integration
+   ============================================================ */
+.add-event-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.add-event-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--text-muted);
+}
+.add-event-required {
+  color: var(--danger);
+  font-weight: 700;
+}
+.add-event-gh-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: var(--glass-tint);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(6px);
+}
+.add-event-gh-note svg { flex-shrink: 0; margin-top: 1px; color: var(--text-dim); }
+
+/* Add event button in calendar sidebar */
+.cal-add-event-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  background: var(--glass-tint);
+  border: 1.5px dashed var(--glass-border);
+  color: var(--text-muted);
+  backdrop-filter: blur(8px);
+  margin-top: 10px;
+}
+.cal-add-event-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-card);
+  transform: translateY(-1px);
+}
+.cal-add-event-btn svg { flex-shrink: 0; }
+
+/* GitHub token status indicator in sidebar */
+.gh-token-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all .2s;
+}
+.gh-token-indicator:hover { color: var(--text-muted); background: var(--glass-tint); }
+.gh-token-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.gh-token-dot.connected { background: var(--success); box-shadow: 0 0 5px rgba(52,211,153,.5); }
+.gh-token-dot.disconnected { background: var(--text-dim); }
+
+/* Inline add button in calendar day header */
+.cal-selected-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.cal-add-event-inline-btn {
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass-tint); border: 1px solid var(--glass-border);
+  border-radius: 6px; color: var(--text-dim); cursor: pointer;
+  transition: all .2s; flex-shrink: 0;
+}
+.cal-add-event-inline-btn:hover {
+  border-color: var(--primary); color: var(--primary);
+  background: var(--bg-card-hover);
 }
