@@ -52,51 +52,60 @@ async function ghFetch(path, options = {}, withAuth = true) {
 }
 
 // ── Leitura do events.json principal ─────────────────────────────────────────
-async function ghGetMainEvents() {
-  const data    = await ghFetch(`/contents/${GH_EVENTS_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`);
-  const content = atob(data.content.replace(/\n/g, ''));
-  return JSON.parse(content);
+// ── Decodificação UTF-8 segura de base64 ────────────────────────────────────
+// atob() nativo quebra com acentos (é, ç, ã). Usa TextDecoder para UTF-8 real.
+function ghBase64Decode(b64) {
+  const binary = atob(b64.replace(/\s/g, ''));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
 }
 
-// ── Leitura dos eventos pendentes (pasta events-pending/) ─────────────────────
-// Retorna array de eventos já aprovados que ainda não foram incorporados ao
-// events.json principal (ou seja, já mergeados mas ainda em pasta separada).
-async function ghGetPendingEvents() {
-  try {
-    const items = await ghFetch(
-      `/contents/${GH_PENDING_DIR}?ref=${GH_BRANCH}&t=${Date.now()}`,
-      {}, false   // leitura pública, não precisa de auth
-    );
-    if (!Array.isArray(items)) return [];
+// ── Codificação UTF-8 segura para base64 ─────────────────────────────────────
+function ghBase64Encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
 
-    const jsonFiles = items.filter(f => f.name.endsWith('.json') && f.type === 'file');
-    const results   = await Promise.allSettled(
-      jsonFiles.map(f =>
-        fetch(f.download_url + `?t=${Date.now()}`)
-          .then(r => r.json())
-          .catch(() => null)
-      )
-    );
-    return results
-      .filter(r => r.status === 'fulfilled' && r.value)
-      .map(r => r.value);
+// ── Leitura do events.json (fetch local, sem API, sem auth) ──────────────────
+// Lê diretamente do arquivo local para que a home funcione sem token.
+// Eventos pendentes (via PR mergeado) são carregados só se houver token.
+async function ghGetMainEvents() {
+  try {
+    const res = await fetch('./data/events.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
   } catch (e) {
-    // Pasta ainda não existe (repositório novo) — retorna vazio silenciosamente
-    if (e.status === 404) return [];
-    console.warn('[DaSIboard] Não foi possível carregar eventos pendentes:', e.message);
+    console.warn('[DaSIboard] Falha ao carregar events.json:', e.message);
     return [];
   }
 }
 
-// ── Carregar todos os eventos (principal + pendentes) ─────────────────────────
-// Chamado na inicialização do calendário no lugar de um fetch simples.
+// ── Leitura dos eventos pendentes (pasta events-pending/) ─────────────────────
+async function ghGetPendingEvents() {
+  if (!ghHasToken()) return []; // sem token não tenta — rate limit severo
+  try {
+    const items = await ghFetch(`/contents/${GH_PENDING_DIR}?ref=${GH_BRANCH}&t=${Date.now()}`);
+    if (!Array.isArray(items)) return [];
+    const jsonFiles = items.filter(f => f.name.endsWith('.json') && f.type === 'file');
+    const results = await Promise.allSettled(
+      jsonFiles.map(f => fetch(f.download_url + '?t=' + Date.now()).then(r => r.json()).catch(() => null))
+    );
+    return results.filter(r => r.status === 'fulfilled' && r.value).map(r => r.value);
+  } catch (e) {
+    if (e.status === 404) return [];
+    console.warn('[DaSIboard] Pendentes indisponíveis:', e.message);
+    return [];
+  }
+}
+
+// ── Carregar todos os eventos ─────────────────────────────────────────────────
 async function ghLoadAllEvents() {
   const [main, pending] = await Promise.all([ghGetMainEvents(), ghGetPendingEvents()]);
-
-  // Merge: preferir versão do events.json principal em caso de mesmo título+data
-  const seen   = new Set(main.map(e => `${e.date}|${e.title}`));
+  const seen = new Set(main.map(e => `${e.date}|${e.title}`));
   const extras = pending.filter(e => e && !seen.has(`${e.date}|${e.title}`));
-
   return [...main, ...extras].sort((a, b) => a.date.localeCompare(b.date));
 }
 
@@ -119,7 +128,7 @@ async function ghCreateBranch(branchName, fromSha) {
 // pois o arquivo ainda não existe nessa branch. Isso é uma criação pura,
 // sem sobrescrever nada. Dois PRs nunca tocam o mesmo arquivo.
 async function ghCommitEventFile(branchName, filename, eventData, commitMsg) {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(eventData, null, 2))));
+  const content = ghBase64Encode(JSON.stringify(eventData, null, 2));
   return ghFetch(`/contents/${GH_PENDING_DIR}/${filename}`, {
     method: 'PUT',
     body:   JSON.stringify({ message: commitMsg, content, branch: branchName })

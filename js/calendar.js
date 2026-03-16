@@ -12,20 +12,6 @@ let calAvailableTurmas = [];
 const TYPE_LABELS = { prova:'Prova', entrega:'Entrega', evento:'Evento', apresentacao:'Apresentação', deadline:'Deadline' };
 const TYPE_DOT_COLORS = { prova:'var(--danger)', entrega:'var(--warning)', evento:'var(--success)', apresentacao:'var(--info)', deadline:'#fb923c' };
 
-// Entidade name/color map (populated after entidades load)
-const ENTIDADE_META = {
-  'dasi':             { nome:'DASI',            cor:'#7c3aed', emoji:'🎓' },
-  'semana-si':        { nome:'Semana de SI',    cor:'#0ea5e9', emoji:'🚀' },
-  'grace':            { nome:'GRACE',           cor:'#ec4899', emoji:'💜' },
-  'each-in-the-shell':{ nome:'Each in the Shell',cor:'#10b981',emoji:'🐚' },
-  'hype':             { nome:'Hype',            cor:'#f97316', emoji:'⚡' },
-  'codelab':          { nome:'CodeLab',         cor:'#6366f1', emoji:'💻' },
-  'lab-das-minas':    { nome:'Lab das Minas',   cor:'#d946ef', emoji:'🔬' },
-  'conway':           { nome:'Conway',          cor:'#14b8a6', emoji:'🧮' },
-  'pet-si':           { nome:'PET-SI',          cor:'#f59e0b', emoji:'🏅' },
-  'sintese-jr':       { nome:'Síntese Jr.',     cor:'#ef4444', emoji:'💼' },
-};
-
 async function initCalendar() {
   if (calEvents.length === 0) {
     // Carrega events.json principal + eventos já aprovados em data/events-pending/

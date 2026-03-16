@@ -333,54 +333,8 @@ function renderNextClass() {
   }
 }
 
-function renderCountdown() {
-  const container = document.getElementById('countdown-card');
-  if (!container) return;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const upcoming = eventsData.filter(e => parseDate(e.date) >= today).sort((a,b) => parseDate(a.date) - parseDate(b.date));
-  if (!upcoming.length) { container.innerHTML = `<div class="countdown-past">Nenhum evento próximo.</div>`; return; }
-  const next = upcoming[0];
-  const nextDate = parseDate(next.date);
-  const diffMs = nextDate - today;
-  const diffDays = Math.ceil(diffMs / 86400000);
-  container.innerHTML = `
-    <div class="countdown-event-name">${next.title}</div>
-    <div class="countdown-units">
-      <div class="countdown-unit">
-        <div class="countdown-num">${String(diffDays).padStart(2,'0')}</div>
-        <div class="countdown-lbl">${diffDays === 1 ? 'Dia' : 'Dias'}</div>
-      </div>
-    </div>
-    <div class="countdown-event-type" style="margin-top:12px">${typeToLabel(next.type)}</div>
-    <div style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);margin-top:8px">${formatDate(next.date)}</div>
-  `;
-}
 
-function renderUpcomingEvents() {
-  const container = document.getElementById('upcoming-events');
-  if (!container) return;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const upcoming = eventsData.filter(e => parseDate(e.date) >= today).sort((a,b) => parseDate(a.date) - parseDate(b.date)).slice(0, 6);
-  if (!upcoming.length) { container.innerHTML = `<div class="no-events-msg">Nenhum evento próximo.</div>`; return; }
-  container.innerHTML = upcoming.map((ev, i) => {
-    const d = parseDate(ev.date);
-    const day = String(d.getDate()).padStart(2,'0');
-    const month = MONTH_NAMES_SHORT[d.getMonth()];
-    return `<div class="event-item anim-fade-up" style="animation-delay:${i*0.06}s">
-      <div class="event-date-badge"><span class="day">${day}</span><span class="month">${month}</span></div>
-      <div class="event-info">
-        <div class="event-title">${ev.title}</div>
-        <div class="event-desc">${ev.description && ev.description !== 'NA' ? ev.description : ''}</div>
-      </div>
-      ${typeToLabel(ev.type)}
-    </div>`;
-  }).join('');
-}
 
-function typeToLabel(type) {
-  const map = { prova:`<span class="badge badge-red">Prova</span>`,entrega:`<span class="badge badge-yellow">Entrega</span>`,evento:`<span class="badge badge-green">Evento</span>`,apresentacao:`<span class="badge badge-blue">Apresentação</span>`,deadline:`<span class="badge badge-yellow">Deadline</span>` };
-  return map[type] || `<span class="badge badge-purple">${type||'Evento'}</span>`;
-}
 
 function svgIcon(name) {
   const icons = {
@@ -493,3 +447,216 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(renderHeroGreeting, 60000);
   window.addEventListener('popstate', () => { navigateTo(window.location.hash.replace('#','') || 'home'); });
 });
+
+// ===== INTEGRAÇÕES E FUNÇÕES NOVAS =====
+
+// ── Refresh global de dados de eventos ────────────────────────────────────────
+// Atualiza eventsData e re-renderiza todos os widgets da home que dependem dele.
+// Chamado após merge/aceite de PR ou manualmente.
+async function refreshEventsData() {
+  eventsData = await ghLoadAllEvents();
+  renderUpcomingEvents();
+  renderCountdown();
+  updateStatEvents();
+  // Se o calendário já foi carregado, força recarregamento dele também
+  if (typeof calEvents !== 'undefined' && calEvents.length > 0) {
+    calEvents = eventsData;
+    if (typeof renderCalendar === 'function') renderCalendar();
+    if (typeof renderCalendarSidebar === 'function' && typeof calSelectedDate !== 'undefined' && calSelectedDate) {
+      renderCalendarSidebar(calSelectedDate, typeof getFilteredEvents === 'function' ? getFilteredEvents(calSelectedDate) : []);
+    }
+  }
+  // Atualiza a busca se cache estiver ativo
+  if (typeof searchEventsCache !== 'undefined') searchEventsCache = eventsData;
+}
+
+// ── Contagem de dias até um evento específico ─────────────────────────────────
+function daysUntil(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = parseDate(dateStr);
+  const diff = Math.ceil((target - today) / 86400000);
+  return diff;
+}
+
+// ── Badge de urgência baseado em dias restantes ───────────────────────────────
+function urgencyBadge(dateStr) {
+  const days = daysUntil(dateStr);
+  if (days < 0)  return `<span class="badge badge-red" style="font-size:9px">Encerrado</span>`;
+  if (days === 0) return `<span class="badge badge-red" style="font-size:9px">Hoje!</span>`;
+  if (days <= 2) return `<span class="badge badge-yellow" style="font-size:9px">${days}d</span>`;
+  if (days <= 7) return `<span class="badge badge-blue" style="font-size:9px">${days}d</span>`;
+  return '';
+}
+
+// ── renderUpcomingEvents: agora com badge de urgência e clique para calendário ─
+// Substitui a versão original com mais informação e interatividade.
+function renderUpcomingEvents() {
+  const container = document.getElementById('upcoming-events');
+  if (!container) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = eventsData
+    .filter(e => parseDate(e.date) >= today)
+    .sort((a,b) => parseDate(a.date) - parseDate(b.date))
+    .slice(0, 6);
+  if (!upcoming.length) {
+    container.innerHTML = `<div class="no-events-msg">Nenhum evento próximo.</div>`;
+    return;
+  }
+  container.innerHTML = upcoming.map((ev, i) => {
+    const d = parseDate(ev.date);
+    const day = String(d.getDate()).padStart(2,'0');
+    const month = MONTH_NAMES_SHORT[d.getMonth()];
+    const urg = urgencyBadge(ev.date);
+    const entBadge = (ev.entidade && typeof ENTIDADE_META !== 'undefined' && ENTIDADE_META[ev.entidade])
+      ? `<span style="font-size:11px;color:${ENTIDADE_META[ev.entidade].cor}">${ENTIDADE_META[ev.entidade].emoji} ${ENTIDADE_META[ev.entidade].nome}</span>`
+      : '';
+    return `<div class="event-item anim-fade-up" style="animation-delay:${i*0.06}s;cursor:pointer"
+      onclick="navigateTo('calendar');setTimeout(()=>{const y=${d.getFullYear()},m=${d.getMonth()};if(typeof calYear!=='undefined'){calYear=y;calMonth=m;calSelectedDate='${ev.date}';renderCalendar();renderCalendarSidebar('${ev.date}',getFilteredEvents('${ev.date}'));}},150)">
+      <div class="event-date-badge"><span class="day">${day}</span><span class="month">${month}</span></div>
+      <div class="event-info" style="flex:1;min-width:0">
+        <div class="event-title">${ev.title}</div>
+        <div class="event-desc" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          ${ev.description && ev.description !== 'NA' ? `<span>${ev.description}</span>` : ''}
+          ${entBadge}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        ${typeToLabel(ev.type)}
+        ${urg}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── renderCountdown: multi-unidade (dias, horas, minutos) ─────────────────────
+function renderCountdown() {
+  const container = document.getElementById('countdown-card');
+  if (!container) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = eventsData
+    .filter(e => parseDate(e.date) >= today)
+    .sort((a,b) => parseDate(a.date) - parseDate(b.date));
+  if (!upcoming.length) {
+    container.innerHTML = `<div class="countdown-past">Nenhum evento próximo.</div>`;
+    return;
+  }
+  const next = upcoming[0];
+  const nextDate = parseDate(next.date);
+  const diffMs = nextDate - today;
+  const diffDays = Math.ceil(diffMs / 86400000);
+
+  // Múltiplos eventos próximos (próximos 3)
+  const moreEvents = upcoming.slice(1, 3);
+  const moreHtml = moreEvents.length
+    ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--glass-border);display:flex;flex-direction:column;gap:6px;position:relative;z-index:2">
+        <div style="font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Próximos</div>
+        ${moreEvents.map(e => {
+          const d2 = daysUntil(e.date);
+          return `<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);min-width:28px">${d2}d</span>
+            <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.title}</span>
+            ${typeToLabel(e.type)}
+          </div>`;
+        }).join('')}
+      </div>`
+    : '';
+
+  container.innerHTML = `
+    <div style="position:relative;z-index:2">
+      <div class="countdown-event-name" onclick="navigateTo('calendar');setTimeout(()=>{if(typeof calYear!=='undefined'){const d=parseDate('${next.date}');calYear=d.getFullYear();calMonth=d.getMonth();calSelectedDate='${next.date}';renderCalendar();renderCalendarSidebar('${next.date}',getFilteredEvents('${next.date}'));}},150)" style="cursor:pointer">${next.title}</div>
+      <div class="countdown-units">
+        <div class="countdown-unit">
+          <div class="countdown-num">${String(diffDays).padStart(2,'0')}</div>
+          <div class="countdown-lbl">${diffDays === 1 ? 'Dia' : 'Dias'}</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;z-index:2">
+        ${typeToLabel(next.type)}
+        ${urgencyBadge(next.date)}
+      </div>
+      <div style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;position:relative;z-index:2">${formatDate(next.date)}</div>
+    </div>
+    ${moreHtml}
+  `;
+}
+
+// ── Navegação com indicador de loading liquid glass ───────────────────────────
+const _navOriginal = navigateTo;
+window.navigateWithFeedback = function(page) {
+  // Adiciona classe de transição na saída
+  document.querySelectorAll('.page.active').forEach(p => {
+    p.style.opacity = '0.6';
+    p.style.transform = 'scale(0.99)';
+    p.style.transition = 'opacity .15s, transform .15s';
+  });
+  setTimeout(() => {
+    _navOriginal(page);
+    document.querySelectorAll('.page.active').forEach(p => {
+      p.style.opacity = '';
+      p.style.transform = '';
+    });
+  }, 120);
+};
+
+// ── Auto-refresh de eventos a cada 5 min (busca pendentes novos) ──────────────
+setInterval(async () => {
+  if (!document.hidden && ghHasToken()) {
+    await refreshEventsData();
+  }
+}, 5 * 60 * 1000);
+
+// ── Integração: ao salvar token, recarregar eventos pendentes imediatamente ───
+const _ghSaveTokenOrig = window.ghSaveToken;
+if (typeof _ghSaveTokenOrig === 'function') {
+  window.ghSaveToken = function(token) {
+    _ghSaveTokenOrig(token);
+    if (token) setTimeout(refreshEventsData, 300);
+    renderGhTokenStatus();
+  };
+}
+
+// ── Badge dinâmico na sidebar para eventos de hoje ───────────────────────────
+function updateTodayEventsBadge() {
+  const badge = document.getElementById('sb-events-count');
+  if (!badge) return;
+  const todayKey = todayStr();
+  const todayCount = eventsData.filter(e => e.date === todayKey).length;
+  badge.textContent = todayCount > 0 ? todayCount : '';
+}
+
+// ── Integração sidebar: clique no badge de eventos vai para calendário no dia ──
+(function patchSidebarEventsBadge() {
+  const badge = document.getElementById('sb-events-count');
+  if (badge && badge.parentElement) {
+    badge.parentElement.addEventListener('click', (e) => {
+      // Ao navegar para calendar, selecionar hoje
+      if (typeof calYear !== 'undefined') {
+        const now = new Date();
+        calYear = now.getFullYear();
+        calMonth = now.getMonth();
+        calSelectedDate = todayStr();
+      }
+    });
+  }
+})();
+
+// ── Keyboard shortcut: G abre modal de proposta de evento ────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.key === 'g' || e.key === 'G') {
+    if (typeof openAddEventModal === 'function') openAddEventModal();
+  }
+  if (e.key === 'h' || e.key === 'H') navigateTo('home');
+  if (e.key === 'c' || e.key === 'C') navigateTo('calendar');
+  if (e.key === 'k' || e.key === 'K') navigateTo('kanban');
+});
+
+// ── Tooltip de atalhos de teclado no footer da sidebar ───────────────────────
+(function addKeyboardHints() {
+  const footer = document.querySelector('.sidebar-footer');
+  if (!footer) return;
+  const hint = document.createElement('div');
+  hint.style.cssText = 'font-family:var(--font-mono);font-size:9px;color:var(--text-dim);padding:0 10px 4px;letter-spacing:.3px;line-height:1.7;';
+  hint.innerHTML = '<kbd style="background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:3px;padding:0 4px;font-size:8.5px">H</kbd> Home &nbsp; <kbd style="background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:3px;padding:0 4px;font-size:8.5px">C</kbd> Calendário &nbsp; <kbd style="background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:3px;padding:0 4px;font-size:8.5px">G</kbd> + Evento';
+  footer.appendChild(hint);
+})();
