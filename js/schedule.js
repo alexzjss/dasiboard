@@ -171,6 +171,10 @@ function buildCourseCard(c, tipo) {
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             ${c.room}
           </div>` : ''}
+          ${(c.extra_rooms||[]).map(er => `<div class="course-meta-item" style="opacity:.6">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${er}
+          </div>`).join('')}
         </div>
       </div>
       ${jupLink}

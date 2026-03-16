@@ -56,56 +56,6 @@
   "schedule": {
     "1_02": [
       {
-        "code": "ACH0041",
-        "course": "Resolução de Problemas I",
-        "day": "Quarta",
-        "time": "08:00-12:00",
-        "extra": [],
-        "professor": "Karla Sampaio / Káthia Honório",
-        "room": "Térreo - Salas",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0141",
-        "course": "Sociedade, Multiculturalismo e Direitos – Estado e Direitos",
-        "day": "Quarta",
-        "time": "08:00-09:45",
-        "extra": [],
-        "professor": "David Dantas",
-        "room": "Térreo - Bloco I - Sala 11",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0021",
-        "course": "Tratamento e Análise de Dados e Informações",
-        "day": "Terça",
-        "time": "08:00-09:45",
-        "extra": [],
-        "professor": "Patrícia Rufino",
-        "room": "1° Andar - Sala 112",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0131",
-        "course": "Ciências da Natureza – Ciência, Cultura e Sociedade",
-        "day": "Terça",
-        "time": "10:15-12:00",
-        "extra": [],
-        "professor": "Paulo Correia",
-        "room": "Térreo - Bloco I - Sala 09",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0111",
-        "course": "Ciências da Natureza – Ciências da Vida",
-        "day": "Quarta",
-        "time": "10:15-12:00",
-        "extra": [],
-        "professor": "Marcos Hara",
-        "room": "Térreo - Bloco I - Sala 09",
-        "tipo": "ciclobasico"
-      },
-      {
         "code": "ACH2001",
         "course": "Introdução à Programação",
         "day": "Quinta",
@@ -142,46 +92,6 @@
     ],
     "1_04": [
       {
-        "code": "ACH0041",
-        "course": "Resolução de Problemas I",
-        "day": "Segunda",
-        "time": "19:00-22:45",
-        "extra": [],
-        "professor": "Marcelo Morandini / Cynthia Correa",
-        "room": "Térreo - Salas",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0161",
-        "course": "Sociedade, Multiculturalismo e Direitos – Direitos Humanos",
-        "day": "Terça",
-        "time": "21:00-22:45",
-        "extra": [],
-        "professor": "Martin Jayo",
-        "room": "Térreo - Sala T04",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0021",
-        "course": "Tratamento e Análise de Dados e Informações",
-        "day": "Terça",
-        "time": "19:00-20:45",
-        "extra": [],
-        "professor": "José Ricardo",
-        "room": "1° Andar - Sala 103",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0101",
-        "course": "Ciências da Natureza – Ciências da Terra",
-        "day": "Terça",
-        "time": "19:00-20:45",
-        "extra": [],
-        "professor": "Victor Velásquez",
-        "room": "Térreo - Bloco I - Sala 11",
-        "tipo": "ciclobasico"
-      },
-      {
         "code": "ACH2001",
         "course": "Introdução à Programação",
         "day": "Quarta",
@@ -217,46 +127,6 @@
       }
     ],
     "1_94": [
-      {
-        "code": "ACH0041",
-        "course": "Resolução de Problemas I",
-        "day": "Segunda",
-        "time": "19:00-22:45",
-        "extra": [],
-        "professor": "Alexandre Igari / Marcos Hara",
-        "room": "Térreo - Salas",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0161",
-        "course": "Sociedade, Multiculturalismo e Direitos – Direitos Humanos",
-        "day": "Terça",
-        "time": "19:00-20:45",
-        "extra": [],
-        "professor": "Martin Jayo",
-        "room": "Térreo - Sala T04",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0021",
-        "course": "Tratamento e Análise de Dados e Informações",
-        "day": "Terça",
-        "time": "21:00-22:45",
-        "extra": [],
-        "professor": "José Ricardo",
-        "room": "1° Andar - Sala 103",
-        "tipo": "ciclobasico"
-      },
-      {
-        "code": "ACH0101",
-        "course": "Ciências da Natureza – Ciências da Terra",
-        "day": "Terça",
-        "time": "19:00-20:45",
-        "extra": [],
-        "professor": "Luis Conti",
-        "room": "Térreo - Bloco I - Sala 09",
-        "tipo": "ciclobasico"
-      },
       {
         "code": "ACH2001",
         "course": "Introdução à Programação",
@@ -363,7 +233,10 @@
         ],
         "professor": "Flávio Coutinho",
         "room": "2° Andar - Sala 203",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Sex: 2° Andar - Sala 219"
+        ]
       },
       {
         "code": "ACH2024",
@@ -375,7 +248,10 @@
         ],
         "professor": "Ivandré Paraboni",
         "room": "2° Andar - Sala 220",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qua: 2° Andar - Sala 203"
+        ]
       },
       {
         "code": "ACH2034",
@@ -387,7 +263,10 @@
         ],
         "professor": "Clodoaldo Lima",
         "room": "2° Andar - Sala 219",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Seg: 2° Andar - Sala 203"
+        ]
       },
       {
         "code": "ACH2063",
@@ -399,7 +278,10 @@
         ],
         "professor": "Violeta Sun",
         "room": "2° Andar - Sala 219",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qui: 2° Andar - Sala 220"
+        ]
       },
       {
         "code": "ACH2053",
@@ -425,7 +307,10 @@
         ],
         "professor": "Flávio Coutinho",
         "room": "2° Andar - Sala 203",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Sex: 2° Andar - Sala 219"
+        ]
       },
       {
         "code": "ACH2024",
@@ -437,7 +322,10 @@
         ],
         "professor": "Ivandré Paraboni",
         "room": "2° Andar - Sala 203",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Sex: 2° Andar - Sala 220"
+        ]
       },
       {
         "code": "ACH2034",
@@ -449,7 +337,10 @@
         ],
         "professor": "Clodoaldo Lima",
         "room": "2° Andar - Sala 203",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qui: 2° Andar - Sala 219"
+        ]
       },
       {
         "code": "ACH2063",
@@ -461,7 +352,10 @@
         ],
         "professor": "Violeta Sun",
         "room": "2° Andar - Sala 220",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Seg: 2° Andar - Sala 219"
+        ]
       },
       {
         "code": "ACH2053",
@@ -549,7 +443,10 @@
         ],
         "professor": "Marcelo Eler",
         "room": "2° Andar - Sala 220",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qui: 2° Andar - Sala 221"
+        ]
       },
       {
         "code": "ACH2016",
@@ -573,7 +470,10 @@
         ],
         "professor": "José Perez",
         "room": "1° Andar - Sala 114",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Seg: 2° Andar - Sala 221"
+        ]
       },
       {
         "code": "ACH2043",
@@ -585,7 +485,10 @@
         ],
         "professor": "Mituhiro Fukuda",
         "room": "2° Andar - Sala 222",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qua: 2° Andar - Sala 220"
+        ]
       },
       {
         "code": "ACH2147",
@@ -611,7 +514,10 @@
         ],
         "professor": "Marcelo Eler",
         "room": "2° Andar - Sala 220",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qui: 2° Andar - Sala 221"
+        ]
       },
       {
         "code": "ACH2016",
@@ -635,7 +541,10 @@
         ],
         "professor": "Luciano Araújo",
         "room": "2° Andar - Sala 221",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Qua: 1° Andar - Sala 125"
+        ]
       },
       {
         "code": "ACH2043",
@@ -647,7 +556,10 @@
         ],
         "professor": "Mituhiro Fukuda",
         "room": "2° Andar - Sala 220",
-        "tipo": "especifica"
+        "tipo": "especifica",
+        "extra_rooms": [
+          "Sex: 2° Andar - Sala 222"
+        ]
       },
       {
         "code": "ACH2147",
@@ -677,7 +589,7 @@
         "code": "ACH2018",
         "course": "Projeto Supervisionado ou de Graduação II",
         "day": "Terça",
-        "time": "12:00-13:00     (Horário Fictício)",
+        "time": "12:00-13:00 (Horário Fictício)",
         "extra": [],
         "professor": "—",
         "room": "—",
@@ -685,7 +597,7 @@
       },
       {
         "code": "ACH2157",
-        "course": "Computação Física e Aplicações -",
+        "course": "Computação Física e Aplicações",
         "day": "Quarta",
         "time": "08:00-12:00",
         "extra": [],
@@ -695,7 +607,7 @@
       },
       {
         "code": "ACH2158",
-        "course": "Simulação de Sistemas Complexos -",
+        "course": "Simulação de Sistemas Complexos",
         "day": "Segunda",
         "time": "08:00-12:00",
         "extra": [],

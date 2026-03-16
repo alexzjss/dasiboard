@@ -85,13 +85,21 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+// JSON fetch cache to avoid redundant requests within a session
+const _jsonCache = new Map();
+
 async function fetchJSON(url) {
+  // Strip cache-bust and use sessionStorage for within-session caching
+  const cacheKey = url.split('?')[0];
+  if (_jsonCache.has(cacheKey)) return _jsonCache.get(cacheKey);
   try {
-    const res = await fetch(url + '?v=' + Date.now());
+    const res = await fetch(cacheKey, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
+    const data = await res.json();
+    _jsonCache.set(cacheKey, data);
+    return data;
   } catch (e) {
-    console.warn(`Failed to fetch ${url}:`, e);
+    console.warn(`Failed to fetch ${cacheKey}:`, e);
     return null;
   }
 }

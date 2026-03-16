@@ -15,3 +15,16 @@
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .gradient-animate{background-size:200% 200%;animation:gradientShift 6s ease infinite}
 @keyframes glowPulse{0%,100%{box-shadow:0 0 16px var(--glow)}50%{box-shadow:0 0 32px var(--glow-strong)}}
+
+/* ===== LITE MODE: disable all animations ===== */
+body.lite-mode .anim-fade-up,
+body.lite-mode .anim-fade-in,
+body.lite-mode .count-up,
+body.lite-mode .scale-in,
+body.lite-mode .slide-right,
+body.lite-mode .gradient-animate,
+body.lite-mode .skeleton {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}

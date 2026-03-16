@@ -439,9 +439,36 @@ function renderGhTokenStatus() {
 }
 
 // ===== INIT =====
+// ===== LITE MODE =====
+function toggleLiteMode() {
+  const isLite = document.body.classList.toggle('lite-mode');
+  localStorage.setItem('dasiLiteMode', isLite ? '1' : '0');
+  renderLiteBtn();
+}
+
+function renderLiteBtn() {
+  const btn = document.getElementById('lite-mode-btn');
+  const status = document.getElementById('lite-status');
+  if (!btn || !status) return;
+  const isLite = document.body.classList.contains('lite-mode');
+  btn.classList.toggle('active', isLite);
+  status.textContent = isLite ? 'on' : 'off';
+  btn.title = isLite ? 'Modo Leve ativado — clique para desativar' : 'Ativar Modo Leve (melhora performance em dispositivos lentos)';
+}
+
+function loadLiteMode() {
+  if (localStorage.getItem('dasiLiteMode') === '1') {
+    document.body.classList.add('lite-mode');
+  }
+  // Clean up the pre-paint attribute now that JS is loaded
+  document.documentElement.removeAttribute('data-lite');
+  renderLiteBtn();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadSavedTheme();
   renderThemeSwitch();
+  loadLiteMode();
   renderGhTokenStatus();
   createSidebarOverlay();
   const hash = window.location.hash.replace('#','') || 'home';

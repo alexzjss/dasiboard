@@ -114,9 +114,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sidebar-mobile-overlay.show{display:block}
 
 /* APP LAYOUT */
-.app-layout{margin-left:var(--sidebar-width);min-height:100vh;position:relative;z-index:1;transition:margin-left .3s ease}
-.main-content{min-height:100vh}
-.page{display:none;padding:40px clamp(18px,3vw,48px) 60px;width:100%;animation:pageIn .38s cubic-bezier(.4,0,.2,1)}
+.app-layout{margin-left:var(--sidebar-width);min-height:100vh;position:relative;z-index:1;transition:margin-left .3s ease;overflow-x:hidden;max-width:100%}
+.main-content{min-height:100vh;overflow-x:hidden}
+.page{display:none;padding:40px clamp(18px,3vw,48px) 60px;width:100%;max-width:100%;overflow-x:hidden;animation:pageIn .38s cubic-bezier(.4,0,.2,1)}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
@@ -166,8 +166,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .btn-danger:hover{background:rgba(248,113,113,.25);border-color:var(--danger)}
 
 /* ===== HOME ===== */
-.home-hero{margin-bottom:28px;position:relative}
-.home-hero::before{content:'';position:absolute;top:-40px;left:-50px;width:300px;height:180px;background:radial-gradient(ellipse,var(--orb-1) 0%,transparent 70%);pointer-events:none;z-index:-1;filter:blur(20px)}
+.home-hero{margin-bottom:28px;position:relative;overflow:hidden}
+.home-hero::before{content:'';position:absolute;top:-40px;left:-50px;width:300px;height:180px;background:radial-gradient(ellipse,var(--orb-1) 0%,transparent 70%);pointer-events:none;z-index:-1;filter:blur(20px);max-width:calc(100% + 50px)}
 .home-hero-eyebrow{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:6px}
 .hero-greeting-text{color:var(--primary);font-weight:600}
 .hero-dot{color:var(--text-dim)}
@@ -3768,3 +3768,673 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 [data-theme="grace"] .orb:nth-child(1) { background:rgba(239,68,68,.12); }
 [data-theme="grace"] .orb:nth-child(2) { background:rgba(168,85,247,.12); }
 [data-theme="grace"] .orb:nth-child(3) { background:rgba(59,130,246,.09); }
+
+/* ============================================================
+   LITE MODE — Simplified visual for low-end devices
+   ============================================================ */
+
+/* Lite mode toggle button */
+.sidebar-lite-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--glass-tint);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--text-muted); width: 100%; text-align: left;
+}
+.sidebar-lite-btn:hover { background: var(--bg-card-hover); border-color: var(--border-hover); color: var(--text); }
+.sidebar-lite-btn.active { background: rgba(251,191,36,.12); border-color: rgba(251,191,36,.4); color: var(--warning); }
+.sidebar-lite-btn .lite-icon { font-size: 13px; flex-shrink: 0; }
+.sidebar-lite-btn .lite-label { flex: 1; }
+.sidebar-lite-btn .lite-status {
+  font-size: 9px; padding: 2px 6px; border-radius: 100px;
+  background: var(--glass-tint); border: 1px solid var(--glass-border);
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.sidebar-lite-btn.active .lite-status {
+  background: rgba(251,191,36,.18); border-color: rgba(251,191,36,.4); color: var(--warning);
+}
+
+/* ---- LITE MODE GLOBAL: Remove heavy visual effects ---- */
+body.lite-mode,
+body.lite-mode * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.lite-mode .bg-orbs { display: none !important; }
+body.lite-mode::before { display: none !important; }
+
+body.lite-mode .card,
+body.lite-mode .stat-card,
+body.lite-mode .next-class-card,
+body.lite-mode .event-item,
+body.lite-mode .course-card,
+body.lite-mode .kanban-card,
+body.lite-mode .docente-card,
+body.lite-mode .estudo-card,
+body.lite-mode .tool-card,
+body.lite-mode .newsletter-featured,
+body.lite-mode .home-quick-btn,
+body.lite-mode .gpa-big-card,
+body.lite-mode .gpa-semester-block,
+body.lite-mode .sidebar,
+body.lite-mode .topbar,
+body.lite-mode .modal-box,
+body.lite-mode .search-box {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.lite-mode .card::before,
+body.lite-mode .card::after,
+body.lite-mode .stat-card::before,
+body.lite-mode .home-quick-btn::before,
+body.lite-mode .btn::before {
+  display: none !important;
+}
+
+/* Disable all non-essential animations */
+body.lite-mode .orb,
+body.lite-mode .theme-dot,
+body.lite-mode @keyframes orbDrift1,
+body.lite-mode @keyframes orbDrift2,
+body.lite-mode @keyframes orbDrift3 {
+  animation: none !important;
+}
+
+body.lite-mode * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.1s !important;
+}
+
+/* Lite mode cards: flat, solid look */
+body.lite-mode .card,
+body.lite-mode .stat-card,
+body.lite-mode .home-quick-btn,
+body.lite-mode .next-class-card,
+body.lite-mode .event-item {
+  background: var(--bg-3) !important;
+  box-shadow: none !important;
+}
+
+body.lite-mode .card:hover,
+body.lite-mode .stat-card:hover,
+body.lite-mode .home-quick-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.lite-mode .sidebar,
+body.lite-mode .topbar {
+  background: var(--bg-2) !important;
+  box-shadow: none !important;
+}
+
+/* Disable gradient text effects in lite mode for performance */
+body.lite-mode .home-hero h2 span,
+body.lite-mode .stat-value,
+body.lite-mode .sidebar-title,
+body.lite-mode .topbar-brand span {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  background-clip: unset !important;
+  color: var(--text) !important;
+}
+
+/* ============================================================
+   PERFORMANCE IMPROVEMENTS
+   ============================================================ */
+
+/* Use will-change only on actively animated elements */
+.orb { will-change: transform; }
+.sidebar { will-change: transform; }
+.modal-overlay { will-change: opacity; }
+
+/* Reduce repaint on hover by using GPU layer */
+.card, .stat-card, .home-quick-btn, .docente-card {
+  contain: layout style;
+}
+
+/* Font display swap to avoid FOIT */
+@font-face {
+  font-display: swap;
+}
+
+/* Reduce backdrop-filter layers - already minimal, ensure no stacking */
+.sidebar .sidebar-theme-btn,
+.sidebar .sidebar-lite-btn {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ============================================================
+   THEME REFINEMENTS — Polish across all themes
+   ============================================================ */
+
+/* Better contrast for muted text on dark themes */
+[data-theme="padrao"] .text-muted,
+[data-theme="super"] .text-muted,
+[data-theme="hypado"] .text-muted,
+[data-theme="omni"] .text-muted,
+[data-theme="d20"] .text-muted {
+  opacity: 1;
+}
+
+/* Improve card readability across themes */
+.card { transition: border-color var(--transition), background var(--transition), transform var(--transition), box-shadow var(--transition); }
+
+/* Better sidebar active state contrast */
+.sidebar-link.active {
+  font-weight: 600;
+}
+
+/* Smoother scrollbar across all themes */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--primary-2); border-radius: 4px; }
+
+/* Refine home hero spacing on very small screens */
+@media (max-width: 380px) {
+  .home-hero { margin-bottom: 16px; overflow: hidden; }
+  .home-hero::before { display: none; }
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat-card { padding: 12px; }
+  .stat-value { font-size: 20px; }
+  .page { padding: 14px 10px 40px; }
+  .home-quick-nav { gap: 5px; }
+}
+
+/* Refined schedule cards */
+.course-card-accent { transition: background var(--transition); }
+
+/* Improve badge legibility */
+.badge { font-size: 10px; letter-spacing: .3px; }
+
+/* Refine modal backdrop */
+.modal-overlay { background: rgba(0,0,0,.62); }
+
+/* Better light theme card shadows */
+[data-theme="grifinho"] .card,
+[data-theme="bidu"] .card,
+[data-theme="laboratorio"] .card,
+[data-theme="sintetizado"] .card,
+[data-theme="masacote"] .card,
+[data-theme="grace"] .card {
+  box-shadow: 0 2px 12px rgba(0,0,0,.07), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* Ensure home page fills width on mobile without overflow */
+@media (max-width: 768px) {
+  .page { max-width: 100vw; overflow-x: hidden; }
+  .home-hero { max-width: 100%; }
+  .home-hero::before { left: -20px; width: min(300px, 85vw); }
+  .home-quick-nav { max-width: 100%; }
+  .stat-grid { max-width: 100%; }
+}
+
+/* ============================================================
+   LITE MODE — Additional refined disabling
+   ============================================================ */
+body.lite-mode .theme-dot { animation: none !important; }
+body.lite-mode .orb { display: none !important; }
+body.lite-mode body::before { display: none !important; }
+
+/* Lite mode: simpler card backgrounds to avoid paint cost */
+body.lite-mode .course-card,
+body.lite-mode .gpa-semester-block,
+body.lite-mode .newsletter-featured,
+body.lite-mode .calendar-main,
+body.lite-mode .search-box,
+body.lite-mode .modal-box {
+  background: var(--bg-3) !important;
+  box-shadow: none !important;
+}
+
+/* Keep sidebar readable in lite mode */
+body.lite-mode .sidebar-footer {
+  border-top-color: var(--border);
+}
+
+/* Lite mode topbar: solid color */
+body.lite-mode .topbar {
+  background: var(--bg-2) !important;
+  backdrop-filter: none !important;
+}
+
+/* ============================================================
+   MOBILE OVERFLOW — Final guarantees
+   ============================================================ */
+html { overflow-x: hidden; }
+
+@media (max-width: 768px) {
+  .app-layout { overflow-x: hidden; width: 100%; }
+  .page { box-sizing: border-box; width: 100%; }
+  .home-hero::before { display: none; }
+}
+
+/* ============================================================
+   COMPREHENSIVE REFINEMENT PASS — v0.6.0
+   ============================================================ */
+
+/* ── 1. Better schedule card layout on mobile ── */
+@media (max-width: 640px) {
+  .course-card-body { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .course-meta { flex-direction: column; gap: 5px; }
+  .course-link-hint { align-self: flex-end; }
+}
+
+/* ── 2. Semester selector scrollable on mobile ── */
+.semester-selector {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+  overflow-x: auto; padding-bottom: 4px;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.semester-selector::-webkit-scrollbar { display: none; }
+
+/* ── 3. Turma header scrollable ── */
+#schedule-turma-header { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 4px; }
+@media (max-width: 480px) {
+  #schedule-turma-header { flex-wrap: wrap !important; }
+}
+
+/* ── 4. Course card — larger color bar, better hover ── */
+.course-color-bar { width: 5px; border-radius: 0; flex-shrink: 0; }
+.course-card { border-radius: var(--radius); }
+.course-card:hover { transform: translateX(3px); }
+
+/* ── 5. Home stat grid — better proportions ── */
+.stat-card { border-radius: var(--radius); }
+.stat-icon { font-size: 22px; }
+
+/* ── 6. Sidebar width refinement ── */
+@media (min-width: 1600px) {
+  :root { --sidebar-width: 240px; }
+}
+
+/* ── 7. Page header refinement ── */
+.page-header { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+.page-header-label { margin-bottom: 6px; }
+
+/* ── 8. Home quick nav — better proportions on mid screens ── */
+@media (min-width: 481px) and (max-width: 768px) {
+  .home-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .home-quick-btn { flex-direction: column; gap: 5px; padding: 12px 8px; font-size: 11.5px; }
+}
+
+/* ── 9. Card inner content alignment ── */
+.card > .card-title:first-child { margin-top: 0; }
+
+/* ── 10. Refined button focus states ── */
+.btn:focus-visible, .sem-btn:focus-visible, .sidebar-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── 11. Theme refinements: dark themes get slightly more saturated cards ── */
+[data-theme="padrao"] .card,
+[data-theme="hypado"] .card,
+[data-theme="omni"] .card,
+[data-theme="minas"] .card {
+  background: var(--bg-card);
+}
+
+/* ── 12. Super theme: better ice effect ── */
+[data-theme="super"] .card {
+  background: rgba(8,24,56,.72);
+  border-color: rgba(160,220,255,.14);
+}
+[data-theme="super"] .card:hover {
+  border-color: rgba(220,30,0,.5);
+  box-shadow: 0 8px 32px rgba(220,30,0,.12), 0 0 0 1px rgba(220,30,0,.08);
+}
+[data-theme="super"] .home-quick-btn:hover svg { filter: drop-shadow(0 0 6px rgba(255,215,0,.6)); }
+[data-theme="super"] .stat-value { background: linear-gradient(135deg, #dc1e00, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+[data-theme="super"] .btn-primary { background: linear-gradient(135deg, #dc1e00, #b81800); box-shadow: 0 4px 16px rgba(220,30,0,.4); }
+
+/* ── 13. D20 theme: more magical glow ── */
+[data-theme="d20"] .card { box-shadow: 0 4px 24px rgba(192,132,252,.06), inset 0 1px 0 rgba(255,200,255,.08); }
+[data-theme="d20"] .card:hover { box-shadow: 0 8px 36px rgba(240,171,252,.14), inset 0 1px 0 rgba(255,200,255,.12); }
+[data-theme="d20"] .sidebar-link.active { box-shadow: inset 3px 0 0 var(--primary); }
+
+/* ── 14. Omni (Matrix) — stronger terminal feel ── */
+[data-theme="omni"] .course-code { color: var(--primary); border-color: rgba(74,222,128,.25); }
+[data-theme="omni"] .page-header h1 { letter-spacing: -0.5px; }
+
+/* ── 15. Minas theme — better pink/green contrast ── */
+[data-theme="minas"] .card { border-color: rgba(236,72,153,.12); }
+[data-theme="minas"] .card:hover { border-color: rgba(236,72,153,.35); }
+[data-theme="minas"] .btn-primary { background: linear-gradient(135deg, #ec4899, #db2777); }
+
+/* ── 16. Light themes — more refined card shadows ── */
+[data-theme="sintetizado"] .card,
+[data-theme="sintetizado"] .stat-card,
+[data-theme="sintetizado"] .home-quick-btn {
+  box-shadow: 0 2px 8px rgba(37,99,235,.06), inset 0 1px 0 rgba(255,255,255,.95);
+}
+[data-theme="sintetizado"] .card:hover {
+  box-shadow: 0 6px 24px rgba(37,99,235,.1), inset 0 1px 0 rgba(255,255,255,.95);
+}
+[data-theme="masacote"] .card {
+  box-shadow: 0 2px 8px rgba(220,38,38,.05), inset 0 1px 0 rgba(255,255,255,.95);
+}
+[data-theme="laboratorio"] .card {
+  box-shadow: 0 2px 8px rgba(219,39,119,.05), inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+/* ── 17. Grace theme — softer glow on cards ── */
+[data-theme="grace"] .card { box-shadow: 0 2px 12px rgba(168,85,247,.07), inset 0 1px 0 rgba(255,255,255,.92); }
+[data-theme="grace"] .card:hover { box-shadow: 0 6px 24px rgba(168,85,247,.12), inset 0 1px 0 rgba(255,255,255,.95); }
+
+/* ── 18. Topbar refinement on mobile ── */
+.topbar-brand { gap: 9px; }
+@media (max-width: 380px) {
+  .topbar { padding: 0 12px; gap: 10px; }
+  .topbar-brand span { font-size: 14px; }
+}
+
+/* ── 19. Sidebar footer improved spacing ── */
+.sidebar-footer { gap: 6px; padding: 10px 10px 12px; }
+.sidebar-time { font-size: 11px; letter-spacing: .3px; padding: 2px 10px; }
+
+/* ── 20. Smooth scrolling on all scrollable containers ── */
+.sidebar-nav,
+.schedule-grid,
+.kanban-board,
+.modal-box { scroll-behavior: smooth; }
+
+/* ── 21. Empty state styling ── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 24px; text-align: center; gap: 12px;
+  color: var(--text-dim); font-family: var(--font-mono); font-size: 13px;
+}
+.empty-state p { margin: 0; }
+
+/* ── 22. Loading spinner refinement ── */
+.loading-spinner {
+  display: flex; align-items: center; gap: 12px;
+  padding: 32px; color: var(--text-dim);
+  font-family: var(--font-mono); font-size: 12px;
+}
+.spinner {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--primary);
+  animation: spin .7s linear infinite; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── 23. Section title line improved ── */
+.section-title::after { opacity: .6; }
+
+/* ── 24. Home hero on small devices ── */
+@media (max-width: 480px) {
+  .home-hero h2 { font-size: 24px; letter-spacing: -.8px; }
+  .home-hero p { font-size: 13px; }
+  .home-hero-eyebrow { font-size: 11px; }
+}
+
+/* ── 25. Kanban card drag indicator ── */
+.kanban-card:active { cursor: grabbing; opacity: .85; }
+
+/* ── 26. GPA discipline row hover ── */
+.gpa-discipline-row:hover { background: var(--bg-card-hover); }
+
+/* ── 27. Footer layout polish ── */
+.footer { padding: 20px clamp(18px, 3vw, 48px); }
+@media (max-width: 768px) { .footer { padding: 16px 14px; } }
+
+/* ── 28. Topbar lite mode: ensure it stays visible ── */
+body.lite-mode .topbar {
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* ── 29. Lite mode: keep text gradient on primary CTA ── */
+body.lite-mode .btn-primary {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* ── 30. Course card — text overflow handling ── */
+.course-name {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ============================================================
+   DEEP THEME POLISH — v0.6.0 Final Pass
+   Every theme gets stronger visual identity & better contrast
+   ============================================================ */
+
+/* ── PADRÃO (dark purple) — sharper glass ── */
+[data-theme="padrao"] .sidebar { border-right-color: rgba(124,58,237,.22); }
+[data-theme="padrao"] .home-hero h2 span { filter: drop-shadow(0 0 30px rgba(124,58,237,.3)); }
+[data-theme="padrao"] .sem-btn.active { box-shadow: 0 4px 20px rgba(124,58,237,.45); }
+[data-theme="padrao"] .stat-card:hover { box-shadow: 0 6px 28px rgba(124,58,237,.15), inset 0 1px 0 var(--glass-shine); }
+
+/* ── SUPER (Superman) — bolder red/gold ── */
+[data-theme="super"] .page-header-label { color: #ffd700; }
+[data-theme="super"] .page-header-label::before { background: linear-gradient(90deg, #ffd700, transparent); }
+[data-theme="super"] .sidebar-brand-text .sidebar-title { -webkit-text-fill-color: transparent; background: linear-gradient(135deg,#eaf5ff,#ffd700); -webkit-background-clip: text; background-clip: text; }
+[data-theme="super"] .section-title svg { color: #ffd700; }
+[data-theme="super"] .sem-btn { background: rgba(8,24,56,.82); }
+[data-theme="super"] .sem-btn.active { background: linear-gradient(135deg,#dc1e00,#b81800); box-shadow: 0 4px 20px rgba(220,30,0,.5); }
+
+/* ── HACKERMAN — purer terminal feel ── */
+[data-theme="hackerman"] .page-header h1 { font-family: var(--font-mono) !important; font-style: normal !important; font-size: 28px !important; }
+[data-theme="hackerman"] .sem-btn { font-family: var(--font-mono); font-size: 11px; background: rgba(0,18,0,.9); border-color: rgba(0,255,65,.2); }
+[data-theme="hackerman"] .sem-btn.active { background: rgba(0,60,0,.9); box-shadow: 0 0 16px rgba(0,255,65,.3), 0 0 1px rgba(0,255,65,.8); }
+[data-theme="hackerman"] .sidebar-time { color: rgba(0,255,65,.5); }
+[data-theme="hackerman"] .section-title svg { color: #00ff41; }
+[data-theme="hackerman"] .sidebar-link:hover svg { color: #00ff41; }
+
+/* ── SITH — deep crimson & darkness ── */
+[data-theme="sith"] .card:hover { box-shadow: 0 8px 32px rgba(180,0,0,.2), 0 0 0 1px rgba(220,40,40,.15); }
+[data-theme="sith"] .home-hero h2 span { filter: drop-shadow(0 0 16px rgba(200,0,0,.5)); }
+[data-theme="sith"] .sem-btn.active { box-shadow: 0 4px 20px rgba(180,0,0,.5); }
+
+/* ── GATILHO DO TEMPO — purpled cosmic ── */
+[data-theme="gatilho"] .home-hero h2 span { filter: drop-shadow(0 0 20px rgba(136,68,238,.5)); }
+[data-theme="gatilho"] .sidebar-link.active { border-color: rgba(200,120,255,.3); box-shadow: inset 0 0 12px rgba(136,68,238,.1); }
+
+/* ── HYPADO (orange/purple) — stronger contrast ── */
+[data-theme="hypado"] .page-header-label { color: var(--primary); }
+[data-theme="hypado"] .card:hover { box-shadow: 0 8px 32px rgba(251,146,60,.12), inset 0 1px 0 rgba(253,186,116,.1); }
+[data-theme="hypado"] .sem-btn.active { box-shadow: 0 4px 20px rgba(251,146,60,.4); }
+[data-theme="hypado"] .stat-value { background: linear-gradient(135deg,#fb923c,#a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── OMNI (Matrix green/white) — cleaner ── */
+[data-theme="omni"] .home-hero h2 span { filter: drop-shadow(0 0 14px rgba(74,222,128,.4)); }
+[data-theme="omni"] .sidebar { border-right-color: rgba(74,222,128,.15); }
+[data-theme="omni"] .sidebar-link.active { color: #4ade80; }
+[data-theme="omni"] .sem-btn.active { background: linear-gradient(135deg,#22c55e,#16a34a); box-shadow: 0 4px 20px rgba(74,222,128,.35); }
+[data-theme="omni"] .stat-value { background: linear-gradient(135deg,#fff,#4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── MINAS (pink/forest) — warmer greens ── */
+[data-theme="minas"] .home-hero h2 span { filter: drop-shadow(0 0 16px rgba(236,72,153,.4)); }
+[data-theme="minas"] .section-title svg { color: var(--accent); }
+[data-theme="minas"] .sem-btn.active { background: linear-gradient(135deg,#ec4899,#db2777); box-shadow: 0 4px 16px rgba(236,72,153,.4); }
+
+/* ── D20 (arcane purple) — mythical glow ── */
+[data-theme="d20"] .page-header h1 { filter: drop-shadow(0 0 20px rgba(192,132,252,.25)); }
+[data-theme="d20"] .sem-btn.active { background: linear-gradient(135deg,#a855f7,#9333ea); box-shadow: 0 4px 20px rgba(192,132,252,.5); }
+[data-theme="d20"] .stat-value { filter: drop-shadow(0 0 10px rgba(240,171,252,.3)); }
+
+/* ── GRIFINHO (light purple) — crisper white cards ── */
+[data-theme="grifinho"] .sidebar-link.active { background: rgba(124,58,237,.08); color: var(--primary); }
+[data-theme="grifinho"] .card { box-shadow: 0 2px 16px rgba(124,58,237,.08), inset 0 1px 0 rgba(255,255,255,.95); }
+[data-theme="grifinho"] .card:hover { box-shadow: 0 8px 32px rgba(124,58,237,.12), inset 0 1px 0 rgba(255,255,255,.98); }
+[data-theme="grifinho"] .home-hero h2 span { -webkit-text-fill-color: transparent; }
+
+/* ── BIDU (warm orange/light) — sun-soaked ── */
+[data-theme="bidu"] .card { box-shadow: 0 2px 16px rgba(234,88,12,.06), inset 0 1px 0 rgba(255,255,255,.95); }
+[data-theme="bidu"] .card:hover { box-shadow: 0 6px 28px rgba(234,88,12,.1), inset 0 1px 0 rgba(255,255,255,.98); }
+[data-theme="bidu"] .sem-btn.active { box-shadow: 0 4px 16px rgba(234,88,12,.35); }
+
+/* ── MAMACO (golden sepia) — warmer tones ── */
+[data-theme="mamaco"] .stat-value { text-shadow: 0 0 14px rgba(245,200,0,.3); }
+[data-theme="mamaco"] .sem-btn.active { background: linear-gradient(135deg,#5a3200,#3d2000); box-shadow: 0 4px 16px rgba(90,50,0,.35); }
+
+/* ── JEDI (green light) — forest calm ── */
+[data-theme="jedi"] .card { box-shadow: 0 2px 12px rgba(34,197,94,.06), inset 0 1px 0 rgba(255,255,255,.95); }
+[data-theme="jedi"] .card:hover { box-shadow: 0 6px 24px rgba(34,197,94,.1), inset 0 1px 0 rgba(255,255,255,.98); }
+
+/* ── OCEAN (blue breeze) — crisp maritime ── */
+[data-theme="ocean"] .card { box-shadow: 0 2px 12px rgba(14,165,233,.06), inset 0 1px 0 rgba(255,255,255,.95); }
+[data-theme="ocean"] .card:hover { box-shadow: 0 6px 24px rgba(14,165,233,.1), inset 0 1px 0 rgba(255,255,255,.98); }
+
+/* ── LABORATÓRIO (deep pink/lab) — precise ── */
+[data-theme="laboratorio"] .sem-btn.active { background: linear-gradient(135deg,#db2777,#be185d); box-shadow: 0 4px 16px rgba(219,39,119,.35); }
+[data-theme="laboratorio"] .card:hover { box-shadow: 0 8px 28px rgba(219,39,119,.1), inset 0 1px 0 rgba(255,255,255,.98); }
+
+/* ── SINTETIZADO (electric blue) — tech clean ── */
+[data-theme="sintetizado"] .home-hero h2 span { -webkit-text-fill-color: transparent; }
+[data-theme="sintetizado"] .sem-btn.active { background: linear-gradient(135deg,#2563eb,#1d4ed8); box-shadow: 0 4px 16px rgba(37,99,235,.4); }
+[data-theme="sintetizado"] .section-title::after { background: linear-gradient(90deg,rgba(37,99,235,.3),transparent); }
+
+/* ── MASACOTE (red/yellow) — bold energy ── */
+[data-theme="masacote"] .home-hero h2 span { -webkit-text-fill-color: transparent; }
+[data-theme="masacote"] .sem-btn.active { background: linear-gradient(135deg,#dc2626,#b91c1c); box-shadow: 0 4px 16px rgba(220,38,38,.4); }
+[data-theme="masacote"] .stat-value { background: linear-gradient(135deg,#dc2626,#ca8a04); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── GRACE (pastel rainbow) — dreamy ── */
+[data-theme="grace"] .home-hero h2 span { -webkit-text-fill-color: transparent; }
+[data-theme="grace"] .sem-btn.active { box-shadow: 0 4px 20px rgba(168,85,247,.4); }
+
+/* ============================================================
+   MICRO-INTERACTIONS — polish all interactive elements
+   ============================================================ */
+
+/* Cards: subtle lift on hover with GPU-accelerated transform */
+.card:hover,
+.stat-card:hover,
+.home-quick-btn:hover,
+.docente-card:hover,
+.estudo-card:hover,
+.event-item:hover {
+  will-change: transform;
+}
+
+/* Sidebar links: sliding accent bar on hover */
+.sidebar-link:hover::before {
+  content: '';
+  position: absolute;
+  left: -10px; top: 50%;
+  transform: translateY(-50%);
+  width: 2px; height: 12px;
+  background: var(--text-dim);
+  border-radius: 0 2px 2px 0;
+  opacity: .4;
+}
+
+/* Active sidebar link: stronger glow */
+.sidebar-link.active {
+  box-shadow: inset 0 0 0 1px var(--glass-border);
+}
+
+/* Buttons: press effect */
+.btn:active { transform: translateY(1px) scale(.99); }
+.sem-btn:active { transform: translateY(1px) scale(.98); }
+.home-quick-btn:active { transform: translateY(-1px) scale(.99); }
+
+/* Course card: left edge grows on hover */
+.course-card:hover .course-color-bar {
+  width: 6px;
+  transition: width .2s ease;
+}
+.course-color-bar { transition: width .2s ease; }
+
+/* ============================================================
+   SCHEDULE PAGE — final visual polish
+   ============================================================ */
+
+/* Turma tab: cleaner selector area */
+#schedule-turma-header > div {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Semester + turma tabs: consistent sizing */
+.sem-btn {
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Course card: better vertical rhythm */
+.course-card { margin-bottom: 1px; }
+.course-card + .course-card { }
+.schedule-grid { gap: 8px; }
+
+/* JupiterWeb link: more visible */
+.course-link-hint {
+  background: var(--glass-tint);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  letter-spacing: .3px;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.course-link-hint:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  color: var(--secondary) !important;
+}
+
+/* ============================================================
+   ACCESSIBILITY — ARIA & screen reader improvements
+   ============================================================ */
+
+/* Skip-to-content link */
+.skip-link {
+  position: absolute; top: -100px; left: 16px;
+  background: var(--primary); color: #fff;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-weight: 700; z-index: 9999; text-decoration: none;
+  transition: top .2s;
+}
+.skip-link:focus { top: 16px; }
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card { border-width: 2px; }
+  .sidebar-link { font-weight: 700; }
+  .sem-btn { border-width: 2px; }
+  .course-color-bar { width: 6px; }
+}
+
+/* ============================================================
+   FOOTER VERSION BADGE
+   ============================================================ */
+.footer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-dim); background: var(--glass-tint);
+  border: 1px solid var(--glass-border); border-radius: 100px;
+  padding: 3px 10px;
+}
+.footer-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--success); animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   FINAL MOBILE OVERFLOW GUARANTEE
+   Catches any remaining horizontal scroll sources
+   ============================================================ */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  .app-layout, .main-content, .page { overflow-x: hidden; max-width: 100%; }
+  .home-hero { overflow: hidden; }
+  .home-grid, .stat-grid, .home-quick-nav { max-width: 100%; }
+  img, svg, video, iframe { max-width: 100%; }
+}
