@@ -25,8 +25,7 @@ function closeSearchIfOutside(event) {
 
 async function ensureSearchCaches() {
   if (searchEventsCache.length === 0) {
-    const data = await fetchJSON('./data/events.json');
-    searchEventsCache = data || [];
+    searchEventsCache = await ghLoadAllEvents();
   }
   if (searchEstudosCache.length === 0) {
     const data = await fetchJSON('./data/estudos/estudos.json');

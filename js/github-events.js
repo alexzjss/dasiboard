@@ -1,19 +1,29 @@
 // ===== GITHUB EVENTS INTEGRATION =====
-// Fluxo via Pull Request:
-//   1. Cria branch temporária com nome único (event/<slug>-<timestamp>)
-//   2. Commita o events.json atualizado nessa branch
-//   3. Abre um Pull Request para `main`
-//   4. Mantenedor revisa e faz merge quando quiser
-//   5. Cada PR é independente — não há race condition entre merges paralelos
-//      porque cada branch parte do HEAD da main no momento da criação e carrega
-//      apenas o delta daquele evento. O GitHub aplica 3-way merge corretamente.
+//
+// ESTRATÉGIA ANTI-CONFLITO:
+//
+// O problema do approach anterior era commitar o events.json COMPLETO em cada
+// branch. Quando dois PRs eram mergeados em sequência, o segundo sobrescrevia
+// o primeiro porque ambos continham versões do array inteiro.
+//
+// Solução: cada PR commita APENAS UM ARQUIVO NOVO em data/events-pending/<id>.json
+// contendo somente aquele evento. O events.json principal nunca é tocado pelos PRs.
+//
+// No merge, o GitHub simplesmente copia o arquivo novo para a pasta — operação
+// atômica, sem conflito possível. Dois merges em sequência resultam em dois
+// arquivos novos na pasta, ambos preservados.
+//
+// O frontend lê o events.json principal + todos os arquivos em events-pending/
+// e faz o merge em memória. Resultado: todos os eventos aparecem corretamente,
+// independente da ordem de merge dos PRs.
 
-const GH_OWNER    = 'alexzjss';
-const GH_REPO     = 'dasiboard';
-const GH_BRANCH   = 'main';
-const GH_PATH     = 'data/events.json';
-const GH_API_BASE = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`;
-const GH_TOKEN_KEY = 'dasiboard_gh_token';
+const GH_OWNER      = 'alexzjss';
+const GH_REPO       = 'dasiboard';
+const GH_BRANCH     = 'main';
+const GH_EVENTS_PATH       = 'data/events.json';
+const GH_PENDING_DIR       = 'data/events-pending';
+const GH_API_BASE   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`;
+const GH_TOKEN_KEY  = 'dasiboard_gh_token';
 
 // ── Token management ──────────────────────────────────────────────────────────
 function ghGetToken()       { return localStorage.getItem(GH_TOKEN_KEY) || ''; }
@@ -21,36 +31,82 @@ function ghSaveToken(token) { token ? localStorage.setItem(GH_TOKEN_KEY, token.t
 function ghHasToken()       { return !!ghGetToken(); }
 
 // ── Low-level helper ──────────────────────────────────────────────────────────
-function ghHeaders() {
-  return {
-    'Authorization':        `Bearer ${ghGetToken()}`,
+function ghHeaders(withAuth = true) {
+  const h = {
     'Accept':               'application/vnd.github+json',
     'Content-Type':         'application/json',
     'X-GitHub-Api-Version': '2022-11-28'
   };
+  if (withAuth) h['Authorization'] = `Bearer ${ghGetToken()}`;
+  return h;
 }
 
-async function ghFetch(path, options = {}) {
-  const res  = await fetch(`${GH_API_BASE}${path}`, { headers: ghHeaders(), ...options });
+async function ghFetch(path, options = {}, withAuth = true) {
+  const res  = await fetch(`${GH_API_BASE}${path}`, { headers: ghHeaders(withAuth), ...options });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw Object.assign(new Error(data.message || `GitHub API error ${res.status}`), { status: res.status, data });
+  if (!res.ok) throw Object.assign(
+    new Error(data.message || `GitHub API error ${res.status}`),
+    { status: res.status, data }
+  );
   return data;
 }
 
-// ── Step 1: ler events.json da main ──────────────────────────────────────────
-async function ghGetMainFile() {
-  const data    = await ghFetch(`/contents/${GH_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`);
+// ── Leitura do events.json principal ─────────────────────────────────────────
+async function ghGetMainEvents() {
+  const data    = await ghFetch(`/contents/${GH_EVENTS_PATH}?ref=${GH_BRANCH}&t=${Date.now()}`);
   const content = atob(data.content.replace(/\n/g, ''));
-  return { fileSha: data.sha, events: JSON.parse(content) };
+  return JSON.parse(content);
 }
 
-// ── Step 2: SHA do commit HEAD da main ───────────────────────────────────────
+// ── Leitura dos eventos pendentes (pasta events-pending/) ─────────────────────
+// Retorna array de eventos já aprovados que ainda não foram incorporados ao
+// events.json principal (ou seja, já mergeados mas ainda em pasta separada).
+async function ghGetPendingEvents() {
+  try {
+    const items = await ghFetch(
+      `/contents/${GH_PENDING_DIR}?ref=${GH_BRANCH}&t=${Date.now()}`,
+      {}, false   // leitura pública, não precisa de auth
+    );
+    if (!Array.isArray(items)) return [];
+
+    const jsonFiles = items.filter(f => f.name.endsWith('.json') && f.type === 'file');
+    const results   = await Promise.allSettled(
+      jsonFiles.map(f =>
+        fetch(f.download_url + `?t=${Date.now()}`)
+          .then(r => r.json())
+          .catch(() => null)
+      )
+    );
+    return results
+      .filter(r => r.status === 'fulfilled' && r.value)
+      .map(r => r.value);
+  } catch (e) {
+    // Pasta ainda não existe (repositório novo) — retorna vazio silenciosamente
+    if (e.status === 404) return [];
+    console.warn('[DaSIboard] Não foi possível carregar eventos pendentes:', e.message);
+    return [];
+  }
+}
+
+// ── Carregar todos os eventos (principal + pendentes) ─────────────────────────
+// Chamado na inicialização do calendário no lugar de um fetch simples.
+async function ghLoadAllEvents() {
+  const [main, pending] = await Promise.all([ghGetMainEvents(), ghGetPendingEvents()]);
+
+  // Merge: preferir versão do events.json principal em caso de mesmo título+data
+  const seen   = new Set(main.map(e => `${e.date}|${e.title}`));
+  const extras = pending.filter(e => e && !seen.has(`${e.date}|${e.title}`));
+
+  return [...main, ...extras].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+// ── SHA do commit HEAD da main ────────────────────────────────────────────────
 async function ghGetMainHeadSha() {
   const data = await ghFetch(`/git/ref/heads/${GH_BRANCH}`);
   return data.object.sha;
 }
 
-// ── Step 3: criar branch a partir do HEAD ────────────────────────────────────
+// ── Criar branch ──────────────────────────────────────────────────────────────
 async function ghCreateBranch(branchName, fromSha) {
   return ghFetch('/git/refs', {
     method: 'POST',
@@ -58,18 +114,20 @@ async function ghCreateBranch(branchName, fromSha) {
   });
 }
 
-// ── Step 4: commitar events.json na nova branch ───────────────────────────────
-// fileSha é o SHA do arquivo na main — necessário pela API Contents mesmo ao
-// commitar em outra branch. Isso não sobrepõe a main; apenas ancora o arquivo.
-async function ghCommitToBranch(branchName, updatedEvents, fileSha, commitMsg) {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedEvents, null, 2))));
-  return ghFetch(`/contents/${GH_PATH}`, {
+// ── Commitar APENAS o arquivo do evento na nova branch ────────────────────────
+// Usa a Contents API para criar um arquivo NOVO — sem SHA de arquivo existente,
+// pois o arquivo ainda não existe nessa branch. Isso é uma criação pura,
+// sem sobrescrever nada. Dois PRs nunca tocam o mesmo arquivo.
+async function ghCommitEventFile(branchName, filename, eventData, commitMsg) {
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(eventData, null, 2))));
+  return ghFetch(`/contents/${GH_PENDING_DIR}/${filename}`, {
     method: 'PUT',
-    body:   JSON.stringify({ message: commitMsg, content, sha: fileSha, branch: branchName })
+    body:   JSON.stringify({ message: commitMsg, content, branch: branchName })
+    // Sem "sha": arquivo novo, não existe ainda
   });
 }
 
-// ── Step 5: abrir Pull Request ────────────────────────────────────────────────
+// ── Abrir Pull Request ────────────────────────────────────────────────────────
 async function ghOpenPR(branchName, ev) {
   const typeLabels = {
     evento: '📅 Evento', entrega: '📝 Entrega', prova: '📋 Prova',
@@ -81,10 +139,20 @@ async function ghOpenPR(branchName, ev) {
     `| **Tipo** | ${typeLabels[ev.type] || ev.type} |`,
     `| **Descrição** | ${ev.description || '—'} |`,
     ev.turmas?.length ? `| **Turmas** | ${ev.turmas.join(', ')} |` : null,
-    ev.entidade       ? `| **Entidade** | ${ev.entidade} |`         : null,
+    ev.entidade       ? `| **Entidade** | ${ev.entidade} |`        : null,
   ].filter(Boolean).join('\n');
 
-  const body = `## Novo evento proposto via DaSIboard\n\n| Campo | Valor |\n|---|---|\n${rows}\n\n> Aberto automaticamente. Faça merge para adicionar o evento ao calendário.`;
+  const body = [
+    `## Novo evento proposto via DaSIboard`,
+    ``,
+    `| Campo | Valor |`,
+    `|---|---|`,
+    rows,
+    ``,
+    `> Aberto automaticamente pelo DaSIboard.`,
+    `> Ao fazer merge, o arquivo \`${GH_PENDING_DIR}/${ev._filename}\` será adicionado ao repositório`,
+    `> e o evento aparecerá automaticamente no calendário.`,
+  ].join('\n');
 
   return ghFetch('/pulls', {
     method: 'POST',
@@ -97,41 +165,49 @@ async function ghOpenPR(branchName, ev) {
   });
 }
 
-// ── Função principal ──────────────────────────────────────────────────────────
+// ── Gerar ID único para o arquivo do evento ───────────────────────────────────
+function ghEventFilename(ev) {
+  const slug = ev.title
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 40);
+  return `${ev.date}-${slug}-${Date.now()}.json`;
+}
+
+// ── Verificar duplicatas (events.json + pendentes) ────────────────────────────
+async function ghCheckDuplicate(newEvent) {
+  const all = await ghLoadAllEvents();
+  return all.some(e => e.title === newEvent.title && e.date === newEvent.date);
+}
+
+// ── Função principal: propor evento via PR ────────────────────────────────────
 //
-// Por que PRs paralelos não causam problemas:
+// Por que isso elimina completamente o problema de conflito:
 //
-//   Cenário: PR-A e PR-B são abertos quase ao mesmo tempo.
-//   Ambos foram criados a partir do mesmo HEAD da main (commit X).
-//   PR-A é mergeado → main avança para commit Y.
-//   PR-B ainda aponta para commit X na sua branch.
+//   Cada PR adiciona UM arquivo novo e único em data/events-pending/.
+//   O events.json principal NUNCA é modificado pelos PRs.
 //
-//   Quando PR-B for mergeado, o GitHub faz um 3-way merge entre:
-//     - base comum: commit X (onde PR-B foi criado)
-//     - main atual: commit Y (que inclui o evento do PR-A)
-//     - branch do PR-B: evento B adicionado
+//   Cenário: PR-A adiciona events-pending/2026-04-01-evento-a-111.json
+//            PR-B adiciona events-pending/2026-04-01-evento-b-222.json
 //
-//   Como os dois PRs adicionaram linhas diferentes ao JSON, o merge é limpo.
-//   O resultado final contém ambos os eventos corretamente.
+//   Merge do PR-A → arquivo A criado na main.
+//   Merge do PR-B → arquivo B criado na main. O arquivo A não é tocado.
 //
-//   O único conflito real ocorreria se dois eventos ocupassem exatamente a
-//   mesma linha no arquivo (mesmo índice de posição), o que é improvável dado
-//   que são ordenados por data e têm conteúdo distinto. Se ocorrer, o GitHub
-//   sinaliza o conflito no PR e o mantenedor resolve — comportamento esperado.
+//   Resultado: ambos os arquivos existem na main. O frontend carrega os dois.
+//   Não há conflito possível porque cada PR toca um arquivo diferente.
 //
 async function ghProposePRForEvent(newEvent) {
-  // 1. Ler estado atual da main (para verificar duplicata e ter o fileSha)
-  const { fileSha, events } = await ghGetMainFile();
+  // 1. Verificar duplicata contra events.json + pendentes já mergeados
+  const isDup = await ghCheckDuplicate(newEvent);
+  if (isDup) throw new Error('Evento duplicado: já existe um evento com este título e data.');
 
-  // 2. Verificar duplicata
-  if (events.find(e => e.title === newEvent.title && e.date === newEvent.date)) {
-    throw new Error('Evento duplicado: já existe um evento com este título e data.');
-  }
+  // 2. Gerar nome de arquivo único para este evento
+  const filename = ghEventFilename(newEvent);
+  newEvent._filename = filename; // usado no corpo do PR
 
-  // 3. Montar lista atualizada (ordenada) para o commit
-  const updated = [...events, newEvent].sort((a, b) => a.date.localeCompare(b.date));
-
-  // 4. Nome de branch único e seguro
+  // 3. Nome de branch único
   const slug = newEvent.title
     .toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -140,17 +216,19 @@ async function ghProposePRForEvent(newEvent) {
     .slice(0, 40);
   const branchName = `event/${slug}-${Date.now()}`;
 
-  // 5. Criar branch a partir do HEAD da main
+  // 4. Criar branch a partir do HEAD da main
   const headSha = await ghGetMainHeadSha();
   await ghCreateBranch(branchName, headSha);
 
-  // 6. Commitar events.json atualizado na nova branch
-  const commitMsg = `[DaSIboard] Propor evento: ${newEvent.title} (${newEvent.date})`;
-  await ghCommitToBranch(branchName, updated, fileSha, commitMsg);
+  // 5. Commitar APENAS o arquivo do evento (sem tocar o events.json)
+  const commitMsg = `[DaSIboard] Adicionar evento: ${newEvent.title} (${newEvent.date})`;
+  // Salvar sem o campo interno _filename
+  const { _filename, ...eventToSave } = newEvent;
+  await ghCommitEventFile(branchName, filename, eventToSave, commitMsg);
 
-  // 7. Abrir PR
+  // 6. Abrir PR
   const pr = await ghOpenPR(branchName, newEvent);
-  return { prUrl: pr.html_url, prNumber: pr.number, branchName };
+  return { prUrl: pr.html_url, prNumber: pr.number, branchName, filename };
 }
 
 // ── Modal: formulário de proposta de evento ───────────────────────────────────
@@ -285,7 +363,7 @@ async function submitAddEvent() {
     btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px"></div> Criando PR…';
   }
 
-  setAddEventStatus('Criando branch e abrindo Pull Request…', 'info');
+  setAddEventStatus('Verificando duplicatas e criando PR…', 'info');
 
   const newEvent = { date, title, description: desc || 'NA', type };
   if (turmas.length) newEvent.turmas   = turmas;
@@ -296,7 +374,6 @@ async function submitAddEvent() {
 
     setAddEventStatus(`✓ Pull Request #${prNumber} aberto com sucesso!`, 'success');
 
-    // Botão vira link direto ao PR
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = `

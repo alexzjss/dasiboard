@@ -28,8 +28,8 @@ const ENTIDADE_META = {
 
 async function initCalendar() {
   if (calEvents.length === 0) {
-    const data = await fetchJSON('./data/events.json');
-    calEvents = data || [];
+    // Carrega events.json principal + eventos já aprovados em data/events-pending/
+    calEvents = await ghLoadAllEvents();
     const turmaSet = new Set();
     calEvents.forEach(ev => { if (Array.isArray(ev.turmas)) ev.turmas.forEach(t => turmaSet.add(t)); });
     calAvailableTurmas = [...turmaSet].sort();

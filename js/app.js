@@ -250,8 +250,8 @@ function escQ(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;
 
 async function initHome() {
   renderHeroGreeting();
-  const data = await fetchJSON('./data/events.json');
-  eventsData = data || [];
+  // Carrega events.json principal + eventos já aprovados em data/events-pending/
+  eventsData = await ghLoadAllEvents();
   const schData = await fetchJSON('./data/schedule.json');
   scheduleDataAll = schData || {};
   renderUpcomingEvents();
