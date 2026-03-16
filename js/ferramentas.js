@@ -713,25 +713,8 @@ function formatSw(ms) {
   return `${m}:${s}.${ms3}`;
 }
 
-// ============================
-// TOAST
-// ============================
-function showToast(msg) {
-  let t = document.getElementById('dasi-toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'dasi-toast';
-    t.className = 'dasi-toast';
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-
 // =====================================================================
 // NOVA FERRAMENTA: CONVERSOR DE UNIDADES
-// Útil para Cálculo, Física, Química — disciplinas comuns em SI
 // =====================================================================
 function renderConversor(container) {
   const cats = {
@@ -748,398 +731,239 @@ function renderConversor(container) {
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
         ${Object.entries(cats).map(([k,v]) => `<button class="btn btn-ghost btn-sm conv-cat-btn" data-cat="${k}" onclick="convSelectCat('${k}')">${v.label}</button>`).join('')}
       </div>
-      <div id="conv-body" style="display:flex;flex-direction:column;gap:14px">
-        <div class="no-events-msg">Selecione uma categoria acima</div>
-      </div>
+      <div id="conv-body"><div class="no-events-msg">Selecione uma categoria acima</div></div>
     </div>`;
   window._convCats = cats;
 }
-
 function convSelectCat(cat) {
-  document.querySelectorAll('.conv-cat-btn').forEach(b => b.classList.toggle('btn-primary', b.dataset.cat === cat));
-  document.querySelectorAll('.conv-cat-btn').forEach(b => b.classList.toggle('btn-ghost', b.dataset.cat !== cat));
+  document.querySelectorAll('.conv-cat-btn').forEach(b => { b.classList.toggle('btn-primary', b.dataset.cat===cat); b.classList.toggle('btn-ghost', b.dataset.cat!==cat); });
   const body = document.getElementById('conv-body');
   const data = window._convCats[cat];
   if (!data) return;
-
-  if (data.special && cat === 'temperatura') {
-    body.innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="add-event-field"><label class="add-event-label">Celsius (°C)</label><input type="number" id="conv-C" class="kanban-input" style="width:100%" placeholder="0" oninput="convTemp('C')"></div>
-        <div class="add-event-field"><label class="add-event-label">Fahrenheit (°F)</label><input type="number" id="conv-F" class="kanban-input" style="width:100%" placeholder="32" oninput="convTemp('F')"></div>
-        <div class="add-event-field"><label class="add-event-label">Kelvin (K)</label><input type="number" id="conv-K" class="kanban-input" style="width:100%" placeholder="273.15" oninput="convTemp('K')"></div>
-        <div class="add-event-field"><label class="add-event-label">Rankine (°R)</label><input type="number" id="conv-R" class="kanban-input" style="width:100%" placeholder="491.67" oninput="convTemp('R')"></div>
-      </div>`;
-    return;
+  if (data.special && cat==='temperatura') {
+    body.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="add-event-field"><label class="add-event-label">Celsius (°C)</label><input type="number" id="conv-C" class="kanban-input" style="width:100%" placeholder="0" oninput="convTemp('C')"></div>
+      <div class="add-event-field"><label class="add-event-label">Fahrenheit (°F)</label><input type="number" id="conv-F" class="kanban-input" style="width:100%" placeholder="32" oninput="convTemp('F')"></div>
+      <div class="add-event-field"><label class="add-event-label">Kelvin (K)</label><input type="number" id="conv-K" class="kanban-input" style="width:100%" placeholder="273.15" oninput="convTemp('K')"></div>
+      <div class="add-event-field"><label class="add-event-label">Rankine (°R)</label><input type="number" id="conv-R" class="kanban-input" style="width:100%" placeholder="491.67" oninput="convTemp('R')"></div>
+    </div>`; return;
   }
-
   const units = Object.keys(data.units);
-  body.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:12px">
-      <div class="add-event-field">
-        <label class="add-event-label">Valor</label>
-        <input type="number" id="conv-val" class="kanban-input" style="width:100%" placeholder="0" oninput="convCalc()">
-      </div>
-      <div class="add-event-field">
-        <label class="add-event-label">De</label>
-        <select id="conv-from" class="kanban-select" onchange="convCalc()">${units.map(u=>`<option>${u}</option>`).join('')}</select>
-      </div>
-      <div class="add-event-field">
-        <label class="add-event-label">Para</label>
-        <select id="conv-to" class="kanban-select" onchange="convCalc()">${units.map((u,i)=>`<option ${i===1?'selected':''}>${u}</option>`).join('')}</select>
-      </div>
-    </div>
-    <div id="conv-result" style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--primary);text-align:center;padding:18px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:12px;min-height:70px;display:flex;align-items:center;justify-content:center">
-      —
-    </div>`;
+  body.innerHTML = `<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:12px">
+    <div class="add-event-field"><label class="add-event-label">Valor</label><input type="number" id="conv-val" class="kanban-input" style="width:100%" placeholder="0" oninput="convCalc()"></div>
+    <div class="add-event-field"><label class="add-event-label">De</label><select id="conv-from" class="kanban-select" onchange="convCalc()">${units.map(u=>`<option>${u}</option>`).join('')}</select></div>
+    <div class="add-event-field"><label class="add-event-label">Para</label><select id="conv-to" class="kanban-select" onchange="convCalc()">${units.map((u,i)=>`<option ${i===1?'selected':''}>${u}</option>`).join('')}</select></div>
+  </div>
+  <div id="conv-result" style="font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--primary);text-align:center;padding:18px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:12px;margin-top:14px;min-height:64px;display:flex;align-items:center;justify-content:center">—</div>`;
   window._convCat = cat;
 }
-
 function convCalc() {
   const val = parseFloat(document.getElementById('conv-val')?.value);
   const from = document.getElementById('conv-from')?.value;
   const to = document.getElementById('conv-to')?.value;
   const res = document.getElementById('conv-result');
   if (!res) return;
-  if (isNaN(val)) { res.textContent = '—'; return; }
+  if (isNaN(val)) { res.textContent='—'; return; }
   const units = window._convCats[window._convCat]?.units;
   if (!units) return;
-  const inBase = val * units[from];
-  const result = inBase / units[to];
-  const fmt = Math.abs(result) < 0.001 || Math.abs(result) > 1e9 ? result.toExponential(4) : parseFloat(result.toPrecision(8)).toString();
-  res.innerHTML = `<span style="font-size:14px;color:var(--text-muted);margin-right:6px">${val} ${from} =</span><strong>${fmt} ${to}</strong>`;
+  const result = (val * units[from]) / units[to];
+  const fmt = Math.abs(result)<0.001||Math.abs(result)>1e9 ? result.toExponential(4) : parseFloat(result.toPrecision(8)).toString();
+  res.innerHTML = `<span style="font-size:13px;color:var(--text-muted);margin-right:6px">${val} ${from} =</span><strong>${fmt} ${to}</strong>`;
 }
-
 function convTemp(src) {
   const v = parseFloat(document.getElementById(`conv-${src}`)?.value);
   if (isNaN(v)) return;
-  let C;
-  if (src==='C') C=v; else if (src==='F') C=(v-32)*5/9; else if (src==='K') C=v-273.15; else C=(v-491.67)*5/9;
-  const vals = { C, F: C*9/5+32, K: C+273.15, R: (C+273.15)*9/5 };
-  Object.entries(vals).forEach(([k,val]) => { if (k!==src) { const el=document.getElementById(`conv-${k}`); if(el) el.value=parseFloat(val.toFixed(4)); } });
+  let C = src==='C'?v:src==='F'?(v-32)*5/9:src==='K'?v-273.15:(v-491.67)*5/9;
+  Object.entries({C,F:C*9/5+32,K:C+273.15,R:(C+273.15)*9/5}).forEach(([k,val])=>{ if(k!==src){const el=document.getElementById(`conv-${k}`);if(el)el.value=parseFloat(val.toFixed(4));} });
 }
 
 // =====================================================================
 // NOVA FERRAMENTA: GERADOR DE CITAÇÃO ABNT
-// Essencial para trabalhos acadêmicos de SI
 // =====================================================================
 function renderCitacoes(container) {
-  container.innerHTML = `
-    <div class="tool-section">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
-        ${['livro','artigo','site','tcc'].map(t=>`<button class="btn btn-ghost btn-sm abnt-type-btn" data-t="${t}" onclick="abntSelect('${t}')">${{livro:'📚 Livro',artigo:'📄 Artigo',site:'🌐 Site',tcc:'🎓 TCC/Monografia'}[t]}</button>`).join('')}
-      </div>
-      <div id="abnt-fields" style="display:flex;flex-direction:column;gap:12px">
-        <div class="no-events-msg">Selecione o tipo de fonte acima</div>
-      </div>
-      <div id="abnt-result" style="display:none;margin-top:18px;padding:16px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:12px">
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Referência ABNT NBR 6023</div>
-        <div id="abnt-output" style="font-size:13.5px;line-height:1.8;color:var(--text)"></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="abntCopy()">📋 Copiar referência</button>
-      </div>
-    </div>`;
-}
-
-function abntSelect(type) {
-  document.querySelectorAll('.abnt-type-btn').forEach(b=>b.classList.toggle('btn-primary',b.dataset.t===type));
-  document.querySelectorAll('.abnt-type-btn').forEach(b=>b.classList.toggle('btn-ghost',b.dataset.t!==type));
-  window._abntType = type;
-  const fields = document.getElementById('abnt-fields');
-  const schemas = {
-    livro: [
-      {id:'autor',label:'Autor(es)',ph:'SOBRENOME, Nome'},
-      {id:'titulo',label:'Título da obra',ph:'Título do Livro'},
-      {id:'edicao',label:'Edição (opcional)',ph:'3. ed.'},
-      {id:'local',label:'Local (cidade)',ph:'São Paulo'},
-      {id:'editora',label:'Editora',ph:'Atlas'},
-      {id:'ano',label:'Ano',ph:'2023'},
-    ],
-    artigo: [
-      {id:'autor',label:'Autor(es)',ph:'SOBRENOME, Nome'},
-      {id:'titulo',label:'Título do artigo',ph:'Título do artigo'},
-      {id:'revista',label:'Nome da revista/periódico',ph:'Revista de SI'},
-      {id:'local',label:'Local',ph:'São Paulo'},
-      {id:'vol',label:'Volume',ph:'v. 10'},
-      {id:'num',label:'Número',ph:'n. 2'},
-      {id:'pag',label:'Páginas',ph:'p. 15-30'},
-      {id:'ano',label:'Ano',ph:'2024'},
-    ],
-    site: [
-      {id:'autor',label:'Autor ou organização',ph:'SILVA, João'},
-      {id:'titulo',label:'Título da página',ph:'Nome da página'},
-      {id:'site',label:'Nome do site',ph:'USP Online'},
-      {id:'url',label:'URL',ph:'https://...'},
-      {id:'acesso',label:'Data de acesso',ph:'10 mar. 2025'},
-    ],
-    tcc: [
-      {id:'autor',label:'Autor',ph:'SOBRENOME, Nome'},
-      {id:'titulo',label:'Título',ph:'Título do trabalho'},
-      {id:'tipo',label:'Tipo',ph:'Trabalho de Conclusão de Curso'},
-      {id:'grau',label:'Grau',ph:'Bacharel em Sistemas de Informação'},
-      {id:'inst',label:'Instituição',ph:'Universidade de São Paulo'},
-      {id:'local',label:'Local',ph:'São Paulo'},
-      {id:'ano',label:'Ano',ph:'2025'},
-    ],
-  };
-  const schema = schemas[type] || [];
-  fields.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      ${schema.map(f=>`<div class="add-event-field" style="${f.id==='titulo'||f.id==='url'?'grid-column:1/-1':''}">
-        <label class="add-event-label">${f.label}</label>
-        <input type="text" id="abnt-${f.id}" class="kanban-input" style="width:100%" placeholder="${f.ph}" oninput="abntGenerate()">
-      </div>`).join('')}
+  container.innerHTML = `<div class="tool-section">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+      ${['livro','artigo','site','tcc'].map(t=>`<button class="btn btn-ghost btn-sm abnt-type-btn" data-t="${t}" onclick="abntSelect('${t}')">${{livro:'📚 Livro',artigo:'📄 Artigo',site:'🌐 Site',tcc:'🎓 TCC'}[t]}</button>`).join('')}
     </div>
-    <button class="btn btn-primary" onclick="abntGenerate()" style="width:100%;justify-content:center">Gerar referência</button>`;
+    <div id="abnt-fields"><div class="no-events-msg">Selecione o tipo de fonte acima</div></div>
+    <div id="abnt-result" style="display:none;margin-top:18px;padding:16px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:12px">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Referência ABNT NBR 6023</div>
+      <div id="abnt-output" style="font-size:13.5px;line-height:1.8;color:var(--text)"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="abntCopy()">📋 Copiar</button>
+    </div>
+  </div>`;
 }
-
+function abntSelect(type) {
+  document.querySelectorAll('.abnt-type-btn').forEach(b=>{b.classList.toggle('btn-primary',b.dataset.t===type);b.classList.toggle('btn-ghost',b.dataset.t!==type);});
+  window._abntType = type;
+  const schemas = {
+    livro:[{id:'autor',label:'Autor(es)',ph:'SOBRENOME, Nome'},{id:'titulo',label:'Título',ph:'Título do Livro'},{id:'edicao',label:'Edição',ph:'3. ed.'},{id:'local',label:'Cidade',ph:'São Paulo'},{id:'editora',label:'Editora',ph:'Atlas'},{id:'ano',label:'Ano',ph:'2023'}],
+    artigo:[{id:'autor',label:'Autor(es)',ph:'SOBRENOME, Nome'},{id:'titulo',label:'Título do artigo',ph:'Título'},{id:'revista',label:'Periódico',ph:'Revista de SI'},{id:'local',label:'Cidade',ph:'São Paulo'},{id:'vol',label:'Volume',ph:'v. 10'},{id:'num',label:'Número',ph:'n. 2'},{id:'pag',label:'Páginas',ph:'p. 15-30'},{id:'ano',label:'Ano',ph:'2024'}],
+    site:[{id:'autor',label:'Autor/Organização',ph:'SILVA, João'},{id:'titulo',label:'Título da página',ph:'Nome da página'},{id:'site',label:'Nome do site',ph:'USP Online'},{id:'url',label:'URL',ph:'https://...'},{id:'acesso',label:'Data de acesso',ph:'10 mar. 2025'}],
+    tcc:[{id:'autor',label:'Autor',ph:'SOBRENOME, Nome'},{id:'titulo',label:'Título',ph:'Título do trabalho'},{id:'tipo',label:'Tipo',ph:'TCC'},{id:'grau',label:'Grau',ph:'Bacharel em SI'},{id:'inst',label:'Instituição',ph:'Universidade de São Paulo'},{id:'local',label:'Cidade',ph:'São Paulo'},{id:'ano',label:'Ano',ph:'2025'}],
+  };
+  const schema = schemas[type]||[];
+  document.getElementById('abnt-fields').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      ${schema.map(f=>`<div class="add-event-field" style="${f.id==='titulo'||f.id==='url'?'grid-column:1/-1':''}"><label class="add-event-label">${f.label}</label><input type="text" id="abnt-${f.id}" class="kanban-input" style="width:100%" placeholder="${f.ph}" oninput="abntGenerate()"></div>`).join('')}
+    </div>
+    <button class="btn btn-primary" onclick="abntGenerate()" style="width:100%;justify-content:center;margin-top:10px">Gerar referência</button>`;
+}
 function abntGenerate() {
-  const g = id => document.getElementById(`abnt-${id}`)?.value?.trim() || '';
-  const type = window._abntType;
-  let ref = '';
-  if (type === 'livro') {
-    const ed = g('edicao') ? ` ${g('edicao')}.` : '';
-    ref = `${g('autor') || 'AUTOR'}. <strong>${g('titulo') || 'TÍTULO'}</strong>.${ed} ${g('local') || 'LOCAL'}: ${g('editora') || 'EDITORA'}, ${g('ano') || 'ANO'}.`;
-  } else if (type === 'artigo') {
-    ref = `${g('autor') || 'AUTOR'}. ${g('titulo') || 'TÍTULO DO ARTIGO'}. <strong>${g('revista') || 'REVISTA'}</strong>, ${g('local') || 'LOCAL'}, ${g('vol')}, ${g('num')}, ${g('pag')}, ${g('ano') || 'ANO'}.`;
-  } else if (type === 'site') {
-    ref = `${g('autor') || 'AUTOR/ORG'}. <strong>${g('titulo') || 'TÍTULO'}</strong>. ${g('site') ? g('site') + ', ' : ''}${g('ano') || '[s.d.]'}. Disponível em: ${g('url') || 'URL'}. Acesso em: ${g('acesso') || 'DATA'}.`;
-  } else if (type === 'tcc') {
-    ref = `${g('autor') || 'AUTOR'}. <strong>${g('titulo') || 'TÍTULO'}</strong>. ${g('ano') || 'ANO'}. ${g('tipo') || 'TCC'} (${g('grau') || 'Graduação'}) — ${g('inst') || 'INSTITUIÇÃO'}, ${g('local') || 'LOCAL'}, ${g('ano') || 'ANO'}.`;
-  }
-  if (!ref) return;
-  const res = document.getElementById('abnt-result');
-  const out = document.getElementById('abnt-output');
-  if (res) res.style.display = '';
-  if (out) out.innerHTML = ref;
+  const g = id => document.getElementById(`abnt-${id}`)?.value?.trim()||'';
+  const type = window._abntType; let ref='';
+  if(type==='livro'){const ed=g('edicao')?` ${g('edicao')}.`:'';ref=`${g('autor')||'AUTOR'}. <strong>${g('titulo')||'TÍTULO'}</strong>.${ed} ${g('local')||'LOCAL'}: ${g('editora')||'EDITORA'}, ${g('ano')||'ANO'}.`;}
+  else if(type==='artigo'){ref=`${g('autor')||'AUTOR'}. ${g('titulo')||'TÍTULO'}. <strong>${g('revista')||'PERIÓDICO'}</strong>, ${g('local')}, ${g('vol')}, ${g('num')}, ${g('pag')}, ${g('ano')||'ANO'}.`;}
+  else if(type==='site'){ref=`${g('autor')||'AUTOR'}. <strong>${g('titulo')||'TÍTULO'}</strong>. ${g('site')?g('site')+', ':''}Disponível em: ${g('url')||'URL'}. Acesso em: ${g('acesso')||'DATA'}.`;}
+  else if(type==='tcc'){ref=`${g('autor')||'AUTOR'}. <strong>${g('titulo')||'TÍTULO'}</strong>. ${g('ano')||'ANO'}. ${g('tipo')||'TCC'} (${g('grau')||'Graduação'}) — ${g('inst')||'INSTITUIÇÃO'}, ${g('local')}, ${g('ano')||'ANO'}.`;}
+  if(!ref)return;
+  const res=document.getElementById('abnt-result'); const out=document.getElementById('abnt-output');
+  if(res)res.style.display=''; if(out)out.innerHTML=ref;
 }
-
 function abntCopy() {
-  const out = document.getElementById('abnt-output');
-  if (!out) return;
-  navigator.clipboard.writeText(out.innerText).then(() => showToast('Referência copiada!'));
+  const out=document.getElementById('abnt-output');
+  if(!out)return;
+  navigator.clipboard.writeText(out.innerText).then(()=>showToast('Referência copiada!'));
 }
 
 // =====================================================================
 // NOVA FERRAMENTA: CHECKLIST ANTI-PLÁGIO
-// Boas práticas acadêmicas para trabalhos de SI
 // =====================================================================
 function renderPlagio(container) {
-  const items = [
-    { cat:'Citações', checks:[
-      'Toda citação direta está entre aspas e com (AUTOR, ANO, p. XX)',
-      'Citações longas (>3 linhas) estão em bloco recuado sem aspas',
-      'Citações indiretas (paráfrases) têm autor e ano indicados',
-      'Nenhum trecho copiado sem atribuição de fonte',
-    ]},
-    { cat:'Referências', checks:[
-      'Todas as fontes citadas no texto estão na lista de referências',
-      'Todas as referências seguem ABNT NBR 6023',
-      'Sites têm URL e data de acesso',
-      'Não há fontes nas referências que não foram citadas no texto',
-    ]},
-    { cat:'Imagens & Tabelas', checks:[
-      'Imagens têm fonte indicada abaixo',
-      'Tabelas têm título acima e fonte abaixo',
-      'Gráficos adaptados indicam "Adaptado de: ..."',
-    ]},
-    { cat:'Integridade', checks:[
-      'O trabalho foi escrito com suas próprias palavras',
-      'Ideias de outros autores foram parafrasadas corretamente',
-      'Não houve reutilização de trabalhos anteriores (auto-plágio) sem permissão',
-      'Uso de IA (se houver) foi declarado conforme exigência da instituição',
-      'O arquivo foi verificado em ferramenta anti-plágio (Turnitin, iThenticate etc.)',
-    ]},
+  const cats = [
+    {cat:'Citações',checks:['Toda citação direta está entre aspas e com (AUTOR, ANO, p. XX)','Citações longas (>3 linhas) estão em bloco recuado sem aspas','Citações indiretas (paráfrases) têm autor e ano indicados','Nenhum trecho copiado sem atribuição de fonte']},
+    {cat:'Referências',checks:['Todas as fontes citadas estão na lista de referências','Todas as referências seguem ABNT NBR 6023','Sites têm URL e data de acesso','Não há fontes nas referências não citadas no texto']},
+    {cat:'Imagens & Tabelas',checks:['Imagens têm fonte indicada abaixo','Tabelas têm título acima e fonte abaixo','Gráficos adaptados indicam "Adaptado de: ..."']},
+    {cat:'Integridade',checks:['O trabalho foi escrito com suas próprias palavras','Ideias de outros foram parafrasadas corretamente','Não houve reutilização de trabalhos anteriores sem permissão','Uso de IA (se houver) foi declarado conforme exigência da instituição','O arquivo foi verificado em ferramenta anti-plágio (Turnitin etc.)']},
   ];
-
-  let html = `<div style="display:flex;flex-direction:column;gap:20px">`;
-  items.forEach((cat, ci) => {
-    html += `<div>
-      <div style="font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--primary);margin-bottom:10px">${cat.cat}</div>
-      <div style="display:flex;flex-direction:column;gap:7px">
-        ${cat.checks.map((c,i) => `<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-tint);transition:.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--glass-border)'">
-          <input type="checkbox" id="plag-${ci}-${i}" style="margin-top:2px;accent-color:var(--primary);flex-shrink:0;width:15px;height:15px" onchange="plagProgress()">
-          <span style="font-size:13px;line-height:1.5;color:var(--text)">${c}</span>
-        </label>`).join('')}
-      </div>
-    </div>`;
+  const total = cats.reduce((a,c)=>a+c.checks.length,0);
+  let html = `<div style="display:flex;flex-direction:column;gap:18px">`;
+  cats.forEach((cat,ci)=>{
+    html+=`<div><div style="font-family:var(--font-mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--primary);margin-bottom:10px">${cat.cat}</div><div style="display:flex;flex-direction:column;gap:7px">
+      ${cat.checks.map((c,i)=>`<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass-tint);transition:.15s">
+        <input type="checkbox" id="plag-${ci}-${i}" style="margin-top:2px;accent-color:var(--primary);flex-shrink:0;width:15px;height:15px" onchange="plagProgress(${total})">
+        <span style="font-size:13px;line-height:1.5;color:var(--text)">${c}</span></label>`).join('')}
+    </div></div>`;
   });
-  const total = items.reduce((a,c)=>a+c.checks.length,0);
-  html += `</div>
-  <div style="margin-top:20px;padding:14px 18px;border-radius:12px;background:var(--glass-tint);border:1px solid var(--glass-border)">
+  html+=`</div><div style="margin-top:20px;padding:14px 18px;border-radius:12px;background:var(--glass-tint);border:1px solid var(--glass-border)">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Progresso</span>
       <span id="plag-count" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--primary)">0/${total}</span>
     </div>
-    <div style="height:8px;border-radius:100px;background:var(--glass-border);overflow:hidden">
-      <div id="plag-bar" style="height:100%;border-radius:100px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0%;transition:.4s cubic-bezier(.34,1.56,.64,1)"></div>
-    </div>
+    <div style="height:8px;border-radius:100px;background:var(--glass-border);overflow:hidden"><div id="plag-bar" style="height:100%;border-radius:100px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0%;transition:.4s cubic-bezier(.34,1.56,.64,1)"></div></div>
     <div id="plag-msg" style="font-size:12px;color:var(--text-muted);margin-top:8px">Marque cada item conforme você revisa o trabalho.</div>
   </div>`;
   container.innerHTML = html;
-  window._plagTotal = total;
 }
-
-function plagProgress() {
-  const total = window._plagTotal || 1;
+function plagProgress(total) {
   const checked = document.querySelectorAll('[id^="plag-"]:checked').length;
   const pct = Math.round(checked/total*100);
-  const bar = document.getElementById('plag-bar');
-  const count = document.getElementById('plag-count');
-  const msg = document.getElementById('plag-msg');
-  if (bar) bar.style.width = pct + '%';
-  if (count) count.textContent = `${checked}/${total}`;
-  if (msg) {
-    if (pct === 100) { msg.textContent = '✅ Excelente! Seu trabalho está em conformidade com as boas práticas acadêmicas.'; msg.style.color = 'var(--success)'; }
-    else if (pct >= 70) { msg.textContent = `${pct}% completo — quase lá!`; msg.style.color = 'var(--warning)'; }
-    else { msg.textContent = `${pct}% completo — continue revisando.`; msg.style.color = 'var(--text-muted)'; }
+  const bar=document.getElementById('plag-bar'), count=document.getElementById('plag-count'), msg=document.getElementById('plag-msg');
+  if(bar)bar.style.width=pct+'%';
+  if(count)count.textContent=`${checked}/${total}`;
+  if(msg){
+    if(pct===100){msg.textContent='✅ Seu trabalho está em conformidade com as boas práticas acadêmicas!';msg.style.color='var(--success)';}
+    else if(pct>=70){msg.textContent=`${pct}% completo — quase lá!`;msg.style.color='var(--warning)';}
+    else{msg.textContent=`${pct}% completo — continue revisando.`;msg.style.color='var(--text-muted)';}
   }
 }
 
 // =====================================================================
 // NOVA FERRAMENTA: FLASHCARDS
-// Estudo por repetição espaçada — ideal para provas
 // =====================================================================
-let fcCards = [];
-let fcIndex = 0;
-let fcFlipped = false;
-let fcSession = { correct:0, wrong:0, skipped:0 };
+let fcCards=[], fcIndex=0, fcFlipped=false, fcSession={correct:0,wrong:0,skipped:0};
 
 function renderFlashcard(container) {
-  fcCards = JSON.parse(localStorage.getItem('dasiboard_fc') || '[]');
-  fcIndex = 0; fcFlipped = false; fcSession = { correct:0, wrong:0, skipped:0 };
-  container.innerHTML = `
-    <div class="tool-section" style="display:flex;flex-direction:column;gap:16px">
-      <!-- Create card -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="add-event-field">
-          <label class="add-event-label">Frente (pergunta)</label>
-          <textarea id="fc-front" class="kanban-input" rows="2" style="width:100%;resize:none" placeholder="O que é um Sistema de Informação?"></textarea>
-        </div>
-        <div class="add-event-field">
-          <label class="add-event-label">Verso (resposta)</label>
-          <textarea id="fc-back" class="kanban-input" rows="2" style="width:100%;resize:none" placeholder="Sistema que coleta, processa e dissemina informação..."></textarea>
-        </div>
+  fcCards=JSON.parse(localStorage.getItem('dasiboard_fc')||'[]');
+  fcIndex=0; fcFlipped=false; fcSession={correct:0,wrong:0,skipped:0};
+  container.innerHTML=`<div class="tool-section" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="add-event-field"><label class="add-event-label">Frente (pergunta)</label><textarea id="fc-front" class="kanban-input" rows="2" style="width:100%;resize:none" placeholder="O que é um Sistema de Informação?"></textarea></div>
+      <div class="add-event-field"><label class="add-event-label">Verso (resposta)</label><textarea id="fc-back" class="kanban-input" rows="2" style="width:100%;resize:none" placeholder="Sistema que coleta, processa e dissemina informação..."></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="fcAddCard()" style="flex:1;justify-content:center">+ Adicionar card</button>
+      <button class="btn btn-ghost btn-sm" onclick="fcClearAll()" title="Apagar todos">🗑</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:10px">
+      <span id="fc-deck-count" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">${fcCards.length} cards</span>
+      <button class="btn btn-primary btn-sm" onclick="fcStartSession()" id="fc-start-btn" ${fcCards.length===0?'disabled':''}>▶ Estudar</button>
+    </div>
+    <div id="fc-study-area" style="display:none;flex-direction:column;align-items:center;gap:14px">
+      <div id="fc-card" onclick="fcFlip()" style="width:100%;min-height:160px;border-radius:16px;background:var(--bg-card);border:1.5px solid var(--glass-border);backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:28px 24px;text-align:center;font-size:16px;line-height:1.6;color:var(--text);position:relative;overflow:hidden;transition:transform .2s cubic-bezier(.34,1.56,.64,1)">
+        <div style="position:absolute;top:10px;left:14px;font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px" id="fc-side-label">Frente</div>
+        <span id="fc-card-text"></span>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" onclick="fcAddCard()" style="flex:1;justify-content:center">+ Adicionar card</button>
-        <button class="btn btn-ghost btn-sm" onclick="fcClearAll()" title="Apagar todos">🗑</button>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim)" id="fc-progress-label"></div>
+      <div style="display:flex;gap:8px;width:100%">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fcAnswer('wrong')">✗ Errei</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fcAnswer('skip')">⟳ Pular</button>
+        <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="fcAnswer('correct')">✓ Acertei</button>
       </div>
-      <!-- Deck info -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:10px">
-        <span id="fc-deck-count" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">0 cards no baralho</span>
-        <button class="btn btn-primary btn-sm" onclick="fcStartSession()" id="fc-start-btn">▶ Estudar</button>
+      <div style="display:flex;gap:16px;font-family:var(--font-mono);font-size:11px">
+        <span style="color:var(--success)">✓ <span id="fc-correct">0</span></span>
+        <span style="color:var(--danger)">✗ <span id="fc-wrong">0</span></span>
+        <span style="color:var(--text-dim)">⟳ <span id="fc-skipped">0</span></span>
       </div>
-      <!-- Card display area -->
-      <div id="fc-study-area" style="display:none;flex-direction:column;align-items:center;gap:14px">
-        <div id="fc-card" onclick="fcFlip()" style="width:100%;min-height:160px;border-radius:16px;background:var(--bg-card);border:1.5px solid var(--glass-border);backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:28px 24px;text-align:center;font-size:16px;line-height:1.6;color:var(--text);position:relative;overflow:hidden;transition:transform .2s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--lg-depth)">
-          <div style="position:absolute;top:10px;left:14px;font-family:var(--font-mono);font-size:9.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px" id="fc-side-label">Frente</div>
-          <span id="fc-card-text"></span>
-        </div>
-        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim)" id="fc-progress-label"></div>
-        <div style="display:flex;gap:8px;width:100%">
-          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fcAnswer('wrong')">✗ Errei</button>
-          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="fcAnswer('skip')">⟳ Pular</button>
-          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="fcAnswer('correct')">✓ Acertei</button>
-        </div>
-        <div style="display:flex;gap:16px;font-family:var(--font-mono);font-size:11px" id="fc-score">
-          <span style="color:var(--success)">✓ <span id="fc-correct">0</span></span>
-          <span style="color:var(--danger)">✗ <span id="fc-wrong">0</span></span>
-          <span style="color:var(--text-dim)">⟳ <span id="fc-skipped">0</span></span>
-        </div>
-      </div>
-    </div>`;
-  fcUpdateDeckCount();
+    </div>
+  </div>`;
 }
-
 function fcAddCard() {
-  const front = document.getElementById('fc-front')?.value.trim();
-  const back = document.getElementById('fc-back')?.value.trim();
-  if (!front || !back) { showToast('Preencha frente e verso do card'); return; }
-  fcCards.push({ front, back });
-  localStorage.setItem('dasiboard_fc', JSON.stringify(fcCards));
-  document.getElementById('fc-front').value = '';
-  document.getElementById('fc-back').value = '';
-  fcUpdateDeckCount();
+  const front=document.getElementById('fc-front')?.value.trim(), back=document.getElementById('fc-back')?.value.trim();
+  if(!front||!back){showToast('Preencha frente e verso');return;}
+  fcCards.push({front,back}); localStorage.setItem('dasiboard_fc',JSON.stringify(fcCards));
+  document.getElementById('fc-front').value=''; document.getElementById('fc-back').value='';
+  const el=document.getElementById('fc-deck-count'); if(el)el.textContent=`${fcCards.length} cards`;
+  const btn=document.getElementById('fc-start-btn'); if(btn)btn.disabled=false;
   showToast('Card adicionado!');
 }
-
-function fcUpdateDeckCount() {
-  const el = document.getElementById('fc-deck-count');
-  if (el) el.textContent = `${fcCards.length} card${fcCards.length !== 1 ? 's' : ''} no baralho`;
-  const btn = document.getElementById('fc-start-btn');
-  if (btn) btn.disabled = fcCards.length === 0;
-}
-
 function fcStartSession() {
-  if (!fcCards.length) return;
-  fcIndex = 0; fcFlipped = false; fcSession = { correct:0, wrong:0, skipped:0 };
-  // Shuffle
-  for (let i = fcCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i+1));
-    [fcCards[i], fcCards[j]] = [fcCards[j], fcCards[i]];
-  }
-  document.getElementById('fc-study-area').style.display = 'flex';
-  fcShowCard();
+  if(!fcCards.length)return;
+  fcIndex=0; fcFlipped=false; fcSession={correct:0,wrong:0,skipped:0};
+  for(let i=fcCards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcCards[i],fcCards[j]]=[fcCards[j],fcCards[i]];}
+  document.getElementById('fc-study-area').style.display='flex'; fcShowCard();
 }
-
 function fcShowCard() {
-  if (fcIndex >= fcCards.length) { fcEndSession(); return; }
-  const card = fcCards[fcIndex];
-  fcFlipped = false;
-  const el = document.getElementById('fc-card-text');
-  const lbl = document.getElementById('fc-side-label');
-  const prog = document.getElementById('fc-progress-label');
-  if (el) el.textContent = card.front;
-  if (lbl) { lbl.textContent = 'Frente — clique para revelar'; lbl.style.color = 'var(--primary)'; }
-  if (prog) prog.textContent = `Card ${fcIndex+1} de ${fcCards.length}`;
-  const cardEl = document.getElementById('fc-card');
-  if (cardEl) { cardEl.style.borderColor = 'var(--glass-border)'; }
+  if(fcIndex>=fcCards.length){fcEndSession();return;}
+  const card=fcCards[fcIndex]; fcFlipped=false;
+  const el=document.getElementById('fc-card-text'), lbl=document.getElementById('fc-side-label'), prog=document.getElementById('fc-progress-label');
+  if(el)el.textContent=card.front; if(lbl){lbl.textContent='Frente — clique para revelar';lbl.style.color='var(--primary)';}
+  if(prog)prog.textContent=`Card ${fcIndex+1} de ${fcCards.length}`;
+  const cardEl=document.getElementById('fc-card'); if(cardEl)cardEl.style.borderColor='var(--glass-border)';
 }
-
 function fcFlip() {
-  if (fcIndex >= fcCards.length) return;
-  const card = fcCards[fcIndex];
-  fcFlipped = !fcFlipped;
-  const el = document.getElementById('fc-card-text');
-  const lbl = document.getElementById('fc-side-label');
-  const cardEl = document.getElementById('fc-card');
-  if (fcFlipped) {
-    if (el) el.textContent = card.back;
-    if (lbl) { lbl.textContent = 'Verso (resposta)'; lbl.style.color = 'var(--success)'; }
-    if (cardEl) { cardEl.style.transform = 'scale(1.02)'; cardEl.style.borderColor = 'var(--success)'; setTimeout(()=>{ if(cardEl) cardEl.style.transform=''; },200); }
+  if(fcIndex>=fcCards.length)return;
+  const card=fcCards[fcIndex]; fcFlipped=!fcFlipped;
+  const el=document.getElementById('fc-card-text'), lbl=document.getElementById('fc-side-label'), cardEl=document.getElementById('fc-card');
+  if(fcFlipped){
+    if(el)el.textContent=card.back; if(lbl){lbl.textContent='Verso (resposta)';lbl.style.color='var(--success)';}
+    if(cardEl){cardEl.style.transform='scale(1.02)';cardEl.style.borderColor='var(--success)';setTimeout(()=>{if(cardEl)cardEl.style.transform='';},200);}
   } else {
-    if (el) el.textContent = card.front;
-    if (lbl) { lbl.textContent = 'Frente — clique para revelar'; lbl.style.color = 'var(--primary)'; }
-    if (cardEl) cardEl.style.borderColor = 'var(--glass-border)';
+    if(el)el.textContent=card.front; if(lbl){lbl.textContent='Frente — clique para revelar';lbl.style.color='var(--primary)';}
+    if(cardEl)cardEl.style.borderColor='var(--glass-border)';
   }
 }
-
 function fcAnswer(type) {
-  fcSession[type === 'correct' ? 'correct' : type === 'wrong' ? 'wrong' : 'skipped']++;
+  if(type==='correct')fcSession.correct++; else if(type==='wrong')fcSession.wrong++; else fcSession.skipped++;
   fcIndex++;
-  document.getElementById('fc-correct').textContent = fcSession.correct;
-  document.getElementById('fc-wrong').textContent = fcSession.wrong;
-  document.getElementById('fc-skipped').textContent = fcSession.skipped;
+  document.getElementById('fc-correct').textContent=fcSession.correct;
+  document.getElementById('fc-wrong').textContent=fcSession.wrong;
+  document.getElementById('fc-skipped').textContent=fcSession.skipped;
   fcShowCard();
 }
-
 function fcEndSession() {
-  const { correct, wrong, skipped } = fcSession;
-  const total = correct + wrong + skipped;
-  const pct = Math.round(correct/total*100);
-  const el = document.getElementById('fc-card');
-  if (el) el.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+  const {correct,wrong,skipped}=fcSession, total=correct+wrong+skipped, pct=Math.round(correct/total*100);
+  const el=document.getElementById('fc-card');
+  if(el)el.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
     <div style="font-size:40px">${pct>=80?'🏆':pct>=50?'👍':'💪'}</div>
     <div style="font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--primary)">${pct}% de acertos</div>
     <div style="font-size:13px;color:var(--text-muted)">${correct} acertos · ${wrong} erros · ${skipped} pulados</div>
     <button class="btn btn-primary" onclick="fcStartSession()" style="margin-top:8px">Repetir baralho</button>
   </div>`;
 }
-
 function fcClearAll() {
-  if (!confirm('Apagar todos os flashcards?')) return;
-  fcCards = [];
-  localStorage.removeItem('dasiboard_fc');
+  if(!confirm('Apagar todos os flashcards?'))return;
+  fcCards=[]; localStorage.removeItem('dasiboard_fc');
   renderFlashcard(document.getElementById('tool-panel-content'));
   showToast('Flashcards apagados.');
 }
