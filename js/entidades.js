@@ -71,6 +71,9 @@ function openEntidade(id) {
   entidadeAtiva = e;
   syncBackBtn();
 
+  // Track visit for pac-man easter egg
+  if (typeof trackEntityVisit === 'function') trackEntityVisit(id);
+
   var hub = document.getElementById('entidades-hub');
   var detail = document.getElementById('entidade-detalhe');
   if (!detail) return;

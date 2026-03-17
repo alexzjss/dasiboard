@@ -56,6 +56,46 @@
   "schedule": {
     "1_02": [
       {
+        "code": "ACH0041",
+        "course": "Resolução de Problemas I",
+        "day": "Quarta",
+        "time": "08:00-12:00",
+        "extra": [],
+        "professor": "Karla Sampaio / Káthia Honório",
+        "room": "Térreo - Bloco I Sala 03 e Bloco II Salas RP 01-04",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0021",
+        "course": "Tratamento e Análise de Dados e Informações",
+        "day": "Terça",
+        "time": "08:00-09:45",
+        "extra": [],
+        "professor": "Patrícia Rufino",
+        "room": "1° Andar - Sala 112",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0111",
+        "course": "Ciências da Natureza – Ciências da Vida",
+        "day": "Quarta",
+        "time": "10:15-12:00",
+        "extra": [],
+        "professor": "Marcos Hara",
+        "room": "Térreo - Bloco I - Sala 09",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0141",
+        "course": "Sociedade, Multiculturalismo e Direitos – Estado e Sociedade",
+        "day": "Quarta",
+        "time": "08:00-09:45",
+        "extra": [],
+        "professor": "David Dantas",
+        "room": "Térreo - Bloco I - Sala 11",
+        "tipo": "ciclobasico"
+      },
+      {
         "code": "ACH2001",
         "course": "Introdução à Programação",
         "day": "Quinta",
@@ -85,12 +125,52 @@
         "day": "Segunda",
         "time": "08:00-12:00",
         "extra": [],
-        "professor": "Luciano Araújo",
+        "professor": "Violeta Sun",
         "room": "2° Andar - Sala 201",
         "tipo": "especifica"
       }
     ],
     "1_04": [
+      {
+        "code": "ACH0041",
+        "course": "Resolução de Problemas I",
+        "day": "Segunda",
+        "time": "19:00-22:45",
+        "extra": [],
+        "professor": "Marcelo Morandini / Cynthia Correa",
+        "room": "Térreo - Bloco I Sala 03 e Bloco II Salas RP 01-03",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0021",
+        "course": "Tratamento e Análise de Dados e Informações",
+        "day": "Terça",
+        "time": "19:00-20:45",
+        "extra": [],
+        "professor": "José Ricardo",
+        "room": "1° Andar - Sala 103",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0101",
+        "course": "Ciências da Natureza – Ciências da Terra",
+        "day": "Terça",
+        "time": "21:00-22:45",
+        "extra": [],
+        "professor": "Victor Velásquez",
+        "room": "Térreo - Bloco I - Sala 11",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0141",
+        "course": "Sociedade, Multiculturalismo e Direitos – Estado e Sociedade",
+        "day": "Terça",
+        "time": "19:00-20:45",
+        "extra": [],
+        "professor": "Alessandro Soares",
+        "room": "Térreo - Sala T04",
+        "tipo": "ciclobasico"
+      },
       {
         "code": "ACH2001",
         "course": "Introdução à Programação",
@@ -127,6 +207,46 @@
       }
     ],
     "1_94": [
+      {
+        "code": "ACH0041",
+        "course": "Resolução de Problemas I",
+        "day": "Quarta",
+        "time": "19:00-22:45",
+        "extra": [],
+        "professor": "Alexandre Igari / Marcos Hara",
+        "room": "Térreo - Bloco I Sala 09 e Bloco II Salas RP 08-10",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0021",
+        "course": "Tratamento e Análise de Dados e Informações",
+        "day": "Terça",
+        "time": "21:00-22:45",
+        "extra": [],
+        "professor": "José Ricardo",
+        "room": "1° Andar - Sala 103",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0101",
+        "course": "Ciências da Natureza – Ciências da Terra",
+        "day": "Terça",
+        "time": "19:00-20:45",
+        "extra": [],
+        "professor": "Luis Conti",
+        "room": "Térreo - Bloco I - Sala 09",
+        "tipo": "ciclobasico"
+      },
+      {
+        "code": "ACH0141",
+        "course": "Sociedade, Multiculturalismo e Direitos – Estado e Sociedade",
+        "day": "Terça",
+        "time": "21:00-22:45",
+        "extra": [],
+        "professor": "Wagner Iglecias",
+        "room": "Térreo - Sala T02",
+        "tipo": "ciclobasico"
+      },
       {
         "code": "ACH2001",
         "course": "Introdução à Programação",
