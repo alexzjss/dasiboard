@@ -93,14 +93,14 @@ async function fetchJSON(url) {
   if (_jsonCache.has(cacheKey)) return _jsonCache.get(cacheKey);
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 8000);
-    const res = await fetch(cacheKey, { signal: ctrl.signal }).finally(() => clearTimeout(t));
+    const t = setTimeout(() => ctrl.abort(), 6000);
+    const res = await fetch(cacheKey, { signal: ctrl.signal, cache: 'no-cache' }).finally(() => clearTimeout(t));
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     _jsonCache.set(cacheKey, data);
     return data;
   } catch (e) {
-    console.warn(`Failed to fetch ${cacheKey}:`, e);
+    console.warn(`Failed to fetch ${cacheKey}:`, e.name === 'AbortError' ? 'timeout' : e.message);
     return null;
   }
 }

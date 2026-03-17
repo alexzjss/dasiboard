@@ -74,13 +74,13 @@ function ghBase64Encode(str) {
 async function ghGetMainEvents() {
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 8000);
-    const res = await fetch('./data/events.json', { signal: ctrl.signal })
+    const t = setTimeout(() => ctrl.abort(), 6000);
+    const res = await fetch('./data/events.json', { signal: ctrl.signal, cache: 'no-cache' })
       .finally(() => clearTimeout(t));
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   } catch (e) {
-    console.warn('[DaSIboard] Falha ao carregar events.json:', e.message);
+    console.warn('[DaSIboard] Falha ao carregar events.json:', e.name === 'AbortError' ? 'timeout' : e.message);
     return [];
   }
 }

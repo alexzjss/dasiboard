@@ -207,20 +207,9 @@ const FALLBACK_QUOTES = [
 ];
 
 async function fetchExternalQuote() {
-  try {
-    // quotable.io — API pública de frases
-    const c1=new AbortController(),t1=setTimeout(()=>c1.abort(),3500); const res = await fetch('https://api.quotable.io/quotes/random?limit=1&maxLength=200', { signal: c1.signal }).finally(()=>clearTimeout(t1));
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (data && data[0]) return { text: data[0].content, author: data[0].author, source: 'Quotable API' };
-  } catch(e) {}
-  // Fallback: zenquotes
-  try {
-    const c2=new AbortController(),t2=setTimeout(()=>c2.abort(),3000); const res = await fetch('https://zenquotes.io/api/random', { signal: c2.signal }).finally(()=>clearTimeout(t2));
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    if (data && data[0]) return { text: data[0].q, author: data[0].a, source: 'ZenQuotes' };
-  } catch(e) {}
+  // quotable.io foi desativado em 2023 e zenquotes.io bloqueia CORS de browsers.
+  // Ambas as APIs são inacessíveis no GitHub Pages (contexto HTTPS + CORS).
+  // Retorna null diretamente para usar o fallback local sem delay.
   return null;
 }
 
@@ -229,11 +218,25 @@ async function loadQuoteWidget() {
   if (!card) return;
   card.innerHTML = '<div class="quote-loading"><div class="spinner"></div></div>';
 
-  let quote = await fetchExternalQuote();
-  if (!quote) {
-    quote = FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
-  }
+  const getFallback = () => FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
 
+  // Timeout de segurança: se algo travar, força o fallback após 2s
+  const safetyTimer = setTimeout(() => {
+    if (card.querySelector('.spinner')) {
+      const q = getFallback();
+      renderQuote(card, q);
+    }
+  }, 2000);
+
+  let quote = null;
+  try { quote = await fetchExternalQuote(); } catch(e) {}
+  clearTimeout(safetyTimer);
+
+  if (!quote) quote = getFallback();
+  renderQuote(card, quote);
+}
+
+function renderQuote(card, quote) {
   card.innerHTML =
     '<div class="quote-mark">"</div>' +
     '<blockquote class="quote-text">' + escQ(quote.text) + '</blockquote>' +
@@ -251,16 +254,38 @@ function escQ(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;
 
 async function initHome() {
   renderHeroGreeting();
+
+  // Carrega dados de eventos e horários com fallback explícito
   try { eventsData = await ghLoadAllEvents(); } catch(e) { eventsData = []; }
   try { const d = await fetchJSON('./data/schedule.json'); scheduleDataAll = d || {}; } catch(e) { scheduleDataAll = {}; }
-  renderUpcomingEvents();
-  renderHomeNewsletter();
-  loadQuoteWidget();
-  renderNextClass();
-  renderCountdown();
-  updateStatEvents();
-  updateHomeKanbanPeek();
-  updateStatTasks();
+
+  // Renderiza todos os widgets — cada um trata internamente o estado vazio
+  try { renderUpcomingEvents(); } catch(e) {
+    const c = document.getElementById('upcoming-events');
+    if (c) c.innerHTML = '<div class="no-events-msg">Nenhum evento próximo.</div>';
+  }
+  try { renderHomeNewsletter(); } catch(e) {
+    const c = document.getElementById('home-newsletter');
+    if (c) c.innerHTML = '<div class="no-events-msg">Newsletter indisponível.</div>';
+  }
+  try { loadQuoteWidget(); } catch(e) {
+    const c = document.getElementById('quote-card');
+    if (c) {
+      const q = FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
+      c.innerHTML = '<div class="quote-mark">"</div><blockquote class="quote-text">' + escQ(q.text) + '</blockquote><div class="quote-meta"><span class="quote-author">— ' + escQ(q.author) + '</span></div>';
+    }
+  }
+  try { renderNextClass(); } catch(e) {
+    const c = document.getElementById('next-class-info');
+    if (c) c.innerHTML = '<div class="no-events-msg">Nenhuma aula cadastrada.</div>';
+  }
+  try { renderCountdown(); } catch(e) {
+    const c = document.getElementById('countdown-card');
+    if (c) c.innerHTML = '<div class="countdown-past">Nenhum evento próximo.</div>';
+  }
+  try { updateStatEvents(); } catch(e) {}
+  try { updateHomeKanbanPeek(); } catch(e) {}
+  try { updateStatTasks(); } catch(e) {}
 }
 
 function renderHeroGreeting() {
