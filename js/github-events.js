@@ -35,7 +35,13 @@ function ghHeaders(withAuth = true) {
 }
 
 async function ghFetch(path, options = {}, withAuth = true) {
-  const res  = await fetch(`${GH_API_BASE}${path}`, { headers: ghHeaders(withAuth), ...options });
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 7000);
+  const res = await fetch(`${GH_API_BASE}${path}`, {
+    headers: ghHeaders(withAuth),
+    signal: ctrl.signal,
+    ...options
+  }).finally(() => clearTimeout(t));
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw Object.assign(
     new Error(data.message || `GitHub API error ${res.status}`),
@@ -67,7 +73,10 @@ function ghBase64Encode(str) {
 // Eventos pendentes (via PR mergeado) são carregados só se houver token.
 async function ghGetMainEvents() {
   try {
-    const res = await fetch('./data/events.json?t=' + Date.now());
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch('./data/events.json', { signal: ctrl.signal })
+      .finally(() => clearTimeout(t));
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   } catch (e) {

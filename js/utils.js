@@ -89,11 +89,12 @@ function hexToRgba(hex, alpha) {
 const _jsonCache = new Map();
 
 async function fetchJSON(url) {
-  // Strip cache-bust and use sessionStorage for within-session caching
   const cacheKey = url.split('?')[0];
   if (_jsonCache.has(cacheKey)) return _jsonCache.get(cacheKey);
   try {
-    const res = await fetch(cacheKey, { cache: 'no-store' });
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(cacheKey, { signal: ctrl.signal }).finally(() => clearTimeout(t));
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     _jsonCache.set(cacheKey, data);

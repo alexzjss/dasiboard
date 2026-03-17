@@ -209,14 +209,14 @@ const FALLBACK_QUOTES = [
 async function fetchExternalQuote() {
   try {
     // quotable.io — API pública de frases
-    const res = await fetch('https://api.quotable.io/quotes/random?limit=1&maxLength=200', { signal: AbortSignal.timeout(3500) });
+    const c1=new AbortController(),t1=setTimeout(()=>c1.abort(),3500); const res = await fetch('https://api.quotable.io/quotes/random?limit=1&maxLength=200', { signal: c1.signal }).finally(()=>clearTimeout(t1));
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data && data[0]) return { text: data[0].content, author: data[0].author, source: 'Quotable API' };
   } catch(e) {}
   // Fallback: zenquotes
   try {
-    const res = await fetch('https://zenquotes.io/api/random', { signal: AbortSignal.timeout(3000) });
+    const c2=new AbortController(),t2=setTimeout(()=>c2.abort(),3000); const res = await fetch('https://zenquotes.io/api/random', { signal: c2.signal }).finally(()=>clearTimeout(t2));
     if (!res.ok) throw new Error();
     const data = await res.json();
     if (data && data[0]) return { text: data[0].q, author: data[0].a, source: 'ZenQuotes' };
@@ -251,10 +251,8 @@ function escQ(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;
 
 async function initHome() {
   renderHeroGreeting();
-  // Carrega events.json principal + eventos já aprovados em data/events-pending/
-  eventsData = await ghLoadAllEvents();
-  const schData = await fetchJSON('./data/schedule.json');
-  scheduleDataAll = schData || {};
+  try { eventsData = await ghLoadAllEvents(); } catch(e) { eventsData = []; }
+  try { const d = await fetchJSON('./data/schedule.json'); scheduleDataAll = d || {}; } catch(e) { scheduleDataAll = {}; }
   renderUpcomingEvents();
   renderHomeNewsletter();
   loadQuoteWidget();
