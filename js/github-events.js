@@ -1,21 +1,14 @@
 // ===== GITHUB EVENTS INTEGRATION =====
 //
-// ESTRATÉGIA ANTI-CONFLITO:
+// ESTRATÉGIA DE EVENTOS:
 //
-// O problema do approach anterior era commitar o events.json COMPLETO em cada
-// branch. Quando dois PRs eram mergeados em sequência, o segundo sobrescrevia
-// o primeiro porque ambos continham versões do array inteiro.
+// Cada PR proposto pelo usuário cria uma branch e modifica o events.json
+// diretamente, adicionando o novo evento ao array e ordenando por data.
+// Após o merge, o evento aparece imediatamente para TODOS os usuários
+// sem necessidade de token GitHub.
 //
-// Solução: cada PR commita APENAS UM ARQUIVO NOVO em data/events-pending/<id>.json
-// contendo somente aquele evento. O events.json principal nunca é tocado pelos PRs.
-//
-// No merge, o GitHub simplesmente copia o arquivo novo para a pasta — operação
-// atômica, sem conflito possível. Dois merges em sequência resultam em dois
-// arquivos novos na pasta, ambos preservados.
-//
-// O frontend lê o events.json principal + todos os arquivos em events-pending/
-// e faz o merge em memória. Resultado: todos os eventos aparecem corretamente,
-// independente da ordem de merge dos PRs.
+// Conflitos de merge simultâneo são improváveis em uso normal, mas se
+// ocorrerem, o GitHub sinalizará no PR para resolução manual.
 
 const GH_OWNER      = 'alexzjss';
 const GH_REPO       = 'dasiboard';
@@ -69,18 +62,12 @@ function ghBase64Encode(str) {
   return btoa(bin);
 }
 
-// ── Helper: fetch com timeout garantido ───────────────────────────────────────
-function fetchWithTimeout(url, options = {}, ms = 5000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  return fetch(url, { ...options, signal: controller.signal })
-    .finally(() => clearTimeout(timer));
-}
-
 // ── Leitura do events.json (fetch local, sem API, sem auth) ──────────────────
+// Lê diretamente do arquivo local para que a home funcione sem token.
+// Eventos pendentes (via PR mergeado) são carregados só se houver token.
 async function ghGetMainEvents() {
   try {
-    const res = await fetchWithTimeout('./data/events.json?t=' + Date.now(), { cache: 'no-store' }, 8000);
+    const res = await fetch('./data/events.json?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   } catch (e) {
@@ -90,68 +77,19 @@ async function ghGetMainEvents() {
 }
 
 // ── Leitura dos eventos pendentes (pasta events-pending/) ─────────────────────
-//
-// Estratégia de dois caminhos:
-//   1. PRIMÁRIO (sempre): lê index.json estático do próprio site — rápido,
-//      sem autenticação, funciona em todos os dispositivos/navegadores.
-//   2. SECUNDÁRIO (só com token): consulta a API do GitHub para pegar arquivos
-//      que ainda não estejam no index.json (ex: recém-mergeados antes do deploy).
-//
-// Isso elimina a dependência de token para visualizar eventos e evita qualquer
-// risco de travamento por requisições externas sem timeout.
 async function ghGetPendingEvents() {
-  // Caminho 1: index.json estático — não depende de token nem da API do GitHub
-  const staticEvents = await ghGetPendingEventsStatic();
-
-  // Caminho 2: API do GitHub — só tenta se houver token (evita rate limit anônimo)
-  if (!ghHasToken()) return staticEvents;
-
+  if (!ghHasToken()) return []; // sem token não tenta — rate limit severo
   try {
-    const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PENDING_DIR}?ref=${GH_BRANCH}&t=${Date.now()}`;
-    const res = await fetchWithTimeout(apiUrl, { headers: ghHeaders(true), cache: 'no-store' }, 6000);
-    if (!res.ok) return staticEvents; // qualquer erro: usa o que já temos
-    const items = await res.json();
-    if (!Array.isArray(items)) return staticEvents;
-
+    const items = await ghFetch(`/contents/${GH_PENDING_DIR}?ref=${GH_BRANCH}&t=${Date.now()}`);
+    if (!Array.isArray(items)) return [];
     const jsonFiles = items.filter(f => f.name.endsWith('.json') && f.type === 'file');
     const results = await Promise.allSettled(
-      jsonFiles.map(f =>
-        fetchWithTimeout(f.download_url + '?t=' + Date.now(), { cache: 'no-store' }, 5000)
-          .then(r => r.json()).catch(() => null)
-      )
-    );
-    const apiEvents = results.filter(r => r.status === 'fulfilled' && r.value).map(r => r.value);
-
-    // Mescla: prioriza eventos da API (mais atualizados), completa com os estáticos
-    const seen = new Set(apiEvents.map(e => `${e.date}|${e.title}`));
-    const merged = [...apiEvents, ...staticEvents.filter(e => !seen.has(`${e.date}|${e.title}`))];
-    return merged;
-  } catch (e) {
-    console.warn('[DaSIboard] API de pendentes indisponível, usando index estático:', e.message);
-    return staticEvents;
-  }
-}
-
-// ── Caminho primário: lê eventos pendentes via index.json estático ────────────
-async function ghGetPendingEventsStatic() {
-  try {
-    const idxRes = await fetchWithTimeout(
-      './data/events-pending/index.json?t=' + Date.now(),
-      { cache: 'no-store' },
-      5000
-    );
-    if (!idxRes.ok) return [];
-    const filenames = await idxRes.json();
-    if (!Array.isArray(filenames)) return [];
-    const results = await Promise.allSettled(
-      filenames.map(name =>
-        fetchWithTimeout(`./data/events-pending/${name}?t=${Date.now()}`, { cache: 'no-store' }, 5000)
-          .then(r => r.json()).catch(() => null)
-      )
+      jsonFiles.map(f => fetch(f.download_url + '?t=' + Date.now()).then(r => r.json()).catch(() => null))
     );
     return results.filter(r => r.status === 'fulfilled' && r.value).map(r => r.value);
   } catch (e) {
-    console.warn('[DaSIboard] index.json de pendentes indisponível:', e.message);
+    if (e.status === 404) return [];
+    console.warn('[DaSIboard] Pendentes indisponíveis:', e.message);
     return [];
   }
 }
@@ -178,16 +116,23 @@ async function ghCreateBranch(branchName, fromSha) {
   });
 }
 
-// ── Commitar APENAS o arquivo do evento na nova branch ────────────────────────
-// Usa a Contents API para criar um arquivo NOVO — sem SHA de arquivo existente,
-// pois o arquivo ainda não existe nessa branch. Isso é uma criação pura,
-// sem sobrescrever nada. Dois PRs nunca tocam o mesmo arquivo.
+// ── Commitar o evento diretamente no events.json da branch ──────────────────
+// Lê o events.json atual da main, adiciona o novo evento e commita.
+// Após o merge do PR, o evento já está no events.json e aparece para TODOS
+// os usuários, sem precisar de token ou pasta events-pending.
 async function ghCommitEventFile(branchName, filename, eventData, commitMsg) {
-  const content = ghBase64Encode(JSON.stringify(eventData, null, 2));
-  return ghFetch(`/contents/${GH_PENDING_DIR}/${filename}`, {
+  // Lê o events.json atual para obter SHA e conteúdo
+  const fileData = await ghFetch(`/contents/${GH_EVENTS_PATH}?ref=${GH_BRANCH}`);
+  const currentSha = fileData.sha;
+  const currentEvents = JSON.parse(ghBase64Decode(fileData.content));
+
+  // Adiciona o novo evento e ordena por data
+  const updated = [...currentEvents, eventData].sort((a, b) => a.date.localeCompare(b.date));
+  const content = ghBase64Encode(JSON.stringify(updated, null, 2));
+
+  return ghFetch(`/contents/${GH_EVENTS_PATH}`, {
     method: 'PUT',
-    body:   JSON.stringify({ message: commitMsg, content, branch: branchName })
-    // Sem "sha": arquivo novo, não existe ainda
+    body:   JSON.stringify({ message: commitMsg, content, branch: branchName, sha: currentSha })
   });
 }
 
@@ -214,8 +159,8 @@ async function ghOpenPR(branchName, ev) {
     rows,
     ``,
     `> Aberto automaticamente pelo DaSIboard.`,
-    `> Ao fazer merge, o arquivo \`${GH_PENDING_DIR}/${ev._filename}\` será adicionado ao repositório`,
-    `> e o evento aparecerá automaticamente no calendário.`,
+    `> Ao fazer merge, o evento será adicionado diretamente ao \`data/events.json\``,
+    `> Após o merge, o evento é adicionado ao events.json e aparece para todos os usuários.`,
   ].join('\n');
 
   return ghFetch('/pulls', {
@@ -263,15 +208,11 @@ async function ghCheckDuplicate(newEvent) {
 //   Não há conflito possível porque cada PR toca um arquivo diferente.
 //
 async function ghProposePRForEvent(newEvent) {
-  // 1. Verificar duplicata contra events.json + pendentes já mergeados
+  // 1. Verificar duplicata
   const isDup = await ghCheckDuplicate(newEvent);
   if (isDup) throw new Error('Evento duplicado: já existe um evento com este título e data.');
 
-  // 2. Gerar nome de arquivo único para este evento
-  const filename = ghEventFilename(newEvent);
-  newEvent._filename = filename; // usado no corpo do PR
-
-  // 3. Nome de branch único
+  // 2. Nome de branch único
   const slug = newEvent.title
     .toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -280,68 +221,18 @@ async function ghProposePRForEvent(newEvent) {
     .slice(0, 40);
   const branchName = `event/${slug}-${Date.now()}`;
 
-  // 4. Criar branch a partir do HEAD da main
+  // 3. Criar branch a partir do HEAD da main
   const headSha = await ghGetMainHeadSha();
   await ghCreateBranch(branchName, headSha);
 
-  // 5. Commitar APENAS o arquivo do evento (sem tocar o events.json)
+  // 4. Commitar o evento diretamente no events.json da nova branch
   const commitMsg = `[DaSIboard] Adicionar evento: ${newEvent.title} (${newEvent.date})`;
-  // Salvar sem o campo interno _filename
-  const { _filename, ...eventToSave } = newEvent;
-  await ghCommitEventFile(branchName, filename, eventToSave, commitMsg);
+  await ghCommitEventFile(branchName, null, newEvent, commitMsg);
 
-  // 6. Atualizar index.json dos pendentes para que dispositivos sem token
-  //    também consigam carregar os eventos via fallback estático.
-  //    Lê o index atual da main e adiciona o novo filename.
-  try {
-    await ghUpdatePendingIndex(branchName, filename);
-  } catch (e) {
-    // Não bloqueia o PR se o índice falhar — o caminho principal (API pública) ainda funciona
-    console.warn('[DaSIboard] Falha ao atualizar index.json de pendentes:', e.message);
-  }
-
-  // 7. Abrir PR
+  // 5. Abrir PR
+  newEvent._filename = null; // manter compatibilidade com ghOpenPR
   const pr = await ghOpenPR(branchName, newEvent);
-  return { prUrl: pr.html_url, prNumber: pr.number, branchName, filename };
-}
-
-// ── Atualizar index.json dos eventos pendentes na branch do PR ────────────────
-// Garante que o fallback estático (para usuários sem token) também inclua
-// o novo evento após o merge do PR.
-async function ghUpdatePendingIndex(branchName, newFilename) {
-  const indexPath = `${GH_PENDING_DIR}/index.json`;
-
-  // Tenta ler o index.json atual da main para obter SHA e conteúdo
-  let currentList = [];
-  let currentSha  = null;
-  try {
-    const fileData = await ghFetch(`/contents/${indexPath}?ref=${GH_BRANCH}`);
-    currentSha  = fileData.sha;
-    currentList = JSON.parse(ghBase64Decode(fileData.content));
-    if (!Array.isArray(currentList)) currentList = [];
-  } catch (e) {
-    // index.json ainda não existe — começa vazio
-    currentList = [];
-    currentSha  = null;
-  }
-
-  // Adiciona o novo arquivo (sem duplicar)
-  if (!currentList.includes(newFilename)) {
-    currentList.push(newFilename);
-  }
-
-  const content = ghBase64Encode(JSON.stringify(currentList, null, 2));
-  const body = {
-    message: `[DaSIboard] Atualizar índice de eventos pendentes`,
-    content,
-    branch: branchName
-  };
-  if (currentSha) body.sha = currentSha; // necessário para atualizar arquivo existente
-
-  return ghFetch(`/contents/${indexPath}`, {
-    method: 'PUT',
-    body:   JSON.stringify(body)
-  });
+  return { prUrl: pr.html_url, prNumber: pr.number, branchName };
 }
 
 // ── Modal: formulário de proposta de evento ───────────────────────────────────
