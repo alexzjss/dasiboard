@@ -267,6 +267,10 @@ async function initGPA() {
     gpaSave();
   }
   renderGPA();
+  // Show and init fluxograma section
+  const fluxTitle = document.getElementById('fluxograma-section-title');
+  if (fluxTitle) fluxTitle.style.display = '';
+  if (typeof initFluxograma === 'function') initFluxograma();
 }
 
 // ===== RESTORE MODAL =====

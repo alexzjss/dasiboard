@@ -253,6 +253,8 @@ function navigateTo(page) {
   if (page === 'kanban') { initKanban?.(); }
   if (page === 'entidades') initEntidades?.();
   if (page === 'leetcode') initLeetcode?.();
+  if (page === 'faltas') initFaltas?.();
+  if (page === 'notas-gpa') { setTimeout(() => { const el = document.getElementById('fluxograma-section-title'); if (el) el.style.display=''; initFluxograma?.(); }, 80); }
   // Track easter egg navigation sequence
   if (typeof trackEggNavigation === 'function') trackEggNavigation(page);
   history.pushState(null, '', `#${page}`);
@@ -595,6 +597,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initHome();
   initModals();
   updateTime();
+
+  // ── PWA Service Worker ──────────────────────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        console.log('[DaSIboard] SW registrado:', reg.scope);
+        // Solicita permissão de notificação após 4s para não assustar o usuário
+        if ('Notification' in window && Notification.permission === 'default') {
+          setTimeout(() => {
+            Notification.requestPermission().then(perm => {
+              if (perm === 'granted') showToast('🔔 Notificações ativadas! Você será avisado sobre faltas e eventos.', 3500);
+            });
+          }, 4000);
+        }
+      })
+      .catch(err => console.warn('[DaSIboard] SW falhou:', err));
+  }
   setInterval(updateTime, 1000);
   setInterval(renderHeroGreeting, 60000);
   window.addEventListener('popstate', () => { navigateTo(window.location.hash.replace('#','') || 'home'); });

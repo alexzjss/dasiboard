@@ -5462,3 +5462,204 @@ body.lite-mode .btn-primary {
 body.lite-mode .lc-code-panel { background: var(--bg-3); }
 body.lite-mode .lc-editor { background: var(--bg-3); color: var(--text); }
 body.lite-mode .lc-line-numbers { background: var(--bg-2); }
+
+/* ================================================================
+   CONTROLE DE FALTAS
+   ================================================================ */
+
+.faltas-overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.faltas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.faltas-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.faltas-card.perigo   { border-color: #f9731633; }
+.faltas-card.reprovado{ border-color: var(--danger); box-shadow: 0 0 0 2px #ef444422; }
+.faltas-card.atencao  { border-color: #eab30833; }
+
+.faltas-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.faltas-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.faltas-code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.faltas-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.faltas-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.faltas-status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Progress bar */
+.faltas-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.faltas-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: var(--glass-tint);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+  border: 1px solid var(--glass-border);
+}
+
+.faltas-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width .5s ease, background .3s;
+}
+
+/* Marcador vertical no limiar de 30% */
+.faltas-bar-marker {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--danger);
+  border-radius: 1px;
+  opacity: .7;
+}
+.faltas-bar-marker::after {
+  content: '30%';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--danger);
+  opacity: .8;
+  white-space: nowrap;
+}
+
+.faltas-pct-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 38px;
+  text-align: right;
+}
+
+/* Stats row */
+.faltas-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 10px;
+  background: var(--glass-tint);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.faltas-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.faltas-stat-val {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.faltas-stat-lbl {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Actions */
+.faltas-actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* History */
+.faltas-history summary { list-style: none; }
+.faltas-history summary::-webkit-details-marker { display: none; }
+
+.faltas-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.faltas-history-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .faltas-overview { grid-template-columns: 1fr 1fr; }
+  .faltas-grid { grid-template-columns: 1fr; }
+  .faltas-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .faltas-overview { grid-template-columns: 1fr; }
+  .faltas-actions-row { flex-direction: column; }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "DaSIboard — SI EACH/USP",
+  "short_name": "DaSIboard",
+  "description": "O dashboard acadêmico do curso de Sistemas de Informação da EACH-USP",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0f13",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./assets/logo-si.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "pt-BR"
+}
