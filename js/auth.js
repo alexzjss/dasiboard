@@ -162,16 +162,39 @@ class AuthManager {
 
   // ===== ATUALIZAR UI =====
   updateAuthUI() {
+    const updateButton = (btn, icon, isTopbar = false) => {
+      if (!btn || !icon) return;
+      
+      if (this.isAuthenticated()) {
+        btn.dataset.state = 'authenticated';
+        const initial = this.currentUser.displayName?.[0]?.toUpperCase() || this.currentUser.email?.[0]?.toUpperCase() || '?';
+        
+        // Mostrar apenas a inicial
+        icon.innerHTML = initial;
+        icon.style.fontSize = isTopbar ? '16px' : '14px';
+        icon.style.fontWeight = '700';
+        icon.style.color = 'inherit';
+        
+        btn.title = `${this.currentUser.displayName || 'Usuário'}`;
+      } else {
+        btn.dataset.state = 'guest';
+        
+        // Mostrar SVG
+        icon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+        
+        btn.title = 'Fazer login';
+      }
+    };
+
+    // Topbar
     const profileBtn = document.getElementById('profile-btn');
     const profileIcon = document.getElementById('profile-icon');
+    updateButton(profileBtn, profileIcon, true);
 
-    if (this.isAuthenticated()) {
-      profileBtn.classList.remove('hidden');
-      const initial = this.currentUser.displayName?.[0]?.toUpperCase() || this.currentUser.email?.[0]?.toUpperCase() || '?';
-      profileIcon.textContent = initial;
-    } else {
-      profileBtn.classList.add('hidden');
-    }
+    // Sidebar Header
+    const sidebarHeaderProfileBtn = document.getElementById('sidebar-header-profile-btn');
+    const sidebarHeaderProfileIcon = document.getElementById('sidebar-header-profile-icon');
+    updateButton(sidebarHeaderProfileBtn, sidebarHeaderProfileIcon, true);
   }
 }
 

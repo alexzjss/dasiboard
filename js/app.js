@@ -815,32 +815,69 @@ document.addEventListener('keydown', e => {
 })();
 
 // ===== AUTENTICAÇÃO & PERFIL =====
-function toggleProfileMenu() {
-  const menu = document.getElementById('profile-menu');
+function handleProfileClick(origin = 'topbar') {
+  const btn = document.getElementById(origin === 'sidebar' ? 'sidebar-header-profile-btn' : 'profile-btn');
+  
+  if (!btn) {
+    console.error('Profile button not found', origin);
+    return;
+  }
+  
+  if (btn.dataset.state === 'guest') {
+    // Se não logado, redireciona para login
+    window.location.href = 'login.html';
+  } else {
+    // Se logado, abre menu específico
+    toggleProfileMenu(origin);
+  }
+}
+
+function toggleProfileMenu(origin = 'topbar') {
+  const menu = origin === 'sidebar' 
+    ? document.getElementById('profile-menu-sidebar')
+    : document.getElementById('profile-menu-topbar');
+  
   if (!menu) return;
+  
+  // Fechar outro menu se aberto
+  const otherMenu = origin === 'sidebar' 
+    ? document.getElementById('profile-menu-topbar')
+    : document.getElementById('profile-menu-sidebar');
+  if (otherMenu) otherMenu.classList.add('hidden');
+  
   menu.classList.toggle('hidden');
 
   // Fechar ao clicar fora
   if (!menu.classList.contains('hidden')) {
     setTimeout(() => {
-      document.addEventListener('click', closeProfileMenuOnClick, true);
+      document.addEventListener('click', (e) => closeProfileMenuOnClick(e, origin), true);
     }, 0);
   }
 }
 
-function closeProfileMenuOnClick(e) {
-  const menu = document.getElementById('profile-menu');
-  const profileBtn = document.getElementById('profile-btn');
+function closeProfileMenuOnClick(e, origin = 'topbar') {
+  const menu = origin === 'sidebar' 
+    ? document.getElementById('profile-menu-sidebar')
+    : document.getElementById('profile-menu-topbar');
+  const btn = origin === 'sidebar' 
+    ? document.getElementById('sidebar-header-profile-btn')
+    : document.getElementById('profile-btn');
   
-  if (!menu.contains(e.target) && profileBtn !== e.target) {
+  if (!menu.contains(e.target) && btn !== e.target && !btn.contains(e.target)) {
     menu.classList.add('hidden');
-    document.removeEventListener('click', closeProfileMenuOnClick, true);
+    document.removeEventListener('click', (e) => closeProfileMenuOnClick(e, origin), true);
   }
 }
 
-function closeProfileMenu() {
-  const menu = document.getElementById('profile-menu');
-  if (menu) menu.classList.add('hidden');
+function closeProfileMenu(origin = 'both') {
+  if (origin === 'sidebar' || origin === 'both') {
+    const menuSidebar = document.getElementById('profile-menu-sidebar');
+    if (menuSidebar) menuSidebar.classList.add('hidden');
+  }
+  if (origin === 'topbar' || origin === 'both') {
+    const menuTopbar = document.getElementById('profile-menu-topbar');
+    if (menuTopbar) menuTopbar.classList.add('hidden');
+  }
 }
 
 function confirmLogout() {
