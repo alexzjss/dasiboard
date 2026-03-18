@@ -2,183 +2,79 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Login — DaSIboard</title>
-  <meta name="theme-color" content="#0b0b0f" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="css/style.css" as="style" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="description" content="Acesse sua conta no DaSIboard — SI/USP" />
   <link rel="icon" type="image/png" href="./assets/logo-dasi.jpg">
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    (function(){
+      var t=localStorage.getItem('dasitheme')||'padrao';
+      document.documentElement.setAttribute('data-theme',t);
+    })();
+  </script>
   <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 16px;
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .auth-wrapper {
+      width: 100%; max-width: 420px; padding: 24px 16px;
     }
-    .auth-container {
-      width: 100%;
-      max-width: 400px;
-      animation: fadeInUp 0.6s ease-out;
+    .auth-logo {
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+      margin-bottom: 32px; text-decoration: none;
     }
-    .auth-header {
-      text-align: center;
-      margin-bottom: 40px;
+    .auth-logo img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--glass-border); }
+    .auth-logo-text { font-family: var(--font-display); font-size: 22px; font-weight: 700; font-style: italic;
+      background: linear-gradient(135deg, var(--text), var(--secondary)); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text; }
+    .auth-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+      padding: 32px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.25);
     }
-    .auth-header img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 16px;
-      border-radius: 16px;
+    .auth-tabs { display: flex; gap: 4px; background: var(--glass-tint); border-radius: 10px;
+      padding: 4px; margin-bottom: 28px; }
+    .auth-tab { flex: 1; padding: 9px; border: none; background: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+      transition: all var(--transition); font-family: var(--font-body); }
+    .auth-tab.active { background: var(--bg-card); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .auth-form { display: none; flex-direction: column; gap: 16px; }
+    .auth-form.active { display: flex; }
+    .auth-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: .5px; display: block; }
+    .auth-input {
+      width: 100%; padding: 11px 14px; background: var(--glass-tint); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--font-body);
+      transition: border-color var(--transition), box-shadow var(--transition); box-sizing: border-box;
     }
-    .auth-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin: 8px 0;
+    .auth-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .auth-input::placeholder { color: var(--text-dim); }
+    .auth-btn {
+      width: 100%; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--highlight));
+      border: none; border-radius: var(--radius-sm); color: white; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition-bounce); font-family: var(--font-body);
+      box-shadow: 0 4px 16px rgba(124,58,237,.3); margin-top: 4px;
     }
-    .auth-header p {
-      color: var(--text-secondary);
-      font-size: 13px;
-      margin-top: 4px;
+    .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,.4); }
+    .auth-btn:active { transform: translateY(0); }
+    .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .auth-error {
+      background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3); border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #f87171; display: none; line-height: 1.5;
     }
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
+    .auth-success {
+      background: rgba(52,211,153,.12); border: 1px solid rgba(52,211,153,.3); border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #34d399; display: none; line-height: 1.5;
     }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .form-group label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .form-group input {
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg-secondary);
-      color: var(--text);
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-    .form-group input::placeholder {
-      color: var(--text-tertiary);
-    }
-    .btn-login {
-      padding: 12px 16px;
-      border: 1px solid var(--primary);
-      border-radius: 8px;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 8px;
-    }
-    .btn-login:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-    .btn-login:active {
-      transform: translateY(0);
-    }
-    .btn-login.loading {
-      opacity: 0.7;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    .error-message {
-      padding: 12px 16px;
-      border-radius: 8px;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid var(--danger);
-      color: var(--danger);
-      font-size: 13px;
-      margin-bottom: 12px;
-      display: none;
-    }
-    .error-message.show {
-      display: block;
-      animation: slideDown 0.2s ease-out;
-    }
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
-      color: var(--text-tertiary);
-      font-size: 12px;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .auth-footer {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
-    .auth-footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .auth-footer a:hover {
-      color: var(--primary-hover);
-      text-decoration: underline;
-    }
-    .home-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 12px;
-      margin-top: 16px;
-      transition: all 0.2s;
-    }
-    .home-link:hover {
-      color: var(--primary);
-    }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .auth-back { text-align: center; margin-top: 20px; }
+    .auth-back a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+    .auth-back a:hover { color: var(--primary); }
+    .auth-divider { border: none; border-top: 1px solid var(--glass-border); margin: 4px 0; }
+    .input-group { display: flex; flex-direction: column; }
+    .pass-wrap { position: relative; }
+    .pass-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0;
+      display: flex; align-items: center;
     }
   </style>
 </head>
@@ -189,103 +85,193 @@
     <div class="orb orb-3"></div>
   </div>
 
-  <div class="auth-container">
-    <a href="index.html" class="home-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-      Voltar
+  <div class="auth-wrapper">
+    <a class="auth-logo" href="index.html">
+      <img src="assets/logo-dasi.jpg" alt="DaSI" />
+      <span class="auth-logo-text">DaSIboard</span>
     </a>
 
-    <div class="auth-header">
-      <img src="assets/logo-dasi.jpg" alt="DaSI" />
-      <h1>DaSIboard</h1>
-      <p>Dashboard acadêmico SI-USP</p>
-    </div>
-
-    <div class="auth-form">
-      <div class="error-message" id="error-msg"></div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="seu@email.com" required />
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Entrar</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Cadastrar</button>
       </div>
 
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input type="password" id="password" placeholder="••••••••" required />
-      </div>
+      <!-- FORM LOGIN -->
+      <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)">
+        <div id="login-error" class="auth-error"></div>
+        <div class="input-group">
+          <label class="auth-label" for="login-email">Email</label>
+          <input id="login-email" class="auth-input" type="email" placeholder="seu@email.com" required autocomplete="email" />
+        </div>
+        <div class="input-group">
+          <label class="auth-label" for="login-password">Senha</label>
+          <div class="pass-wrap">
+            <input id="login-password" class="auth-input" type="password" placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px" />
+            <button type="button" class="pass-toggle" onclick="togglePass('login-password', this)" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="auth-btn" type="submit" id="login-btn">Entrar</button>
+      </form>
 
-      <button class="btn-login" id="login-btn" onclick="handleLogin()">Entrar</button>
+      <!-- FORM CADASTRO -->
+      <form class="auth-form" id="form-signup" onsubmit="handleSignup(event)">
+        <div id="signup-error" class="auth-error"></div>
+        <div id="signup-success" class="auth-success"></div>
+        <div class="input-group">
+          <label class="auth-label" for="signup-name">Nome</label>
+          <input id="signup-name" class="auth-input" type="text" placeholder="Seu nome" required autocomplete="name" />
+        </div>
+        <div class="input-group">
+          <label class="auth-label" for="signup-email">Email</label>
+          <input id="signup-email" class="auth-input" type="email" placeholder="seu@email.com" required autocomplete="email" />
+        </div>
+        <div class="input-group">
+          <label class="auth-label" for="signup-password">Senha</label>
+          <div class="pass-wrap">
+            <input id="signup-password" class="auth-input" type="password" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" style="padding-right:44px" minlength="6" />
+            <button type="button" class="pass-toggle" onclick="togglePass('signup-password', this)" tabindex="-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="auth-btn" type="submit" id="signup-btn">Criar conta</button>
+      </form>
     </div>
 
-    <div class="divider">ou</div>
-
-    <div class="auth-footer">
-      Não tem conta? <a href="signup.html">Crie uma agora</a>
-    </div>
-
-    <div style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-tertiary);">
-      💡 Use credenciais de teste para testar a plataforma
+    <div class="auth-back">
+      <a href="index.html">← Voltar ao DaSIboard</a>
     </div>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js"></script>
+  <!-- Firebase v8 compat -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   <script src="js/firebase-config.js"></script>
-  <script src="js/auth.js"></script>
 
   <script>
-    // Verificar se já está logado
-    document.addEventListener('DOMContentLoaded', async () => {
-      const user = await authManager.init();
-      if (user) {
+    // Redirecionar se já logado
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) window.location.href = 'index.html';
+    });
+
+    function switchTab(tab) {
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+      document.getElementById('form-login').classList.toggle('active', tab === 'login');
+      document.getElementById('form-signup').classList.toggle('active', tab === 'signup');
+      clearErrors();
+    }
+
+    function clearErrors() {
+      ['login-error', 'signup-error', 'signup-success'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.textContent = ''; }
+      });
+    }
+
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function showSuccess(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function togglePass(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isText = input.type === 'text';
+      input.type = isText ? 'password' : 'text';
+      btn.innerHTML = isText
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      clearErrors();
+      const btn = document.getElementById('login-btn');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
         window.location.href = 'index.html';
-      }
-    });
-
-    async function handleLogin() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('error-msg');
-      const loginBtn = document.getElementById('login-btn');
-
-      // Validação básica
-      if (!email || !password) {
-        showError('Preencha todos os campos');
-        return;
-      }
-
-      // Mostrar carregamento
-      loginBtn.classList.add('loading');
-      loginBtn.textContent = 'Entrando...';
-
-      // Fazer login
-      const result = await authManager.login(email, password);
-
-      if (result.success) {
-        errorMsg.classList.remove('show');
-        loginBtn.textContent = '✓ Bem-vindo!';
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 500);
-      } else {
-        showError(result.error);
-        loginBtn.classList.remove('loading');
-        loginBtn.textContent = 'Entrar';
+      } catch (error) {
+        console.error('Login error:', error.code, error.message);
+        const msgs = {
+          'auth/user-not-found': 'Usuário não encontrado.',
+          'auth/wrong-password': 'Senha incorreta.',
+          'auth/invalid-credential': 'Email ou senha incorretos.',
+          'auth/invalid-email': 'Email inválido.',
+          'auth/too-many-requests': 'Muitas tentativas. Aguarde um momento.',
+          'auth/user-disabled': 'Conta desativada.',
+          'auth/network-request-failed': 'Erro de rede. Verifique sua conexão.'
+        };
+        showError('login-error', msgs[error.code] || `Erro: ${error.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
       }
     }
 
-    function showError(message) {
-      const errorMsg = document.getElementById('error-msg');
-      errorMsg.textContent = message;
-      errorMsg.classList.add('show');
-    }
+    async function handleSignup(e) {
+      e.preventDefault();
+      clearErrors();
+      const btn = document.getElementById('signup-btn');
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
 
-    // Permitir Enter para enviar
-    document.getElementById('password').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleLogin();
-    });
+      if (!name) { showError('signup-error', 'Informe seu nome.'); return; }
+      if (password.length < 6) { showError('signup-error', 'A senha precisa ter pelo menos 6 caracteres.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Criando conta...';
+
+      try {
+        const result = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        await result.user.updateProfile({ displayName: name });
+
+        // Tentar salvar no Firestore (não bloqueia se falhar)
+        try {
+          await firebase.firestore().collection('users').doc(result.user.uid).set({
+            email, displayName: name, photoURL: null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            bio: '', universidade: 'USP', curso: 'Sistemas de Informação'
+          });
+        } catch (fsErr) {
+          console.warn('Firestore write skipped:', fsErr);
+        }
+
+        showSuccess('signup-success', '✅ Conta criada! Redirecionando...');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+      } catch (error) {
+        console.error('Signup error:', error.code, error.message);
+        const msgs = {
+          'auth/email-already-in-use': 'Este email já está cadastrado.',
+          'auth/invalid-email': 'Email inválido.',
+          'auth/weak-password': 'Senha muito fraca. Use pelo menos 6 caracteres.',
+          'auth/operation-not-allowed': 'Cadastro desativado. Contate o administrador.',
+          'auth/network-request-failed': 'Erro de rede. Verifique sua conexão.'
+        };
+        showError('signup-error', msgs[error.code] || `Erro: ${error.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Criar conta';
+      }
+    }
   </script>
 </body>
 </html>

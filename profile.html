@@ -2,287 +2,101 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Perfil — DaSIboard</title>
-  <meta name="theme-color" content="#0b0b0f" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="css/style.css" as="style" />
-  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/png" href="./assets/logo-dasi.jpg">
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    (function(){
+      var t=localStorage.getItem('dasitheme')||'padrao';
+      document.documentElement.setAttribute('data-theme',t);
+    })();
+  </script>
   <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 16px;
+    body { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding-top: 40px; }
+    .profile-wrapper { width: 100%; max-width: 560px; padding: 24px 16px 60px; }
+    .profile-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted);
+      text-decoration: none; margin-bottom: 28px; transition: color var(--transition); }
+    .profile-back:hover { color: var(--primary); }
+    .profile-header-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+      padding: 28px; margin-bottom: 16px; display: flex; align-items: center; gap: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.15);
     }
-    .profile-container {
-      width: 100%;
-      max-width: 500px;
-      animation: fadeInUp 0.6s ease-out;
-    }
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-    .profile-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 12px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: var(--bg-secondary);
-      transition: all 0.2s;
-    }
-    .profile-back:hover {
-      color: var(--primary);
-      background: var(--bg-tertiary);
-    }
-    .profile-title {
-      font-size: 24px;
-      font-weight: 700;
-    }
-    .profile-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--bg-secondary);
-      padding: 32px 24px;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .profile-avatar-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 24px;
-    }
+    .profile-avatar-wrap { position: relative; flex-shrink: 0; }
     .profile-avatar {
-      width: 120px;
-      height: 120px;
-      border: 3px solid var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: white;
+      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--primary); box-shadow: 0 0 0 4px rgba(124,58,237,.15);
     }
-    .profile-avatar.has-image {
-      border: none;
-      background: none;
+    .profile-avatar-placeholder {
+      width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--highlight));
+      display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;
+      color: white; border: 3px solid var(--primary); flex-shrink: 0;
     }
-    .profile-avatar img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
+    .profile-avatar-edit {
+      position: absolute; bottom: 0; right: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--primary); border: 2px solid var(--bg-card); display: flex; align-items: center;
+      justify-content: center; cursor: pointer; transition: background var(--transition);
     }
-    .avatar-upload-btn {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 32px;
-      height: 32px;
-      border: 2px solid var(--bg);
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      transition: all 0.2s;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    .profile-avatar-edit:hover { background: var(--highlight); }
+    .profile-info { flex: 1; min-width: 0; }
+    .profile-name { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .profile-email { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .profile-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+      background: rgba(124,58,237,.12); color: var(--primary); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(124,58,237,.2); }
+    .profile-section { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+      padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .section-head { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .5px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .field-group { display: flex; flex-direction: column; gap: 14px; }
+    .field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;
+      display: block; text-transform: uppercase; letter-spacing: .4px; }
+    .field-input {
+      width: 100%; padding: 10px 14px; background: var(--glass-tint); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--font-body);
+      transition: border-color var(--transition); box-sizing: border-box;
     }
-    .avatar-upload-btn:hover {
-      background: var(--primary-hover);
-      transform: scale(1.1);
-    }
-    .profile-name {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .profile-email {
-      color: var(--text-secondary);
-      font-size: 13px;
-      margin-bottom: 20px;
-    }
-    .profile-section {
-      margin-bottom: 24px;
-    }
-    .profile-section-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-      padding: 0 0 8px;
-      border-bottom: 1px solid var(--border);
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-    .form-group label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-    .form-group input,
-    .form-group textarea {
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-    .form-group textarea {
-      resize: vertical;
-      max-height: 120px;
-      line-height: 1.5;
-    }
-    .form-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
+    .field-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.12); }
+    .field-input::placeholder { color: var(--text-dim); }
+    .field-input:disabled { opacity: .5; cursor: not-allowed; }
+    .profile-actions { display: flex; gap: 10px; margin-top: 20px; }
     .btn-save {
-      flex: 1;
-      padding: 12px 16px;
-      border: 1px solid var(--primary);
-      border-radius: 8px;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 1; padding: 11px; background: linear-gradient(135deg, var(--primary), var(--highlight));
+      border: none; border-radius: var(--radius-sm); color: white; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition-bounce); font-family: var(--font-body);
     }
-    .btn-save:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,.3); }
+    .btn-save:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-cancel-edit {
+      padding: 11px 20px; background: var(--glass-tint); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); color: var(--text-muted); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all var(--transition); font-family: var(--font-body);
     }
-    .btn-save:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      pointer-events: none;
+    .btn-cancel-edit:hover { border-color: var(--border-hover); color: var(--text); }
+    .profile-msg { font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-top: 12px; display: none; }
+    .profile-msg.error { background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3); color: #f87171; }
+    .profile-msg.success { background: rgba(52,211,153,.12); border: 1px solid rgba(52,211,153,.3); color: #34d399; }
+    .logout-btn {
+      width: 100%; padding: 11px; background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25);
+      border-radius: var(--radius-sm); color: #f87171; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition); font-family: var(--font-body);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-logout {
-      flex: 1;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
+    .logout-btn:hover { background: rgba(248,113,113,.15); border-color: rgba(248,113,113,.4); }
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 999;
     }
-    .btn-logout:hover {
-      background: var(--bg-secondary);
-      border-color: var(--danger);
-      color: var(--danger);
-    }
-    .message {
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 16px;
-      animation: slideDown 0.2s ease-out;
-      display: none;
-    }
-    .message.show {
-      display: block;
-    }
-    .message.success {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--success);
-      color: var(--success);
-    }
-    .message.error {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid var(--danger);
-      color: var(--danger);
-    }
-    .loading-spinner {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-    }
-    #avatar-input {
-      display: none;
-    }
-    .profile-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .stat {
-      padding: 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      text-align: center;
-    }
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    .loading-overlay.hidden { display: none; }
+    .loading-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 32px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--glass-border); border-top-color: var(--primary);
+      border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #file-avatar { display: none; }
+    /* Logout confirm modal */
+    .logout-confirm { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+      padding: 28px; max-width: 340px; text-align: center; width: 90%; }
   </style>
 </head>
 <body>
@@ -292,210 +106,234 @@
     <div class="orb orb-3"></div>
   </div>
 
-  <div class="profile-container">
-    <div class="profile-header">
-      <a href="index.html" class="profile-back">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        Voltar
-      </a>
-      <h1 class="profile-title">Perfil</h1>
-    </div>
-
-    <div id="message" class="message"></div>
-
-    <div class="profile-card">
-      <div class="profile-avatar-wrapper">
-        <div class="profile-avatar" id="profile-avatar">
-          <span id="avatar-initial">?</span>
-          <img id="avatar-image" style="display: none;" />
-        </div>
-        <button class="avatar-upload-btn" onclick="document.getElementById('avatar-input').click()" title="Mudar foto de perfil">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        </button>
-        <input type="file" id="avatar-input" accept="image/*" onchange="handleAvatarUpload(event)" />
-      </div>
-
-      <div class="profile-name" id="profile-name">Carregando...</div>
-      <div class="profile-email" id="profile-email">—</div>
-
-      <div class="profile-stats">
-        <div class="stat">
-          <div class="stat-value" id="stat-cursos">2</div>
-          <div class="stat-label">Cursos</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="stat-data">Mar 26</div>
-          <div class="stat-label">Membro desde</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="profile-section">
-      <div class="profile-section-title">Informações Pessoais</div>
-      
-      <div class="form-group">
-        <label for="display-name">Nome completo</label>
-        <input type="text" id="display-name" />
-      </div>
-
-      <div class="form-group">
-        <label for="bio">Sobre você</label>
-        <textarea id="bio" placeholder="Conte um pouco sobre você, seus interesses em programação, etc."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="curso">Curso</label>
-        <input type="text" id="curso" value="Sistemas de Informação" />
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <button class="btn-save" id="save-btn" onclick="saveProfile()">Salvar mudanças</button>
-      <button class="btn-logout" onclick="confirmLogout()">Sair</button>
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <span style="color:var(--text-muted);font-size:14px">Carregando perfil...</span>
     </div>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js"></script>
+  <!-- Logout confirm modal -->
+  <div class="modal-overlay hidden" id="logout-modal" onclick="if(event.target===this)closeLogoutModal()">
+    <div class="logout-confirm">
+      <div style="font-size:32px;margin-bottom:12px">👋</div>
+      <h2 style="font-size:17px;margin-bottom:8px;color:var(--text)">Encerrar sessão?</h2>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">Você será desconectado da sua conta.</p>
+      <div style="display:flex;gap:10px">
+        <button onclick="closeLogoutModal()" style="flex:1;padding:10px;background:var(--glass-tint);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);font-size:14px">Cancelar</button>
+        <button onclick="doLogout()" style="flex:1;padding:10px;background:var(--danger);border:1px solid var(--danger);border-radius:8px;color:white;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-wrapper" id="profile-wrapper" style="display:none">
+    <a href="index.html" class="profile-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar ao DaSIboard
+    </a>
+
+    <!-- Header do perfil -->
+    <div class="profile-header-card">
+      <div class="profile-avatar-wrap">
+        <div id="avatar-display"></div>
+        <label class="profile-avatar-edit" for="file-avatar" title="Alterar foto">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </label>
+        <input type="file" id="file-avatar" accept="image/*" onchange="handleAvatarUpload(this)" />
+      </div>
+      <div class="profile-info">
+        <div class="profile-name" id="header-name">—</div>
+        <div class="profile-email" id="header-email">—</div>
+        <span class="profile-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          SI — USP/EACH
+        </span>
+      </div>
+    </div>
+
+    <!-- Dados da conta -->
+    <div class="profile-section">
+      <div class="section-head">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Dados do perfil
+      </div>
+      <div class="field-group">
+        <div>
+          <label class="field-label" for="field-name">Nome de exibição</label>
+          <input id="field-name" class="field-input" type="text" placeholder="Seu nome" maxlength="60" />
+        </div>
+        <div>
+          <label class="field-label" for="field-bio">Bio</label>
+          <textarea id="field-bio" class="field-input" placeholder="Fale um pouco sobre você..." rows="3" maxlength="200" style="resize:vertical;line-height:1.5"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="field-curso">Curso</label>
+          <input id="field-curso" class="field-input" type="text" placeholder="Ex: Sistemas de Informação" maxlength="80" />
+        </div>
+      </div>
+      <div id="profile-msg" class="profile-msg"></div>
+      <div class="profile-actions">
+        <button class="btn-save" id="save-btn" onclick="saveProfile()">Salvar alterações</button>
+      </div>
+    </div>
+
+    <!-- Conta -->
+    <div class="profile-section">
+      <div class="section-head">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Conta
+      </div>
+      <div>
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" id="field-email" disabled />
+      </div>
+      <div style="margin-top:14px">
+        <label class="field-label">Membro desde</label>
+        <input class="field-input" type="text" id="field-since" disabled />
+      </div>
+    </div>
+
+    <!-- Sair -->
+    <div class="profile-section">
+      <button class="logout-btn" onclick="openLogoutModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Encerrar sessão
+      </button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   <script src="js/firebase-config.js"></script>
-  <script src="js/auth.js"></script>
 
   <script>
-    let userProfile = {};
+    let currentUser = null;
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const user = await authManager.init();
-      
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         window.location.href = 'login.html';
         return;
       }
-
-      loadProfile();
+      currentUser = user;
+      await loadProfile(user);
+      document.getElementById('loading-overlay').classList.add('hidden');
+      document.getElementById('profile-wrapper').style.display = '';
     });
 
-    async function loadProfile() {
-      const user = authManager.getUser();
-      if (!user) return;
+    async function loadProfile(user) {
+      // Header
+      document.getElementById('header-name').textContent = user.displayName || 'Usuário';
+      document.getElementById('header-email').textContent = user.email || '';
+      document.getElementById('field-email').value = user.email || '';
+      document.getElementById('field-name').value = user.displayName || '';
 
-      // Carregar dados do perfil
-      userProfile = await authManager.loadUserProfile() || {};
-
-      // Preencher avatar
-      const initial = user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || '?';
-      document.getElementById('avatar-initial').textContent = initial;
-
-      if (user.photoURL) {
-        document.getElementById('avatar-image').src = user.photoURL;
-        document.getElementById('avatar-image').style.display = 'block';
-        document.getElementById('avatar-initial').style.display = 'none';
-        document.getElementById('profile-avatar').classList.add('has-image');
+      // Data de criação
+      if (user.metadata?.creationTime) {
+        const d = new Date(user.metadata.creationTime);
+        document.getElementById('field-since').value = d.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
       }
 
-      // Preencher informações
-      document.getElementById('profile-name').textContent = user.displayName || 'Usuário';
-      document.getElementById('profile-email').textContent = user.email;
-      document.getElementById('display-name').value = user.displayName || '';
-      document.getElementById('bio').value = userProfile.bio || '';
-      document.getElementById('curso').value = userProfile.curso || 'Sistemas de Informação';
+      // Avatar
+      renderAvatar(user);
 
-      // Estatísticas
-      const createdDate = user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
-      const dateStr = createdDate.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
-      document.getElementById('stat-data').textContent = dateStr.replace(' de ', ' ');
+      // Dados do Firestore
+      try {
+        const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('field-bio').value = data.bio || '';
+          document.getElementById('field-curso').value = data.curso || 'Sistemas de Informação';
+        }
+      } catch (e) { console.warn('Firestore read failed:', e); }
     }
 
-    async function handleAvatarUpload(event) {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      if (!file.type.startsWith('image/')) {
-        showMessage('Selecione uma imagem válida', 'error');
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        showMessage('Arquivo deve ter menos de 5MB', 'error');
-        return;
-      }
-
-      showMessage('Enviando foto...', 'success');
-
-      const result = await authManager.uploadProfilePhoto(file);
-
-      if (result.success) {
-        document.getElementById('avatar-image').src = result.photoURL;
-        document.getElementById('avatar-image').style.display = 'block';
-        document.getElementById('avatar-initial').style.display = 'none';
-        document.getElementById('profile-avatar').classList.add('has-image');
-        showMessage('Foto de perfil atualizada!', 'success');
+    function renderAvatar(user) {
+      const wrap = document.getElementById('avatar-display');
+      if (user.photoURL) {
+        wrap.innerHTML = `<img src="${user.photoURL}" class="profile-avatar" alt="Avatar" />`;
       } else {
-        showMessage(result.error, 'error');
+        const initial = user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || '?';
+        wrap.innerHTML = `<div class="profile-avatar-placeholder">${initial}</div>`;
       }
-
-      // Limpar input
-      event.target.value = '';
     }
 
     async function saveProfile() {
-      const displayName = document.getElementById('display-name').value.trim();
-      const bio = document.getElementById('bio').value.trim();
-      const curso = document.getElementById('curso').value.trim();
+      const btn = document.getElementById('save-btn');
+      const msg = document.getElementById('profile-msg');
+      msg.style.display = 'none';
 
-      if (!displayName) {
-        showMessage('Nome completo é obrigatório', 'error');
-        return;
+      const displayName = document.getElementById('field-name').value.trim();
+      const bio = document.getElementById('field-bio').value.trim();
+      const curso = document.getElementById('field-curso').value.trim();
+
+      if (!displayName) { showMsg('Informe seu nome.', 'error'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+
+      try {
+        await currentUser.updateProfile({ displayName });
+        try {
+          await firebase.firestore().collection('users').doc(currentUser.uid).set({
+            displayName, bio, curso,
+            email: currentUser.email,
+            photoURL: currentUser.photoURL || null,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        } catch (fsErr) { console.warn('Firestore skipped:', fsErr); }
+
+        document.getElementById('header-name').textContent = displayName;
+        showMsg('✅ Perfil atualizado com sucesso!', 'success');
+      } catch (err) {
+        showMsg('Erro ao salvar: ' + err.message, 'error');
       }
 
-      const saveBtn = document.getElementById('save-btn');
-      saveBtn.disabled = true;
-      saveBtn.innerHTML = '<div class="loading-spinner"><span>Salvando...</span></div>';
+      btn.disabled = false;
+      btn.textContent = 'Salvar alterações';
+    }
 
-      const result = await authManager.updateProfile({
-        displayName,
-        bio,
-        curso
-      });
+    async function handleAvatarUpload(input) {
+      const file = input.files[0];
+      if (!file || !currentUser) return;
+      if (file.size > 2 * 1024 * 1024) { showMsg('Imagem muito grande. Máximo 2MB.', 'error'); return; }
 
-      if (result.success) {
-        showMessage('Perfil atualizado com sucesso!', 'success');
-        await loadProfile();
-      } else {
-        showMessage(result.error, 'error');
+      showMsg('Enviando foto...', 'success');
+      try {
+        const storageRef = firebase.storage().ref(`profiles/${currentUser.uid}/avatar`);
+        await storageRef.put(file);
+        const photoURL = await storageRef.getDownloadURL();
+        await currentUser.updateProfile({ photoURL });
+        try {
+          await firebase.firestore().collection('users').doc(currentUser.uid).update({ photoURL });
+        } catch(e) {}
+        renderAvatar(currentUser);
+        showMsg('✅ Foto atualizada!', 'success');
+      } catch (err) {
+        showMsg('Erro ao enviar foto: ' + err.message, 'error');
       }
-
-      saveBtn.disabled = false;
-      saveBtn.textContent = 'Salvar mudanças';
     }
 
-    function confirmLogout() {
-      if (!confirm('Tem certeza que deseja sair?')) return;
-
-      const logoutBtn = event.target;
-      logoutBtn.textContent = 'Saindo...';
-      logoutBtn.disabled = true;
-
-      authManager.logout().then(result => {
-        if (result.success) {
-          window.location.href = 'index.html';
-        } else {
-          showMessage(result.error, 'error');
-          logoutBtn.textContent = 'Sair';
-          logoutBtn.disabled = false;
-        }
-      });
+    function showMsg(text, type) {
+      const el = document.getElementById('profile-msg');
+      el.textContent = text;
+      el.className = 'profile-msg ' + type;
+      el.style.display = 'block';
+      if (type === 'success') setTimeout(() => { el.style.display = 'none'; }, 3500);
     }
 
-    function showMessage(text, type) {
-      const msgEl = document.getElementById('message');
-      msgEl.textContent = text;
-      msgEl.className = `message show ${type}`;
-
-      setTimeout(() => {
-        msgEl.classList.remove('show');
-      }, 4000);
+    function openLogoutModal() {
+      document.getElementById('logout-modal').classList.remove('hidden');
+    }
+    function closeLogoutModal() {
+      document.getElementById('logout-modal').classList.add('hidden');
+    }
+    async function doLogout() {
+      closeLogoutModal();
+      await firebase.auth().signOut();
+      window.location.href = 'index.html';
     }
   </script>
 </body>

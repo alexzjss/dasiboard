@@ -162,29 +162,28 @@
 
   <!-- PROFILE MENU DROPDOWN — SIDEBAR -->
   <div class="profile-menu profile-menu-sidebar hidden" id="profile-menu-sidebar" onclick="if(event.target===this)closeProfileMenu('sidebar')">
-    <div class="profile-menu-box">
-      <a href="profile.html" class="profile-menu-item profile-menu-profile">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span>Ver perfil</span>
-      </a>
-      <button class="profile-menu-item profile-menu-logout" onclick="confirmLogout()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Sair</span>
-      </button>
+    <div class="profile-menu-box" id="profile-menu-box-sidebar">
+      <!-- preenchido dinamicamente por updateProfileMenus() em auth.js -->
     </div>
   </div>
 
   <!-- PROFILE MENU DROPDOWN — TOPBAR -->
   <div class="profile-menu profile-menu-topbar hidden" id="profile-menu-topbar" onclick="if(event.target===this)closeProfileMenu('topbar')">
-    <div class="profile-menu-box">
-      <a href="profile.html" class="profile-menu-item profile-menu-profile">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span>Ver perfil</span>
-      </a>
-      <button class="profile-menu-item profile-menu-logout" onclick="confirmLogout()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Sair</span>
-      </button>
+    <div class="profile-menu-box" id="profile-menu-box-topbar">
+      <!-- preenchido dinamicamente por updateProfileMenus() em auth.js -->
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE LOGOUT -->
+  <div class="modal-overlay hidden" id="logout-confirm-modal" onclick="if(event.target===this)closeLogoutModal()">
+    <div class="modal-box" style="max-width:360px;text-align:center">
+      <div style="font-size:36px;margin-bottom:12px">👋</div>
+      <h2 style="font-size:18px;margin-bottom:8px;color:var(--text)">Encerrar sessão?</h2>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px">Você será desconectado da sua conta.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn btn-ghost" onclick="closeLogoutModal()" style="flex:1;justify-content:center">Cancelar</button>
+        <button class="btn" onclick="doLogout()" style="flex:1;justify-content:center;background:var(--danger);border-color:var(--danger);color:white">Encerrar sessão</button>
+      </div>
     </div>
   </div>
 
@@ -603,10 +602,11 @@
   </div>
 
   <script src="js/utils.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js" defer></script>
+  <!-- Firebase v8 compat (namespace API — compatível com firebase.auth(), firebase.firestore(), etc.) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js" defer></script>
   <script src="js/firebase-config.js" defer></script>
   <script src="js/auth.js" defer></script>
   <script src="js/calendar.js" defer></script>

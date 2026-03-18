@@ -881,8 +881,17 @@ function closeProfileMenu(origin = 'both') {
 }
 
 function confirmLogout() {
-  if (!confirm('Tem certeza que deseja sair?')) return;
-  
+  const modal = document.getElementById('logout-confirm-modal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeLogoutModal() {
+  const modal = document.getElementById('logout-confirm-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function doLogout() {
+  closeLogoutModal();
   authManager.logout().then(result => {
     if (result.success) {
       window.location.href = 'index.html';
