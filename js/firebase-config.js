@@ -3,12 +3,13 @@
 // https://console.firebase.google.com/
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD_YOUR_API_KEY_HERE",
-  authDomain: "seu-projeto.firebaseapp.com",
-  projectId: "seu-projeto-id",
-  storageBucket: "seu-projeto.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:0000000000000000"
+    apiKey: "AIzaSyDsEK4RY_5Q0pBDkPC16mLYP5SgNdqBswc",
+    authDomain: "dasiboard.firebaseapp.com",
+    projectId: "dasiboard",
+    storageBucket: "dasiboard.firebasestorage.app",
+    messagingSenderId: "946586942129",
+    appId: "1:946586942129:web:2071934f38d1dad333c090",
+    measurementId: "G-TL1PB8NYTS"
 };
 
 // Inicializar Firebase
