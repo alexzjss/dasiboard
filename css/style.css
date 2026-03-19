@@ -5733,3 +5733,29 @@ body.lite-mode .lc-line-numbers { background: var(--bg-2); }
   .faltas-overview { grid-template-columns: 1fr; }
   .faltas-actions-row { flex-direction: column; }
 }
+
+/* ===== SCHEDULE MODULE STYLES (adicionado v0.6.1) ===== */
+.semester-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.semester-btn{padding:8px 18px;border-radius:var(--radius-sm);background:var(--glass-tint);border:1.5px solid var(--glass-border);color:var(--text-muted);font-size:13px;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:all var(--transition)}
+.semester-btn.active,.semester-btn:hover{background:rgba(124,58,237,.12);border-color:var(--primary);color:var(--primary)}
+.turma-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm);background:var(--glass-tint);border:1.5px solid var(--glass-border);color:var(--text-muted);font-size:12px;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:all var(--transition)}
+.turma-btn.active,.turma-btn:hover{background:rgba(124,58,237,.1);border-color:var(--primary);color:var(--primary)}
+.turma-periodo{font-size:10px;background:var(--glass-tint);border-radius:4px;padding:1px 5px;color:var(--text-dim)}
+.schedule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.schedule-day-col{display:flex;flex-direction:column;gap:10px}
+.schedule-day-header{font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--primary);padding-bottom:6px;border-bottom:1px solid var(--glass-border)}
+.schedule-course-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:5px;transition:border-color var(--transition)}
+.schedule-course-card:hover{border-color:var(--border-hover)}
+.schedule-course-time{font-family:var(--font-mono);font-size:11px;color:var(--primary);font-weight:700}
+.schedule-course-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.schedule-course-prof{font-size:11.5px;color:var(--text-muted)}
+.schedule-course-room{font-size:11px;color:var(--text-dim)}
+.schedule-extra{font-size:11px;color:var(--text-dim);display:flex;flex-direction:column;gap:2px}
+.schedule-course-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px;flex-wrap:wrap}
+.schedule-tipo-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;font-family:var(--font-mono)}
+.schedule-jupiter-link{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-family:var(--font-mono);color:var(--text-muted);text-decoration:none;transition:color var(--transition)}
+.schedule-jupiter-link:hover{color:var(--primary)}
+@media(max-width:600px){.schedule-grid{grid-template-columns:1fr}}
+
+/* ===== SEARCH BUTTON RESET ===== */
+button.search-result-item{width:100%;border:none;background:none;text-align:left;font-family:var(--font-body)}

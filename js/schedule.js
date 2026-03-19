@@ -1,183 +1,178 @@
-// ===== SCHEDULE MODULE (refactored for semester+turma) =====
+// ===== SCHEDULE MODULE — DaSIboard =====
 
+let scheduleInitialized = false;
 let scheduleData = null;
-let scheduleActiveSem = '1';
-let scheduleActiveTurma = '02';
+let selectedSemester = null;
+let selectedTurma = null;
+
+const DAY_ORDER = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+const TIPO_LABELS = {
+  especifica: { label: 'Específica SI', color: 'var(--primary)' },
+  ciclobasico: { label: 'Ciclo Básico', color: 'var(--info)' },
+  optativa: { label: 'Optativa', color: 'var(--success)' },
+  default: { label: 'Disciplina', color: 'var(--text-muted)' }
+};
 
 async function initSchedule() {
-  if (!scheduleData) {
-    const data = await fetchJSON('./data/schedule.json');
-    scheduleData = data || null;
-  }
-  if (!scheduleData) {
-    document.getElementById('schedule-grid').innerHTML = '<div class="empty-state"><p>Erro ao carregar horários.</p></div>';
+  if (scheduleInitialized && scheduleData) {
+    renderSchedulePage();
     return;
   }
-  renderSemesterTabs();
-  renderTurmaTabs();
+
+  const grid = document.getElementById('schedule-grid');
+  if (grid) grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div>Carregando grade...</div>';
+
+  try {
+    scheduleData = await fetchJSON('./data/schedule.json');
+    if (!scheduleData) throw new Error('Dados não encontrados');
+    scheduleInitialized = true;
+
+    // Selecionar semestre e turma padrão
+    const semesters = scheduleData.semesters || [];
+    if (semesters.length > 0) {
+      selectedSemester = semesters[0].id;
+      const firstTurmas = semesters[0].turmas || [];
+      selectedTurma = firstTurmas.length > 0 ? firstTurmas[0] : null;
+    }
+
+    renderSchedulePage();
+  } catch (e) {
+    console.error('[DaSIboard] Erro ao carregar horários:', e);
+    if (grid) grid.innerHTML = '<div class="no-events-msg">Não foi possível carregar os horários. Tente novamente.</div>';
+  }
+}
+
+function renderSchedulePage() {
+  renderSemesterButtons();
+  renderTurmaHeader();
   renderScheduleGrid();
 }
 
-function renderSemesterTabs() {
-  const el = document.getElementById('semester-buttons');
-  if (!el || !scheduleData) return;
-  el.innerHTML = scheduleData.semesters.map(sem => `
-    <button class="sem-btn ${scheduleActiveSem === sem.id ? 'active' : ''}"
-      onclick="selectSemester('${sem.id}')">
-      ${sem.label}
-    </button>
-  `).join('');
-}
+function renderSemesterButtons() {
+  const container = document.getElementById('semester-buttons');
+  if (!container || !scheduleData) return;
 
-function renderTurmaTabs() {
-  const hdr = document.getElementById('schedule-turma-header');
-  if (!hdr || !scheduleData) return;
-
-  // Find which turmas are available for this semester
-  const semInfo = scheduleData.semesters.find(s => s.id === scheduleActiveSem);
-  const turmas = semInfo?.turmas || Object.keys(scheduleData.turmas);
-
-  hdr.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Turma:</span>
-      ${turmas.map(t => {
-        const info = scheduleData.turmas[t];
-        return `<button class="sem-btn ${scheduleActiveTurma === t ? 'active' : ''}"
-          onclick="selectTurma('${t}')" style="display:flex;align-items:center;gap:6px">
-          <span style="font-size:11px;opacity:.7">${info?.periodo || t}</span>
-          ${t}
-        </button>`;
-      }).join('')}
-    </div>
-    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);padding:4px 8px;border-radius:var(--radius-sm);background:var(--glass-tint);border:1px solid var(--glass-border)">
-      ${scheduleData.turmas[scheduleActiveTurma]?.label || scheduleActiveTurma}
-    </div>
-  `;
+  const semesters = scheduleData.semesters || [];
+  container.innerHTML = semesters.map(sem => {
+    const isActive = sem.id === selectedSemester;
+    return `<button class="semester-btn ${isActive ? 'active' : ''}" onclick="selectSemester('${sem.id}')">${sem.label}</button>`;
+  }).join('');
 }
 
 function selectSemester(semId) {
-  scheduleActiveSem = semId;
-  // Make sure current turma is available
-  const semInfo = scheduleData.semesters.find(s => s.id === semId);
-  if (semInfo?.turmas && !semInfo.turmas.includes(scheduleActiveTurma)) {
-    scheduleActiveTurma = semInfo.turmas[0];
+  selectedSemester = semId;
+  const semesters = scheduleData.semesters || [];
+  const sem = semesters.find(s => s.id === semId);
+  if (sem && sem.turmas && sem.turmas.length > 0) {
+    selectedTurma = sem.turmas[0];
+  } else {
+    selectedTurma = null;
   }
-  renderSemesterTabs();
-  renderTurmaTabs();
+  renderSemesterButtons();
+  renderTurmaHeader();
   renderScheduleGrid();
 }
 
-function selectTurma(turma) {
-  scheduleActiveTurma = turma;
-  renderTurmaTabs();
+function selectTurma(turmaId) {
+  selectedTurma = turmaId;
+  renderTurmaHeader();
   renderScheduleGrid();
+}
+
+function renderTurmaHeader() {
+  const container = document.getElementById('schedule-turma-header');
+  if (!container || !scheduleData) { if (container) container.innerHTML = ''; return; }
+
+  const semesters = scheduleData.semesters || [];
+  const sem = semesters.find(s => s.id === selectedSemester);
+  if (!sem) { container.innerHTML = ''; return; }
+
+  const turmasInfo = scheduleData.turmas || {};
+  const turmas = sem.turmas || [];
+
+  container.innerHTML = turmas.map(tId => {
+    const info = turmasInfo[tId] || {};
+    const isActive = tId === selectedTurma;
+    return `<button class="turma-btn ${isActive ? 'active' : ''}" onclick="selectTurma('${tId}')">
+      ${info.label || ('Turma ' + tId)}
+      ${info.periodo ? `<span class="turma-periodo">${info.periodo}</span>` : ''}
+    </button>`;
+  }).join('');
 }
 
 function renderScheduleGrid() {
-  const grid = document.getElementById('schedule-grid');
-  if (!grid || !scheduleData) return;
+  const container = document.getElementById('schedule-grid');
+  if (!container || !scheduleData) return;
 
-  const key = `${scheduleActiveSem}_${scheduleActiveTurma}`;
-  const courses = scheduleData.schedule[key];
-
-  if (!courses || courses.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><p>Nenhuma disciplina cadastrada para esta combinação.</p></div>`;
+  if (!selectedSemester || !selectedTurma) {
+    container.innerHTML = '<div class="no-events-msg">Selecione um semestre e turma para ver a grade.</div>';
     return;
   }
 
-  // Group by tipo: ciclobasico first, then especifica
-  const cb = courses.filter(c => c.tipo === 'ciclobasico');
-  const esp = courses.filter(c => c.tipo !== 'ciclobasico');
+  const key = `${selectedSemester}_${selectedTurma}`;
+  const courses = (scheduleData.schedule || {})[key];
 
-  const dayOrder = ['Segunda','Terça','Quarta','Quinta','Sexta'];
-  const sortFn = (a,b) => {
-    const da = dayOrder.indexOf(a.day), db = dayOrder.indexOf(b.day);
-    if (da !== db) return da - db;
-    return (a.time||'').localeCompare(b.time||'');
-  };
-
-  let html = '';
-
-  if (cb.length) {
-    html += `
-      <div class="schedule-section-label">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Ciclo Básico
-      </div>`;
-    html += cb.sort(sortFn).map(c => buildCourseCard(c, 'cb')).join('');
+  if (!courses || courses.length === 0) {
+    container.innerHTML = `<div class="no-events-msg">Nenhuma disciplina cadastrada para ${key.replace('_', ' – Turma ')}.</div>`;
+    return;
   }
 
-  if (esp.length) {
-    html += `
-      <div class="schedule-section-label" style="${cb.length ? 'margin-top:20px' : ''}">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-        Disciplinas de SI
-      </div>`;
-    html += esp.sort(sortFn).map(c => buildCourseCard(c, 'si')).join('');
-  }
-
-  grid.innerHTML = html;
-
-  // Stagger animation
-  grid.querySelectorAll('.course-card').forEach((card, i) => {
-    card.classList.add('anim-fade-up');
-    card.style.animationDelay = `${i * 0.04}s`;
+  // Agrupar por dia
+  const byDay = {};
+  DAY_ORDER.forEach(d => byDay[d] = []);
+  courses.forEach(c => {
+    const day = c.day || c.dia || '';
+    if (byDay[day]) byDay[day].push(c);
+    else {
+      byDay[day] = byDay[day] || [];
+      byDay[day].push(c);
+    }
   });
+
+  const activeDays = DAY_ORDER.filter(d => byDay[d] && byDay[d].length > 0);
+
+  if (activeDays.length === 0) {
+    container.innerHTML = '<div class="no-events-msg">Nenhuma aula nesta turma.</div>';
+    return;
+  }
+
+  container.innerHTML = activeDays.map(day => {
+    const classes = byDay[day].sort((a, b) => {
+      const ta = parseTimeRange(a.time || `${a.inicio}-${a.fim}`).start;
+      const tb = parseTimeRange(b.time || `${b.inicio}-${b.fim}`).start;
+      return ta - tb;
+    });
+
+    return `
+      <div class="schedule-day-col">
+        <div class="schedule-day-header">${day}</div>
+        ${classes.map(c => renderCourseCard(c)).join('')}
+      </div>`;
+  }).join('');
 }
 
-function buildCourseCard(c, tipo) {
-  const colorIndex = hashStringToColor(c.code || c.course);
-  const dayAbbr = {'Segunda':'Seg','Terça':'Ter','Quarta':'Qua','Quinta':'Qui','Sexta':'Sex'}[c.day] || c.day;
+function renderCourseCard(c) {
+  const time = c.time || (c.inicio && c.fim ? `${c.inicio}–${c.fim}` : '');
+  const tipo = c.tipo || 'default';
+  const tipoInfo = TIPO_LABELS[tipo] || TIPO_LABELS.default;
+  const extras = Array.isArray(c.extra) && c.extra.length > 0
+    ? `<div class="schedule-extra">${c.extra.map(e => `<span>+ ${e}</span>`).join('')}</div>` : '';
+  const jupLink = c.code
+    ? `<a class="schedule-jupiter-link" href="https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=${c.code}" target="_blank" rel="noopener" title="Ver no JupiterWeb">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        ${c.code}
+       </a>` : '';
 
-  // Extra time slots
-  const extraHtml = (c.extra || []).filter(e => e && !e.includes('?')).map(e =>
-    `<div class="course-meta-item" style="opacity:.65">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      ${e}
-    </div>`
-  ).join('');
-
-  // Jupiter link (only for SI-specific)
-  const jupLink = tipo === 'si' && c.code ?
-    `<a class="course-link-hint" href="https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=${c.code}" target="_blank" rel="noopener">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      JupiterWeb
-    </a>` : '';
-
-  return `<div class="course-card anim-fade-up">
-    <div class="course-color-bar" style="background:${colorIndex}"></div>
-    <div class="course-card-body">
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">
-          <span class="course-code">${c.code || ''}</span>
-          ${tipo === 'cb' ? '<span class="course-cb-badge">Ciclo Básico</span>' : ''}
-        </div>
-        <div class="course-name">${c.course}</div>
-        <div class="course-meta" style="margin-top:6px;flex-wrap:wrap;gap:8px">
-          ${c.day && c.day !== '?' ? `<div class="course-meta-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            ${c.day}
-          </div>` : ''}
-          ${c.time ? `<div class="course-meta-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            ${c.time}
-          </div>` : ''}
-          ${extraHtml}
-          ${c.professor && c.professor !== '—' ? `<div class="course-meta-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            ${c.professor}
-          </div>` : ''}
-          ${c.room && c.room !== '—' ? `<div class="course-meta-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            ${c.room}
-          </div>` : ''}
-          ${(c.extra_rooms||[]).map(er => `<div class="course-meta-item" style="opacity:.6">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            ${er}
-          </div>`).join('')}
-        </div>
+  return `
+    <div class="schedule-course-card" data-tipo="${tipo}">
+      <div class="schedule-course-time">${time}</div>
+      <div class="schedule-course-name">${escapeHTML(c.course || c.codigo || '')}</div>
+      ${c.professor ? `<div class="schedule-course-prof">${escapeHTML(c.professor)}</div>` : ''}
+      ${c.room ? `<div class="schedule-course-room">📍 ${escapeHTML(c.room)}</div>` : ''}
+      ${extras}
+      <div class="schedule-course-footer">
+        <span class="schedule-tipo-badge" style="color:${tipoInfo.color};background:${tipoInfo.color}18;border:1px solid ${tipoInfo.color}30">${tipoInfo.label}</span>
+        ${jupLink}
       </div>
-      ${jupLink}
-    </div>
-  </div>`;
+    </div>`;
 }

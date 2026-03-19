@@ -1,20 +1,22 @@
 {
-  "name": "DaSIboard — SI EACH/USP",
+  "name": "DaSIboard — SI-USP",
   "short_name": "DaSIboard",
-  "description": "O dashboard acadêmico do curso de Sistemas de Informação da EACH-USP",
+  "description": "Dashboard acadêmico para o curso de Sistemas de Informação da USP (EACH)",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f0f13",
+  "background_color": "#0b0b0f",
   "theme_color": "#7c3aed",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "./assets/logo-si.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "./assets/logo-dasi.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "./assets/logo-dasi.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
     }
-  ],
-  "categories": ["education", "productivity"],
-  "lang": "pt-BR"
+  ]
 }
